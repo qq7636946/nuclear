@@ -2487,11 +2487,7 @@
                         <i class="fas fa-video-slash"></i>
                     </button>
 
-                    <!-- NEW: Theme Toggle Button -->
-                    <button class="btn btn-theme-toggle" id="themeToggle" aria-label="Toggle Dark/Light Mode"
-                        data-cursor="hover">
-                        <i class="fas fa-sun"></i>
-                    </button>
+
 
                     <a href="#" class="btn btn-contact" data-cursor="hover"><span>CONTACT</span></a>
                 </div>
@@ -3417,21 +3413,6 @@
                 });
             }
 
-            // --- Theme Toggle Logic (NEW) ---
-            const themeToggleBtn = document.getElementById('themeToggle');
-            if (themeToggleBtn) {
-                themeToggleBtn.addEventListener('click', () => {
-                    document.body.classList.toggle('light-mode');
-                    const icon = themeToggleBtn.querySelector('i');
-                    if (document.body.classList.contains('light-mode')) {
-                        icon.classList.remove('fa-sun');
-                        icon.classList.add('fa-moon');
-                    } else {
-                        icon.classList.remove('fa-moon');
-                        icon.classList.add('fa-sun');
-                    }
-                });
-            }
 
             /* --- Grid Effects --- */
             const gridCards = document.querySelectorAll('.legacy-grid-wrapper .grid-card');
