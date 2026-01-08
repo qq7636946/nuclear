@@ -1,0 +1,230 @@
+# .htaccess - Apache 伺服器 SEO 優化配置
+# 更新日期: 2026-01-08
+
+# ==========================================
+# 1. HTTPS 重定向
+# ==========================================
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # 強制使用 HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    
+    # 強制使用 WWW（或移除 WWW，根據需求選擇）
+    # 選項 A: 強制使用 WWW
+    RewriteCond %{HTTP_HOST} !^www\. [NC]
+    RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
+    
+    # 選項 B: 移除 WWW（如果選擇此選項，請註解掉選項 A）
+    # RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    # RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+</IfModule>
+
+# ==========================================
+# 2. 瀏覽器快取控制
+# ==========================================
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # 預設快取時間
+    ExpiresDefault "access plus 1 month"
+    
+    # HTML 文件
+    ExpiresByType text/html "access plus 0 seconds"
+    
+    # CSS 和 JavaScript
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType text/javascript "access plus 1 year"
+    
+    # 圖片
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    
+    # 字型
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+    
+    # 影片和音訊
+    ExpiresByType video/mp4 "access plus 1 year"
+    ExpiresByType video/webm "access plus 1 year"
+    ExpiresByType audio/mp3 "access plus 1 year"
+    
+    # PDF 和其他文件
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType application/zip "access plus 1 month"
+</IfModule>
+
+# Cache-Control Headers
+<IfModule mod_headers.c>
+    # 靜態資源
+    <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|webp|svg|js|css|swf|woff|woff2|ttf|eot)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+    
+    # HTML 文件不快取
+    <FilesMatch "\.(html|htm|php)$">
+        Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires 0
+    </FilesMatch>
+</IfModule>
+
+# ==========================================
+# 3. GZIP 壓縮
+# ==========================================
+<IfModule mod_deflate.c>
+    # 壓縮 HTML, CSS, JavaScript, Text, XML
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/atom_xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+    
+    # 排除已壓縮的文件
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|webp|zip|gz|rar)$ no-gzip dont-vary
+</IfModule>
+
+# ==========================================
+# 4. 安全性標頭
+# ==========================================
+<IfModule mod_headers.c>
+    # X-Frame-Options: 防止點擊劫持
+    Header always set X-Frame-Options "SAMEORIGIN"
+    
+    # X-Content-Type-Options: 防止 MIME 類型嗅探
+    Header always set X-Content-Type-Options "nosniff"
+    
+    # X-XSS-Protection: 啟用 XSS 過濾
+    Header always set X-XSS-Protection "1; mode=block"
+    
+    # Referrer-Policy: 控制 Referrer 資訊
+    Header always set Referrer-Policy "no-referrer-when-downgrade"
+    
+    # Content-Security-Policy: 內容安全策略（根據需求調整）
+    # Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com; style-src 'self' 'unsafe-inline';"
+    
+    # Strict-Transport-Security: 強制 HTTPS（僅在確定使用 HTTPS 後啟用）
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    
+    # Permissions-Policy: 控制瀏覽器功能
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# ==========================================
+# 5. URL 重寫和 SEO 友善 URL
+# ==========================================
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # 移除尾部斜線（或強制加上，根據需求選擇）
+    # 選項 A: 移除尾部斜線
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [R=301,L]
+    
+    # 選項 B: 強制加上尾部斜線（如果選擇此選項，請註解掉選項 A）
+    # RewriteCond %{REQUEST_FILENAME} !-f
+    # RewriteCond %{REQUEST_URI} !(.*)/$
+    # RewriteRule ^(.*)$ $1/ [R=301,L]
+    
+    # 移除 index.php/index.html
+    RewriteCond %{THE_REQUEST} ^.*/index\.(php|html)
+    RewriteRule ^(.*)index\.(php|html)$ /$1 [R=301,L]
+    
+    # 小寫 URL（SEO 最佳實踐）
+    RewriteMap lowercase int:tolower
+    RewriteCond %{REQUEST_URI} [A-Z]
+    RewriteRule ^(.*)$ ${lowercase:$1} [R=301,L]
+</IfModule>
+
+# ==========================================
+# 6. 字元編碼
+# ==========================================
+AddDefaultCharset UTF-8
+<IfModule mod_mime.c>
+    AddCharset UTF-8 .html .css .js .xml .json .rss .atom
+</IfModule>
+
+# ==========================================
+# 7. MIME 類型
+# ==========================================
+<IfModule mod_mime.c>
+    # JavaScript
+    AddType application/javascript js
+    AddType text/javascript js
+    
+    # JSON
+    AddType application/json json
+    
+    # 字型
+    AddType font/woff woff
+    AddType font/woff2 woff2
+    AddType application/font-woff woff
+    AddType application/font-woff2 woff2
+    
+    # 圖片
+    AddType image/webp webp
+    AddType image/svg+xml svg svgz
+    
+    # 影片
+    AddType video/mp4 mp4
+    AddType video/webm webm
+</IfModule>
+
+# ==========================================
+# 8. 錯誤頁面
+# ==========================================
+ErrorDocument 404 /404.html
+ErrorDocument 403 /403.html
+ErrorDocument 500 /500.html
+
+# ==========================================
+# 9. 禁止目錄瀏覽
+# ==========================================
+Options -Indexes
+
+# ==========================================
+# 10. 保護敏感文件
+# ==========================================
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "(^#.*#|\.(bak|conf|dist|fla|in[ci]|log|psd|sh|sql|sw[op])|~)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# ==========================================
+# 使用說明：
+# ==========================================
+# 1. 將此文件放在網站根目錄
+# 2. 根據您的伺服器配置調整設定
+# 3. 測試所有重定向是否正常運作
+# 4. 確保 mod_rewrite, mod_headers, mod_expires, mod_deflate 模組已啟用
+# 5. 備份原有的 .htaccess 文件
+#
+# 注意事項：
+# - 某些設定可能需要伺服器管理員權限
+# - 在生產環境使用前，請先在測試環境測試
+# - 監控伺服器錯誤日誌以發現問題
+# ==========================================

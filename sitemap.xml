@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+    
+    <!-- 首頁 - NUCLEAR LABS SYSTEM V3 -->
+    <url>
+        <loc>https://www.nuclearlabs.com/</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- Demo 頁面 -->
+    <url>
+        <loc>https://www.nuclearlabs.com/demo/</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+</urlset>
+
+<!--
+NUCLEAR LABS SYSTEM V3 - Sitemap
+
+使用說明：
+1. 替換 "nuclearlabs.com" 為您的實際網域
+2. 根據您的網站結構添加更多頁面
+3. 更新 lastmod（最後修改日期）為實際日期
+4. 調整 changefreq（更新頻率）：
+   - always: 每次訪問都會改變
+   - hourly: 每小時
+   - daily: 每天
+   - weekly: 每週
+   - monthly: 每月
+   - yearly: 每年
+   - never: 從不改變
+5. 設定 priority（優先級，0.0-1.0）：
+   - 1.0: 最重要（通常是首頁）
+   - 0.8-0.9: 重要頁面
+   - 0.5-0.7: 一般頁面
+   - 0.0-0.4: 較不重要的頁面
+
+提交 Sitemap：
+- Google Search Console: https://search.google.com/search-console
+- Bing Webmaster Tools: https://www.bing.com/webmasters
+- 在 robots.txt 中加入: Sitemap: https://www.nuclearlabs.com/sitemap.xml
+-->

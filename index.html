@@ -1,0 +1,3801 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- ==========================================
+         基本 Meta 標籤
+         ========================================== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- 主要 SEO Meta 標籤 -->
+    <title>NUCLEAR LABS SYSTEM V3 - 先進科技儀表板 | 未來科技展示平台</title>
+    <meta name="description"
+        content="探索 NUCLEAR LABS SYSTEM V3 - 結合 WebGL、3D 視覺化和手勢控制的先進科技儀表板。體驗未來科技的互動式展示平台，提供沉浸式的使用者體驗。">
+    <meta name="keywords" content="NUCLEAR LABS, 科技儀表板, WebGL, 3D視覺化, 手勢控制, 互動式介面, 未來科技, Tech Dashboard, 技術展示">
+    <meta name="author" content="NUCLEAR LABS">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+    <!-- 規範連結 (Canonical URL) - 請替換為實際網址 -->
+    <link rel="canonical" href="https://www.nuclearlabs.com/">
+
+    <!-- ==========================================
+         Open Graph 標籤 (Facebook, LinkedIn)
+         ========================================== -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="NUCLEAR LABS SYSTEM V3">
+    <meta property="og:title" content="NUCLEAR LABS SYSTEM V3 - 先進科技儀表板">
+    <meta property="og:description" content="探索結合 WebGL、3D 視覺化和手勢控制的先進科技儀表板。體驗未來科技的互動式展示平台。">
+    <meta property="og:url" content="https://www.nuclearlabs.com/">
+    <meta property="og:image" content="https://www.nuclearlabs.com/images/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="NUCLEAR LABS SYSTEM V3 科技儀表板介面">
+    <meta property="og:locale" content="zh_TW">
+    <meta property="og:locale:alternate" content="en_US">
+
+    <!-- ==========================================
+         Twitter Card 標籤
+         ========================================== -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NUCLEAR LABS SYSTEM V3 - 先進科技儀表板">
+    <meta name="twitter:description" content="探索結合 WebGL、3D 視覺化和手勢控制的先進科技儀表板。體驗未來科技的互動式展示平台。">
+    <meta name="twitter:image" content="https://www.nuclearlabs.com/images/twitter-card.jpg">
+    <meta name="twitter:image:alt" content="NUCLEAR LABS SYSTEM V3 科技儀表板介面">
+
+    <!-- ==========================================
+         Favicon 和 App Icons
+         ========================================== -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="theme-color" content="#ccff00">
+
+    <!-- ==========================================
+         安全性和隱私
+         ========================================== -->
+    <meta name="referrer" content="no-referrer-when-downgrade">
+
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Montserrat:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&family=Syncopate:wght@400;700&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+
+    <!-- Vanilla Tilt (Library kept but unused as requested) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <!-- WebGL Dependencies (Three.js) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Spline Viewer -->
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"></script>
+
+    <!-- MediaPipe Hands Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+    <style>
+        /* =========================================
+           CSS VARIABLES (THEMING)
+           ========================================= */
+        :root {
+            /* Default Dark Mode Colors */
+            --bg-body-gradient: radial-gradient(circle at 50% -10%, #2a2a2a 0%, #050505 60%, #000000 100%);
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --neon-color: #ccff00;
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --btn-bg: #000000;
+            --btn-text: #ffffff;
+            --btn-border: #ffffff;
+            --marquee-bg: #000000;
+            --marquee-text: #ffffff;
+            --footer-bg: #050505;
+            --nav-border: rgba(255, 255, 255, 0.2);
+            --grid-line: rgba(255, 255, 255, 0.04);
+            --hud-color: #ccff00;
+            --overlay-menu-bg: #ccff00;
+        }
+
+        body.light-mode {
+            /* Light Mode Colors */
+            --bg-body-gradient: radial-gradient(circle at 50% -10%, #ffffff 0%, #f0f0f0 60%, #e0e0e0 100%);
+            --text-main: #111111;
+            --text-muted: rgba(0, 0, 0, 0.6);
+            --neon-color: #ccff00;
+            /* Keep accent or change to darker green if needed */
+            --card-bg: rgba(0, 0, 0, 0.03);
+            --card-border: rgba(0, 0, 0, 0.1);
+            --btn-bg: #ffffff;
+            --btn-text: #000000;
+            --btn-border: #000000;
+            --marquee-bg: #ffffff;
+            --marquee-text: #000000;
+            --footer-bg: #f5f5f5;
+            --nav-border: rgba(0, 0, 0, 0.1);
+            --grid-line: rgba(0, 0, 0, 0.05);
+            --hud-color: #000000;
+            /* Overlay menu keeps brand color */
+        }
+
+        /* =========================================
+           LOADING SCREEN STYLES
+           ========================================= */
+        .loader-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #000;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px;
+            color: #fff;
+        }
+
+        .loader-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 150px;
+            width: 100%;
+        }
+
+        .loader-counter {
+            font-size: 15vw;
+            font-weight: 400;
+            line-height: 0.8;
+            color: #ccff00;
+            font-family: 'syncopate', 'montserrat', sans-serif;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 5px;
+            position: absolute;
+            bottom: 200px;
+        }
+
+        .loader-text {
+            font-family: 'montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: right;
+            line-height: 1.5;
+            color: #fff;
+            position: absolute;
+            bottom: 100px;
+        }
+
+        .loader-progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 4px;
+            width: 0%;
+            background-color: #ccff00;
+            transition: width 0.1s linear;
+        }
+
+        body {
+            visibility: visible;
+        }
+
+        /* =========================================
+           CORE STYLES & RESET
+           ========================================= */
+        html {
+            scroll-behavior: auto !important;
+            overflow-x: hidden !important;
+            height: auto !important;
+        }
+
+        body {
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+            height: auto !important;
+            background: var(--bg-body-gradient);
+            background-attachment: fixed;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        /* Invert Particles Canvas in Light Mode for cool effect */
+        body.light-mode #bg-canvas {
+            filter: invert(1) opacity(0.6);
+        }
+
+        #nu-wrapper {
+            position: relative;
+            width: 100%;
+            height: auto !important;
+            min-height: 100vh;
+            overflow: visible !important;
+            z-index: 10;
+            --font-main: 'Inter', 'Noto Sans JP', sans-serif;
+            --font-tech: 'Share Tech Mono', monospace;
+            font-family: var(--font-main);
+            background-color: transparent;
+            cursor: none;
+        }
+
+        #nu-wrapper * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* === WEBGL NOISE CANVAS === */
+        #bg-canvas {
+            position: fixed;
+            top: -20px;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            opacity: 1;
+            outline: none;
+            pointer-events: none;
+            transition: filter 0.5s ease;
+        }
+
+        #nu-wrapper .global-grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            background: linear-gradient(to right, var(--grid-line) 1px, transparent 1px);
+            background-size: calc(100% / 6) 100%;
+            border-right: 1px solid var(--grid-line);
+        }
+
+        /* --- Pinning Spacer --- */
+        #nu-wrapper .particle-pin-spacer {
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        #nu-wrapper .pinned-content {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #nu-wrapper .spline-wrapper {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: auto;
+        }
+
+        #nu-wrapper .intro-overlay-text {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            pointer-events: none;
+            mix-blend-mode: difference;
+            margin-top: 40vh;
+        }
+
+        #nu-wrapper .intro-overlay-text h2 {
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-top: 20px;
+            color: #fff;
+            /* Kept white because mix-blend-mode: difference handles contrast */
+        }
+
+        /* --- Scroll Indicator --- */
+        #nu-wrapper .scroll-indicator-2025 {
+            position: absolute;
+            bottom: 5vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 120px;
+            z-index: 20;
+            pointer-events: auto;
+            mix-blend-mode: difference;
+            cursor: pointer;
+        }
+
+        #nu-wrapper .circle-text-svg {
+            width: 100%;
+            height: 100%;
+            animation: rotateText 10s linear infinite;
+            transform-origin: center;
+        }
+
+        #nu-wrapper .circle-text-path {
+            fill: #fff;
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            font-size: 12.5px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        #nu-wrapper .scroll-arrow-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: #ccff00;
+            animation: bounceArrow 2s infinite ease-in-out;
+            filter: drop-shadow(0 0 5px rgba(204, 255, 0, 0.5));
+        }
+
+        @keyframes rotateText {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes bounceArrow {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translate(-50%, -50%) translateY(0);
+            }
+
+            40% {
+                transform: translate(-50%, -50%) translateY(-8px);
+            }
+
+            60% {
+                transform: translate(-50%, -50%) translateY(-4px);
+            }
+        }
+
+        /* --- Cursor --- */
+        #nu-wrapper .cursor-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+        }
+
+        #nu-wrapper .cursor-dot {
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #nu-wrapper .cursor-follower {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #nu-wrapper .cursor-text {
+            font-size: 10px;
+            font-weight: 800;
+            color: #000;
+            opacity: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        body.hovered #nu-wrapper .cursor-follower {
+            width: 80px;
+            height: 80px;
+            background-color: #fff;
+            border-color: transparent;
+        }
+
+        body.hovered #nu-wrapper .cursor-text {
+            opacity: 1;
+        }
+
+        body.hovered #nu-wrapper .cursor-dot {
+            opacity: 0;
+        }
+
+        #nu-wrapper .char {
+            display: inline-block;
+            will-change: transform, opacity, filter;
+            opacity: 0;
+        }
+
+        /* --- Header --- */
+        #nu-wrapper .header-container {
+            position: fixed;
+            top: 50px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            z-index: 100;
+            padding: 0 40px;
+            pointer-events: none;
+            mix-blend-mode: exclusion;
+        }
+
+        #nu-wrapper .pill-header {
+            color: #000000;
+            width: 100%;
+            max-width: 80%;
+            height: 80px;
+            border-radius: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            pointer-events: auto;
+        }
+
+        #nu-wrapper .brand-logo {
+            font-size: 24px;
+            font-weight: 800;
+            text-decoration: none;
+            color: #fff;
+            /* Always white due to mix-blend-mode: exclusion */
+        }
+
+        #nu-wrapper .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        #nu-wrapper .btn {
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            border: 1px solid var(--btn-border);
+            border-radius: 12px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s, color 0.3s;
+        }
+
+        #nu-wrapper .btn:hover {
+            transform: scale(1.05);
+        }
+
+        #nu-wrapper .btn-menu {
+            width: 60px;
+        }
+
+        #nu-wrapper .hamburger-icon span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background-color: currentColor;
+            margin: 3px 0;
+        }
+
+        #nu-wrapper .btn-contact {
+            padding: 0 24px;
+            text-decoration: none;
+        }
+
+        #nu-wrapper .btn-camera {
+            width: 44px;
+            margin-right: 0px;
+        }
+
+        #nu-wrapper .btn-camera.active {
+            background-color: var(--neon-color);
+            color: #000;
+            border-color: var(--neon-color);
+        }
+
+        /* Theme Toggle Button */
+        #nu-wrapper .btn-theme-toggle {
+            width: 44px;
+            margin-right: 0px;
+        }
+
+        /* =========================================================
+           TECH DASHBOARD UI (NEW ADDITIONS)
+           ========================================================= */
+
+        /* 1. Tech Side Nav (Altitude Style) */
+        #tech-dashboard-nav {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 60vh;
+            width: 60px;
+            z-index: 800;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+            pointer-events: none;
+            /* Allows click through, but children will have pointer-events auto */
+            font-family: var(--font-tech);
+            color: rgba(255, 255, 255, 0.6);
+            mix-blend-mode: difference;
+        }
+
+        body.light-mode #tech-dashboard-nav {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .tech-nav-label-top,
+        .tech-nav-label-bottom {
+            font-size: 10px;
+            letter-spacing: 2px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            opacity: 0.7;
+        }
+
+        .tech-scale-container {
+            position: relative;
+            height: 100%;
+            width: 40px;
+            border-right: 1px solid var(--nav-border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 0;
+            margin: 10px 0;
+            pointer-events: auto;
+        }
+
+        /* The Tick Marks */
+        .tech-tick {
+            width: 8px;
+            height: 1px;
+            background-color: var(--text-muted);
+            align-self: flex-end;
+            position: relative;
+            transition: width 0.3s, background-color 0.3s;
+        }
+
+        .tech-tick.major {
+            width: 20px;
+            background-color: var(--text-main);
+        }
+
+        /* Interactive Section Areas (Transparent hitboxes) */
+        .tech-anchor-item {
+            position: absolute;
+            right: 0;
+            height: 20px;
+            /* Hit area height */
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tech-anchor-item:hover .tech-tick-ref {
+            width: 30px;
+            background-color: var(--text-main);
+        }
+
+        .tech-anchor-item:hover .tech-anchor-text {
+            opacity: 1;
+            transform: translateX(-10px);
+            color: var(--neon-color);
+        }
+
+        .tech-tick-ref {
+            width: 20px;
+            height: 2px;
+            background-color: var(--text-main);
+            margin-right: 0;
+        }
+
+        .tech-anchor-text {
+            position: absolute;
+            right: 35px;
+            font-size: 12px;
+            opacity: 0;
+            transform: translateX(10px);
+            transition: all 0.3s ease-out;
+            white-space: nowrap;
+            color: #fff;
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 2px 6px;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Current Indicator (The moving yellow slider) */
+        .tech-indicator {
+            position: absolute;
+            right: -2px;
+            /* Align with border */
+            top: 0;
+            width: 0;
+            height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-right: 10px solid var(--neon-color);
+            transform: translateY(-50%);
+            transition: top 0.1s linear;
+            /* Smooth follow */
+            filter: drop-shadow(0 0 4px var(--neon-color));
+        }
+
+        .tech-indicator::after {
+            content: '';
+            position: absolute;
+            right: -38px;
+            /* Extend line across */
+            top: -1px;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-color), transparent);
+            opacity: 0.5;
+        }
+
+        /* 2. Corner HUD (Bottom Left) */
+        #tech-hud-left {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            z-index: 800;
+            font-family: var(--font-tech);
+            color: var(--neon-color);
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 12px;
+            mix-blend-mode: difference;
+        }
+
+        body.light-mode #tech-hud-left {
+            /* Since mix-blend-mode is difference, light background makes this color inverted. 
+               If neon-color is bright green, inverted on white it becomes purpleish. 
+               Let's keep it simple. */
+        }
+
+        .hud-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hud-label {
+            opacity: 0.6;
+        }
+
+        .hud-value {
+            font-weight: bold;
+        }
+
+        .hud-crosshair {
+            width: 20px;
+            height: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.light-mode .hud-crosshair {
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .hud-crosshair::before,
+        .hud-crosshair::after {
+            content: '';
+            position: absolute;
+            background: var(--neon-color);
+        }
+
+        .hud-crosshair::before {
+            width: 100%;
+            height: 1px;
+        }
+
+        .hud-crosshair::after {
+            width: 1px;
+            height: 100%;
+        }
+
+        @media (max-width: 768px) {
+
+            #tech-dashboard-nav,
+            #tech-hud-left {
+                display: none;
+            }
+        }
+
+
+        /* --- Main Layout --- */
+        #nu-wrapper section {
+            width: 100%;
+            min-height: 300px;
+            position: relative;
+        }
+
+        #nu-wrapper .section-dark {
+            background-color: transparent;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- CROSSED MARQUEE (NEW STYLES) --- */
+        #nu-wrapper .section-crossed-marquee {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: visible;
+            z-index: 3;
+            top: -80px;
+        }
+
+        #nu-wrapper .marquee-strip {
+            position: absolute;
+            width: 120%;
+            background-color: var(--marquee-bg);
+            padding: 25px 0;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            left: -10%;
+            border-top: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
+            transition: background-color 0.5s ease;
+        }
+
+        #nu-wrapper .strip-1 {
+            transform: rotate(-3deg);
+            z-index: 1;
+        }
+
+        #nu-wrapper .strip-2 {
+            transform: rotate(3deg);
+            z-index: 2;
+        }
+
+        /* New Marquee Item Styles */
+        #nu-wrapper .marquee-track {
+            display: flex;
+            white-space: nowrap;
+            animation: marquee-move 20s linear infinite;
+        }
+
+        #nu-wrapper .marquee-track.reverse {
+            animation: marquee-move-reverse 20s linear infinite;
+        }
+
+        #nu-wrapper .marquee-group {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            /* Spacing between items */
+            padding-right: 60px;
+            /* Seamless loop spacing */
+            flex-shrink: 0;
+            /* Prevent shrinking */
+        }
+
+        #nu-wrapper .marquee-text-solid {
+            font-family: 'Syncopate', 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 2.2rem;
+            color: var(--marquee-text);
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        #nu-wrapper .marquee-text-outline {
+
+            font-family: 'Syncopate', 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+
+        .marquee-text-outline {
+            color: transparent;
+            -webkit-text-stroke: 1px var(--marquee-text);
+        }
+
+        #nu-wrapper .marquee-item-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #nu-wrapper .marquee-item-logo img {
+            height: clamp(30px, 4vw, 50px);
+            width: auto;
+            display: block;
+            /* Invert icons in light mode if they are black SVG shapes? 
+               Assuming they are SVGs that need inversion or they are already compatible. 
+               If they are white lines in dark mode, they need to be black in light mode.
+            */
+        }
+
+        body.light-mode .marquee-item-logo img {
+            filter: invert(1);
+        }
+
+        @keyframes marquee-move {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        @keyframes marquee-move-reverse {
+            0% {
+                transform: translateX(-50%);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        /* --- EXPLOSIVE ZOOM --- */
+        #nu-wrapper .section-explosive-zoom {
+            height: 250vh;
+            background: transparent;
+            z-index: 6;
+        }
+
+        #nu-wrapper .explosive-wrapper {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #nu-wrapper .center-stage {
+            position: relative;
+            width: 65vw;
+            aspect-ratio: 16/9;
+            z-index: 10;
+            transform-origin: center center;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        #nu-wrapper .center-stage video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #nu-wrapper .center-text-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 2;
+        }
+
+        #nu-wrapper .center-text-overlay h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            color: #fff;
+            /* Video overlay always white */
+        }
+
+        #nu-wrapper .center-text-overlay p {
+            font-size: 1rem;
+            opacity: 0.7;
+            color: #fff;
+        }
+
+        #nu-wrapper .float-item {
+            position: absolute;
+            z-index: 5;
+            will-change: transform, opacity;
+        }
+
+        #nu-wrapper .float-img,
+        #nu-wrapper .float-img2,
+        #nu-wrapper .float-img3 {
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        #nu-wrapper .float-img {
+            width: 300px;
+            height: 200px;
+        }
+
+        #nu-wrapper .float-img2 {
+            width: 274px;
+            height: 341px;
+        }
+
+        #nu-wrapper .float-img3 {
+            width: 147px;
+            height: 185px;
+        }
+
+        #nu-wrapper .float-pill {
+            padding: 12px 24px;
+            background: #aabcc4;
+            color: #000;
+            border-radius: 40px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        #nu-wrapper .pos-1 {
+            top: 15%;
+            left: 10%;
+            transform: rotate(0deg);
+        }
+
+        #nu-wrapper .pos-2 {
+            bottom: 15%;
+            left: 8%;
+            transform: rotate(0deg);
+        }
+
+        #nu-wrapper .pos-3 {
+            top: 25%;
+            right: 8%;
+        }
+
+        #nu-wrapper .pos-4 {
+            bottom: 20%;
+            right: 12%;
+            transform: rotate(0deg);
+        }
+
+        #nu-wrapper .pos-5 {
+            bottom: 5%;
+            left: 40%;
+            filter: blur(4px);
+            opacity: 0.7;
+        }
+
+        /* --- HORIZONTAL STATS SCROLL --- */
+        #nu-wrapper .section-horizontal-staggered {
+            width: 100%;
+            height: 100vh;
+            background-color: transparent;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            z-index: 3;
+            padding: 10vh 0;
+        }
+
+        #nu-wrapper .horizontal-staggered-wrapper {
+            display: flex;
+            flex-wrap: nowrap;
+            height: 80%;
+            align-items: center;
+            padding-left: 10vw;
+            padding-right: 10vw;
+            gap: 6vw;
+        }
+
+        #nu-wrapper .staggered-card {
+            width: 25vw;
+            min-width: 350px;
+            height: 45vh;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-shrink: 0;
+            position: relative;
+            transition: background-color 0.3s, transform 0.3s;
+            backdrop-filter: blur(5px);
+            overflow: hidden;
+            /* Added to contain the atomic icon */
+        }
+
+        #nu-wrapper .staggered-card:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body.light-mode .staggered-card:hover {
+            background-color: rgba(0, 0, 0, 0.08);
+        }
+
+        #nu-wrapper .staggered-card:nth-child(odd) {
+            margin-top: -15vh;
+        }
+
+        #nu-wrapper .staggered-card:nth-child(even) {
+            margin-top: 15vh;
+        }
+
+        #nu-wrapper .staggered-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            z-index: 2;
+            position: relative;
+        }
+
+        #nu-wrapper .stat-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        #nu-wrapper .stat-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--text-main);
+            border-radius: 50%;
+            opacity: 0.4;
+        }
+
+        #nu-wrapper .staggered-card:hover .stat-dot {
+            opacity: 1;
+        }
+
+        #nu-wrapper .staggered-num {
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(3rem, 5vw, 5rem);
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 20px;
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+
+        #nu-wrapper .staggered-footer {
+            margin-top: auto;
+            z-index: 2;
+            position: relative;
+        }
+
+        #nu-wrapper .staggered-title {
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        #nu-wrapper .staggered-desc {
+            font-size: 0.9rem;
+            opacity: 0.5;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        /* === ATOMIC ICON STYLES (INTEGRATED) === */
+        .atomic-icon-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            max-height: 250px;
+            /* Limit size */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            /* Let clicks pass through */
+            z-index: 0;
+            /* Behind text */
+            opacity: 0.8;
+            filter: drop-shadow(0 0 4px rgba(204, 255, 0, 0.4)) drop-shadow(0 0 15px rgba(204, 255, 0, 0.1));
+        }
+
+        .orbit-line {
+            fill: none;
+            stroke: #ccff00;
+            stroke-width: 0.8;
+            opacity: 0.6;
+        }
+
+        .outer-dashed {
+            fill: none;
+            stroke: #ccff00;
+            stroke-width: 1;
+            stroke-dasharray: 10 15;
+            stroke-linecap: round;
+            transform-origin: center;
+            animation: spinAtom 20s linear infinite;
+            opacity: 0.5;
+        }
+
+        .inner-ring {
+            fill: none;
+            stroke: #ccff00;
+            stroke-width: 0.3;
+            opacity: 0.3;
+        }
+
+        .center-core {
+            fill: #ccff00;
+        }
+
+        .electron {
+            fill: #fff;
+            filter: drop-shadow(0 0 2px #ccff00);
+        }
+
+        body.light-mode .electron {
+            fill: #000;
+        }
+
+        @keyframes spinAtom {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* === GEOMETRIC ICON STYLES (NEW) === */
+        .geometric-icon-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            max-height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .geometric-icon-wrapper svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 5px rgba(204, 255, 0, 0.8));
+            animation: pulseGeoScale 4s ease-in-out infinite;
+        }
+
+        .geo-shape {
+            fill: none;
+            stroke: url(#geoGradient);
+            stroke-linecap: round;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawGeoLine 3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .geo-main-cross {
+            stroke-width: 1;
+            opacity: 1;
+        }
+
+        .geo-diagonal-cross {
+            stroke-width: 1;
+            opacity: 0.5;
+        }
+
+        @keyframes drawGeoLine {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes pulseGeoScale {
+
+            0%,
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 5px rgba(204, 255, 0, 0.6));
+            }
+
+            50% {
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 15px rgba(204, 255, 0, 0.9));
+            }
+        }
+
+        /* === WIREFRAME ICON STYLES (NEWLY ADDED) === */
+        /* --- Wrapper --- */
+        .wireframe-icon-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            max-height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            z-index: 0;
+            /* Float Animation applied to wrapper or SVG */
+            animation: wf-float 6s ease-in-out infinite;
+        }
+
+        .wireframe-icon-wrapper svg {
+            width: 100%;
+            height: 100%;
+            /* Subtle neon green glow matching other icons */
+            filter: drop-shadow(0 0 8px rgba(204, 255, 0, 0.4));
+        }
+
+        /* --- Wireframe Common --- */
+        .wf-wireframe {
+            fill: none;
+            stroke: #ccff00;
+            stroke-width: 0.8;
+            opacity: 0.8;
+        }
+
+        /* 1. Outer Dashed */
+        .wf-outer-dashed {
+            stroke-dasharray: 4 6;
+            opacity: 0.5;
+            transform-origin: center;
+            animation: wf-spinSlow 30s linear infinite;
+        }
+
+        /* 2. Axis Line */
+        .wf-axis-line {
+            stroke-width: 0.5;
+            opacity: 0.3;
+        }
+
+        /* 3. Latitude Ring */
+        .wf-latitude-ring {
+            opacity: 0.7;
+        }
+
+        /* 4. Equator Ring */
+        .wf-equator-ring {
+            opacity: 0.9;
+            stroke: #ccff00;
+            animation: wf-pulseStroke 3s ease-in-out infinite;
+        }
+
+        /* 5. Node Dot */
+        .wf-node-dot {
+            fill: #ccff00;
+            filter: drop-shadow(0 0 4px #ccff00);
+            animation: wf-blink 2s infinite alternate;
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+
+        /* --- Wireframe Animations --- */
+        @keyframes wf-spinSlow {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes wf-pulseStroke {
+
+            0%,
+            100% {
+                stroke-opacity: 0.5;
+                stroke-width: 0.8;
+            }
+
+            50% {
+                stroke-opacity: 1;
+                stroke-width: 1.2;
+            }
+        }
+
+        @keyframes wf-blink {
+            0% {
+                opacity: 0.4;
+                transform: scale(0.8);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes wf-float {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) translateY(0);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) translateY(-10px);
+            }
+        }
+
+        /* === HOLOGRAPHIC GEOMETRY ICON STYLES (NEW) === */
+        .holographic-icon-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            max-height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .holographic-icon-wrapper svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 5px rgba(204, 255, 0, 0.4));
+        }
+
+        .hg-shape {
+            fill: none;
+            stroke: var(--neon-color);
+            /* #ccff00 */
+            stroke-width: 1;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            vector-effect: non-scaling-stroke;
+        }
+
+        /* 1. Outer Square */
+        .hg-layer-outer {
+            opacity: 0.6;
+            stroke-width: 1;
+        }
+
+        /* 2. Octagon Flow */
+        .hg-layer-flow {
+            stroke-dasharray: 20 15;
+            animation: hg-dash-flow 12s linear infinite;
+            opacity: 0.9;
+        }
+
+        /* 3. Diamond Breathe */
+        .hg-layer-breathe {
+            transform-origin: center;
+            transform-box: fill-box;
+            animation: hg-breathe 6s ease-in-out infinite alternate;
+        }
+
+        /* 4. Circle Pulse */
+        .hg-layer-pulse {
+            transform-origin: center;
+            transform-box: fill-box;
+            animation: hg-breathe 6s ease-in-out infinite alternate-reverse;
+            opacity: 1;
+        }
+
+        /* 5. Core Square Spin */
+        .hg-layer-core {
+            stroke-width: 1;
+            transform-origin: center;
+            transform-box: fill-box;
+            animation: hg-spin 15s linear infinite;
+            /* 修改：移除白色/黑色，改為跟其他線條一樣的霓虹色 */
+            stroke: var(--neon-color);
+            /* 修改：稍微降低不透明度以融入整體 */
+            opacity: 0.9;
+        }
+
+        /* 移除原本 Light Mode 對核心方形的黑色覆蓋，保持全色系一致 */
+        /* body.light-mode .hg-layer-core { stroke: #000; }  <-- Removed */
+
+        @keyframes hg-dash-flow {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
+
+        @keyframes hg-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes hg-breathe {
+            0% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+        }
+
+        /* ===================================== */
+
+        @media (max-width: 768px) {
+            #nu-wrapper .horizontal-staggered-wrapper {
+                flex-direction: column;
+                height: auto;
+                padding: 0 20px;
+                gap: 40px;
+                transform: none !important;
+            }
+
+            #nu-wrapper .section-horizontal-staggered {
+                height: auto;
+                overflow-y: visible;
+                padding: 100px 0;
+            }
+
+            #nu-wrapper .staggered-card {
+                width: 100%;
+                margin-top: 0 !important;
+                height: auto;
+                min-height: 300px;
+            }
+        }
+
+        /* --- Pinned Text Reveal --- */
+        #nu-wrapper .section-pinned-text {
+            width: 100%;
+            height: auto;
+            position: relative;
+            background-color: transparent;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #nu-wrapper .pinned-text-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        #nu-wrapper .pinned-text-title {
+            font-size: 40px;
+            font-weight: 900;
+            color: var(--text-muted);
+            margin-bottom: 60px;
+            filter: blur(8px);
+            opacity: 0.5;
+            transform: translateY(20px);
+            font-family: 'Noto Sans JP', sans-serif;
+            letter-spacing: -1px;
+        }
+
+        #nu-wrapper .pinned-text-body {
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #nu-wrapper .pinned-line {
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 1.6;
+            color: var(--text-muted);
+            opacity: 0.3;
+            transition: color 0.3s;
+        }
+
+        #nu-wrapper .pinned-line.highlight {
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        #nu-wrapper .pinned-line.special {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: 900;
+        }
+
+        /* --- Card Stack --- */
+        #nu-wrapper .section-stack-wrapper {
+            background-color: transparent;
+            position: relative;
+            z-index: 4;
+            padding-bottom: 0;
+        }
+
+        #nu-wrapper .card-stack-container {
+            width: 100%;
+            position: relative;
+        }
+
+        #nu-wrapper .project-card {
+            width: 100%;
+            height: 100vh;
+            background-color: var(--btn-bg);
+            /* Use btn-bg which toggles black/white */
+            color: #fff;
+            /* Text always white on cards because of video background overlay? */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid var(--card-border);
+            overflow: hidden;
+            transform: translate3d(0, 0, 0);
+            will-change: transform;
+            box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        body.light-mode #nu-wrapper .project-card {
+            color: #000;
+            /* In light mode, if video isn't there, we want text to be visible */
+        }
+
+        #nu-wrapper .card-bg-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            opacity: 0.7;
+            transition: transform 1.5s ease-out;
+        }
+
+        #nu-wrapper .project-card:hover .card-bg-video {
+            transform: scale(1.05);
+        }
+
+        #nu-wrapper .card-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.4) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* In light mode, maybe lighten the mask or remove it? 
+           But the video is under text. If text is white, we need dark mask.
+           If we switch to light mode, maybe the text on cards should stay white because of the video? 
+           Let's keep card text white even in light mode for now as they are "media cards".
+        */
+        body.light-mode #nu-wrapper .project-card {
+            color: #fff;
+        }
+
+        #nu-wrapper .card-inner {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 100px 40px 60px 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+
+        #nu-wrapper .card-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 30px;
+        }
+
+        #nu-wrapper .header-top-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+
+        #nu-wrapper .project-tags .tag-pill {
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
+        }
+
+        #nu-wrapper .header-main-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        #nu-wrapper .project-title {
+            font-size: clamp(4rem, 8vw, 8rem);
+            font-weight: 800;
+            line-height: 0.9;
+            letter-spacing: -3px;
+            margin: 0;
+            text-transform: uppercase;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        #nu-wrapper .view-btn {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        #nu-wrapper .view-btn:hover {
+            background-color: var(--neon-color);
+            color: #000;
+            border-color: var(--neon-color);
+            transform: scale(1.1);
+        }
+
+        #nu-wrapper .card-body-overlay {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+        }
+
+        #nu-wrapper .info-label {
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--neon-color);
+            display: block;
+        }
+
+        /* --- Legacy Grid --- */
+        #nu-wrapper .legacy-grid-wrapper {
+            background-color: transparent;
+            color: var(--text-main);
+            position: relative;
+            z-index: 10;
+        }
+
+        #nu-wrapper .legacy-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 150px 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8vw;
+            width: 100%;
+        }
+
+        #nu-wrapper .col-left {
+            display: flex;
+            flex-direction: column;
+            gap: 150px;
+        }
+
+        #nu-wrapper .col-right {
+            display: flex;
+            flex-direction: column;
+            gap: 150px;
+            padding-top: 250px;
+        }
+
+        #nu-wrapper .grid-card {
+            width: 100%;
+            position: relative;
+        }
+
+        #nu-wrapper .media {
+            background-color: transparent;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        #nu-wrapper .ratio-1 {
+            aspect-ratio: 680 / 540;
+        }
+
+        #nu-wrapper .ratio-2 {
+            aspect-ratio: 652 / 860;
+        }
+
+        #nu-wrapper .ratio-3 {
+            aspect-ratio: 436 / 580;
+            width: 70%;
+        }
+
+        #nu-wrapper .ratio-4 {
+            aspect-ratio: 544 / 520;
+            width: 85%;
+        }
+
+        #nu-wrapper .photo-webgl-source {
+            width: 100%;
+            height: 140%;
+            object-fit: cover;
+            opacity: 1;
+            will-change: transform, filter;
+            position: relative;
+            transform: scale(1.1);
+            transition: transform 0.1s linear;
+        }
+
+        #nu-wrapper .info {
+            border-top: 1px solid var(--nav-border);
+            padding-top: 20px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #nu-wrapper .title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        #nu-wrapper .meta {
+            color: var(--text-muted);
+        }
+
+        /* --- Footer --- */
+        #nu-wrapper .main-footer {
+            position: relative;
+            background-color: var(--footer-bg);
+            color: var(--text-main);
+            padding-top: 120px;
+            overflow: hidden;
+            z-index: 10;
+            border-top: 1px solid var(--card-border);
+            transition: background-color 0.5s ease;
+        }
+
+        #nu-wrapper .footer-marquee {
+            position: relative;
+            width: 100%;
+            border-bottom: 1px solid var(--card-border);
+            padding: 30px 0;
+            margin-bottom: 80px;
+            overflow: hidden;
+        }
+
+        #nu-wrapper .footer-track {
+            display: flex;
+            white-space: nowrap;
+            animation: footerMarquee 25s linear infinite;
+        }
+
+        #nu-wrapper .footer-marquee-item {
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            font-size: 3.5rem;
+            color: var(--neon-color);
+            text-transform: uppercase;
+            margin-right: 60px;
+            letter-spacing: -1px;
+        }
+
+        @keyframes footerMarquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        #nu-wrapper .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 40px;
+            gap: 40px;
+        }
+
+        #nu-wrapper .footer-col {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        #nu-wrapper .col-title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #nu-wrapper .footer-link {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            transition: color 0.3s;
+            width: fit-content;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #nu-wrapper .footer-link:hover {
+            color: var(--neon-color);
+        }
+
+        #nu-wrapper .address-text {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+        }
+
+        #nu-wrapper .back-to-top-col {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+        }
+
+        #nu-wrapper .scroll-top-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--neon-color);
+            border: none;
+            color: #000;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #nu-wrapper .scroll-top-circle:hover {
+            transform: scale(1.15) rotate(-45deg);
+        }
+
+        #nu-wrapper .footer-bottom {
+            margin-top: 120px;
+            border-top: 1px solid var(--card-border);
+            padding: 0 40px;
+            overflow: hidden;
+        }
+
+        #nu-wrapper .giant-footer-text {
+            font-size: 9vw;
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 900;
+            line-height: 0.85;
+            color: transparent;
+            -webkit-text-stroke: 2px var(--text-main);
+            margin: 0;
+            text-align: center;
+            transition: all 0.5s;
+            cursor: default;
+            width: 100%;
+            display: block;
+            padding-bottom: 20px;
+            opacity: .4;
+        }
+
+        #nu-wrapper .giant-footer-text:hover {
+            color: var(--neon-color);
+            -webkit-text-stroke: 2px var(--neon-color);
+        }
+
+        /* --- Menu Overlay --- */
+        #nu-wrapper .overlay-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--neon-color);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            padding: 60px 4vw;
+            box-sizing: border-box;
+            visibility: hidden;
+            clip-path: inset(0 0 100% 0);
+            overflow: hidden;
+        }
+
+        #nu-wrapper .overlay-header {
+            display: flex;
+            justify-content: flex-end;
+            padding: 30px 40px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 20;
+        }
+
+        #nu-wrapper .close-btn {
+            width: 80px;
+            height: 44px;
+            background-color: #000;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #nu-wrapper .close-icon {
+            width: 20px;
+            height: 20px;
+            position: relative;
+        }
+
+        #nu-wrapper .close-icon::before,
+        #nu-wrapper .close-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--neon-color);
+            transform: rotate(45deg);
+        }
+
+        #nu-wrapper .close-icon::after {
+            transform: rotate(-45deg);
+        }
+
+        #nu-wrapper .menu-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding-top: 40px;
+        }
+
+        #nu-wrapper .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 0;
+        }
+
+        #nu-wrapper .nav-list:hover .nav-item {
+            opacity: 0.25;
+            filter: blur(1px);
+        }
+
+        #nu-wrapper .nav-item {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 2.5vh 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: opacity 0.4s ease, filter 0.4s ease, border-color 0.4s ease;
+            cursor: pointer;
+        }
+
+        #nu-wrapper .nav-item:first-child {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        #nu-wrapper .nav-item:hover {
+            opacity: 1 !important;
+            filter: blur(0) !important;
+            border-color: #000;
+        }
+
+        #nu-wrapper .nav-item-wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        #nu-wrapper .nav-link {
+            font-size: clamp(3rem, 6vw, 7rem);
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            color: #000;
+            text-decoration: none;
+            line-height: 0.95;
+            text-transform: uppercase;
+            display: block;
+            letter-spacing: -0.04em;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+        }
+
+        #nu-wrapper .nav-item:hover .nav-link {
+            transform: translateX(30px);
+        }
+
+        #nu-wrapper .nav-meta-tag {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #nu-wrapper .nav-num {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.4);
+            margin-right: 30px;
+            font-family: 'Syncopate', sans-serif;
+        }
+
+        #nu-wrapper .menu-footer-info {
+            position: absolute;
+            bottom: 40px;
+            left: 4vw;
+            width: calc(100% - 8vw);
+            padding: 30px 0 0 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            align-items: flex-start;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #000;
+            text-transform: uppercase;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.02em;
+        }
+
+        #nu-wrapper .menu-preview-float {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 350px;
+            height: 450px;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+            transition: opacity 0.3s, transform 0.1s linear;
+            mix-blend-mode: normal;
+        }
+
+        #nu-wrapper .preview-img-float {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        #nu-wrapper .preview-img-float.active {
+            display: block;
+        }
+
+        #nu-wrapper .social-link {
+            color: #000;
+            text-decoration: none;
+            position: relative;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        #nu-wrapper .social-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: #000;
+            transition: width 0.3s;
+        }
+
+        #nu-wrapper .social-link:hover::after {
+            width: 100%;
+        }
+
+        @media (max-width: 1024px) {
+            #nu-wrapper .nav-link {
+                font-size: 4rem;
+                letter-spacing: -1px;
+            }
+
+            #nu-wrapper .nav-meta-tag {
+                display: none;
+            }
+
+            #nu-wrapper .menu-footer-info {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+
+            #nu-wrapper .overlay-menu {
+                padding: 60px 20px;
+            }
+
+            #nu-wrapper .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            #nu-wrapper .back-to-top-col {
+                justify-content: flex-start;
+            }
+
+            #nu-wrapper .giant-footer-text {
+                font-size: 40px;
+            }
+
+            #nu-wrapper .pinned-text-title {
+                font-size: 1.5rem;
+                margin-bottom: 30px;
+            }
+
+            #nu-wrapper .pinned-line {
+                font-size: 1rem;
+            }
+
+            /* --- MODIFYING CURSOR VISIBILITY HERE FOR TOUCH DEVICES --- */
+            #nu-wrapper .cursor-wrapper {
+                display: none !important;
+            }
+
+            #nu-wrapper {
+                cursor: auto !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #nu-wrapper .menu-preview-float {
+                display: none !important;
+            }
+
+            #nu-wrapper .menu-footer-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .spline_mobile {
+            display: none
+        }
+
+        @media (max-width: 1120px) {
+            .spline_pc {
+                display: none;
+            }
+
+            .spline_mobile {
+                display: block;
+                width: 100%;
+                height: 500px;
+            }
+
+            #nu-wrapper .pinned-content {
+                height: 80vh;
+            }
+
+            #nu-wrapper .global-grid-lines {
+                background-size: calc(100% / 4) 100%;
+            }
+
+            #nu-wrapper .header-container {
+                padding: 0;
+            }
+
+            #nu-wrapper .pill-header {
+                padding: 0;
+            }
+
+            #nu-wrapper .intro-overlay-text {
+                display: none;
+            }
+
+            canvas {
+                width: 80%
+            }
+        }
+
+        /* --- Input Video for MediaPipe (Hidden) --- */
+        .input_video {
+            display: none;
+        }
+    </style>
+
+    <!-- ==========================================
+         結構化資料 (JSON-LD)
+         ========================================== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://www.nuclearlabs.com/#organization",
+          "name": "NUCLEAR LABS",
+          "url": "https://www.nuclearlabs.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.nuclearlabs.com/images/logo.png",
+            "width": 600,
+            "height": 60
+          },
+          "description": "先進科技展示平台，專注於 WebGL、3D 視覺化和互動式技術創新",
+          "sameAs": [
+            "https://www.facebook.com/nuclearlabs",
+            "https://twitter.com/nuclearlabs",
+            "https://www.linkedin.com/company/nuclearlabs",
+            "https://github.com/nuclearlabs"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.nuclearlabs.com/#website",
+          "url": "https://www.nuclearlabs.com/",
+          "name": "NUCLEAR LABS SYSTEM V3",
+          "description": "先進科技儀表板 - 結合 WebGL、3D 視覺化和手勢控制的未來科技展示平台",
+          "publisher": {
+            "@id": "https://www.nuclearlabs.com/#organization"
+          },
+          "inLanguage": "zh-TW"
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://www.nuclearlabs.com/#webpage",
+          "url": "https://www.nuclearlabs.com/",
+          "name": "NUCLEAR LABS SYSTEM V3 - 先進科技儀表板",
+          "isPartOf": {
+            "@id": "https://www.nuclearlabs.com/#website"
+          },
+          "about": {
+            "@id": "https://www.nuclearlabs.com/#organization"
+          },
+          "description": "探索結合 WebGL、3D 視覺化和手勢控制的先進科技儀表板。體驗未來科技的互動式展示平台，提供沉浸式的使用者體驗。",
+          "inLanguage": "zh-TW"
+        }
+      ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- 0. LOADING SCREEN -->
+    <div class="loader-screen" id="nuLoader">
+        <div class="loader-progress-bar"></div>
+        <div class="loader-content">
+            <div class="loader-counter">000</div>
+            <div class="loader-text">
+                NUCLEAR LABS SYSTEM V3<br>
+                INITIALIZING ASSETS<br>
+                EST. 2025
+            </div>
+        </div>
+    </div>
+
+    <!-- WRAPPER START -->
+    <div id="nu-wrapper">
+
+        <!-- GLOBAL GRID LINES -->
+        <div class="global-grid-lines"></div>
+
+        <!-- PARTICLE BACKGROUND CANVAS -->
+        <div id="bg-canvas"></div>
+
+        <!-- 1. CURSOR -->
+        <div class="cursor-wrapper">
+            <div class="cursor-follower"><span class="cursor-text">VIEW</span></div>
+            <div class="cursor-dot"></div>
+        </div>
+
+        <!-- NEW: TECH DASHBOARD SIDE NAV (RIGHT) -->
+        <div id="tech-dashboard-nav">
+            <div class="tech-nav-label-top">ALTITUDE_REF</div>
+
+            <div class="tech-scale-container">
+                <!-- Dynamic Ticks Generated via JS or Static -->
+                <!-- The moving triangle indicator -->
+                <div class="tech-indicator" id="techIndicator"></div>
+
+                <!-- Ticks & Hit Areas -->
+                <div class="tech-tick major"></div>
+                <!-- Hit area for Section 1 -->
+                <div class="tech-anchor-item" data-target="#home" style="top: 0%;">
+                    <div class="tech-anchor-text">HOME</div>
+                    <div class="tech-tick-ref"></div>
+                </div>
+
+                <div class="tech-tick"></div>
+                <div class="tech-tick"></div>
+                <div class="tech-tick"></div>
+
+                <div class="tech-tick major"></div>
+                <!-- Hit area for Section 2 -->
+                <div class="tech-anchor-item" data-target="#work" style="top: 25%;">
+                    <div class="tech-anchor-text">WORK</div>
+                    <div class="tech-tick-ref"></div>
+                </div>
+
+                <div class="tech-tick"></div>
+                <div class="tech-tick"></div>
+                <div class="tech-tick"></div>
+
+                <div class="tech-tick major"></div>
+                <!-- Hit area for Section 3 -->
+                <div class="tech-anchor-item" data-target="#lab" style="top: 50%;">
+                    <div class="tech-anchor-text">LAB</div>
+                    <div class="tech-tick-ref"></div>
+                </div>
+
+                <div class="tech-tick"></div>
+                <div class="tech-tick"></div>
+                <div class="tech-tick"></div>
+
+                <div class="tech-tick major"></div>
+                <!-- Hit area for Section 4 -->
+                <div class="tech-anchor-item" data-target="#grid" style="top: 75%;">
+                    <div class="tech-anchor-text">GRID</div>
+                    <div class="tech-tick-ref"></div>
+                </div>
+
+                <div class="tech-tick"></div>
+                <div class="tech-tick"></div>
+                <div class="tech-tick"></div>
+
+                <div class="tech-tick major"></div>
+                <!-- Hit area for Footer -->
+                <div class="tech-anchor-item" data-target="#contact" style="top: 100%;">
+                    <div class="tech-anchor-text">CONTACT</div>
+                    <div class="tech-tick-ref"></div>
+                </div>
+            </div>
+
+            <div class="tech-nav-label-bottom">Z-INDEX: 05</div>
+        </div>
+
+        <!-- NEW: TECH HUD (LEFT CORNER) -->
+        <div id="tech-hud-left">
+            <div class="hud-row">
+                <div class="hud-crosshair"></div>
+                <span class="hud-label">POS:</span>
+                <span class="hud-value" id="hudScrollVal">0000</span>
+            </div>
+            <div class="hud-row">
+                <span class="hud-label">FPS:</span>
+                <span class="hud-value">60</span>
+            </div>
+            <div class="hud-row">
+                <span class="hud-label">SYS:</span>
+                <span class="hud-value" style="color:#fff">ONLINE</span>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <div class="header-container">
+            <header class="pill-header">
+                <a href="#" class="brand-logo" data-cursor="hover">NUCLEAR LABS</a>
+                <div class="header-actions">
+                    <button class="btn btn-menu" id="openMenu" aria-label="Menu" data-cursor="hover">
+                        <div class="hamburger-icon"><span></span><span></span><span></span></div>
+                    </button>
+
+                    <!-- Camera Toggle -->
+                    <button class="btn btn-camera" id="toggleCamera" aria-label="Camera Control" data-cursor="hover">
+                        <i class="fas fa-video-slash"></i>
+                    </button>
+
+                    <!-- NEW: Theme Toggle Button -->
+                    <button class="btn btn-theme-toggle" id="themeToggle" aria-label="Toggle Dark/Light Mode"
+                        data-cursor="hover">
+                        <i class="fas fa-sun"></i>
+                    </button>
+
+                    <a href="#" class="btn btn-contact" data-cursor="hover"><span>CONTACT</span></a>
+                </div>
+            </header>
+        </div>
+
+        <!-- Main Content -->
+        <main>
+
+            <!-- ID added for anchors -->
+            <div class="particle-pin-spacer" id="home">
+                <div class="pinned-content">
+                    <!-- Spline Viewer -->
+                    <div class="spline_pc">
+                        <div class="spline-wrapper">
+                            <spline-viewer
+                                url="https://prod.spline.design/P9GeC1WeLuHJmIu9/scene.splinecode"></spline-viewer>
+                        </div>
+
+                    </div>
+
+                    <div class="spline_mobile">
+                        <spline-viewer
+                            url="https://prod.spline.design/rcBB4ZRQXel88K6R/scene.splinecode"></spline-viewer>
+                    </div>
+
+
+                    <!-- Text Overlay -->
+                    <div class="intro-overlay-text">
+                        <h2>透過 AI、動態與互動編碼灌注靈魂</h2>
+                    </div>
+
+                    <!-- Scroll Indicator -->
+                    <div class="scroll-indicator-2025" data-cursor="hover">
+                        <svg class="circle-text-svg" viewBox="0 0 100 100" width="100" height="100">
+                            <defs>
+                                <path id="circle" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" />
+                            </defs>
+                            <text class="circle-text-path">
+                                <textPath xlink:href="#circle">
+                                    SCROLL DOWN • DISCOVER MORE •
+                                </textPath>
+                            </text>
+                        </svg>
+                        <div class="scroll-arrow-center">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- CROSSED MARQUEE SECTION (UPDATED) -->
+            <section class="section-crossed-marquee">
+                <!-- Strip 1 -->
+                <div class="marquee-strip custom-style strip-1">
+                    <div class="marquee-track">
+                        <div class="marquee-group">
+                            <span class="marquee-text-solid">CREATIVE SYSTEM</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/4.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-outline">DESIGN PHILOSOPHY</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/3.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-solid">FUSION THINKING</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/2.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-outline">STRUCTURED CREATIVITY</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/0.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-solid">DESIGN WITH PURPOSE</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/1.svg" alt="Icon">
+                            </div>
+                        </div>
+                        <div class="marquee-group">
+                            <span class="marquee-text-solid">CREATIVE SYSTEM</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/4.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-outline">DESIGN PHILOSOPHY</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/3.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-solid">FUSION THINKING</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/2.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-outline">STRUCTURED CREATIVITY</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/0.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-solid">DESIGN WITH PURPOSE</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/1.svg" alt="Icon">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strip 2 -->
+                <div class="marquee-strip custom-style strip-2">
+                    <div class="marquee-track reverse">
+                        <div class="marquee-group">
+                            <span class="marquee-text-solid">CREATIVE SYSTEM</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/4.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-outline">DESIGN PHILOSOPHY</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/3.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-solid">FUSION THINKING</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/2.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-outline">STRUCTURED CREATIVITY</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/0.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-solid">DESIGN WITH PURPOSE</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/1.svg" alt="Icon">
+                            </div>
+                        </div>
+                        <div class="marquee-group">
+                            <span class="marquee-text-solid">CREATIVE SYSTEM</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/4.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-outline">DESIGN PHILOSOPHY</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/3.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-solid">FUSION THINKING</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/2.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-outline">STRUCTURED CREATIVITY</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/0.svg" alt="Icon">
+                            </div>
+                            <span class="marquee-text-solid">DESIGN WITH PURPOSE</span>
+                            <div class="marquee-item-logo"><img
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/1.svg" alt="Icon">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- CARD STACK -->
+            <div class="section-stack-wrapper" id="work">
+                <div class="card-stack-container">
+                    <div class="project-card" data-cursor="view">
+                        <video class="card-bg-video" autoplay muted loop playsinline>
+                            <source src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/logo.mp4"
+                                type="video/mp4">
+                        </video>
+                        <div class="card-mask"></div>
+                        <div class="card-inner">
+                            <div class="card-header">
+                                <div class="header-top-row">
+                                    <div class="project-number">PROJECT <span>01</span></div>
+                                    <div class="project-tags"><span class="tag-pill">WEB</span><span
+                                            class="tag-pill">BRANDING</span></div>
+                                </div>
+                                <div class="header-main-row">
+                                    <h2 class="project-title" data-effect="text-reveal">NITTA DuPont</h2>
+                                    <div class="view-btn">VIEW</div>
+                                </div>
+                            </div>
+                            <div class="card-body-overlay">
+                                <div class="card-info"><span class="info-label">OUTLINE</span>
+                                    <p class="info-desc">We handled the rebranding and web design for Nitta DuPont.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card" data-cursor="view">
+                        <video class="card-bg-video" autoplay muted loop playsinline>
+                            <source src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/N.webm"
+                                type="video/webm">
+                        </video>
+                        <div class="card-mask"></div>
+                        <div class="card-inner">
+                            <div class="card-header">
+                                <div class="header-top-row">
+                                    <div class="project-number">PROJECT <span>02</span></div>
+                                    <div class="project-tags"><span class="tag-pill">WEB</span><span
+                                            class="tag-pill">RECRUIT</span></div>
+                                </div>
+                                <div class="header-main-row">
+                                    <h2 class="project-title" data-effect="text-reveal">FFIS RECRUITING</h2>
+                                    <div class="view-btn">VIEW</div>
+                                </div>
+                            </div>
+                            <div class="card-body-overlay">
+                                <div class="card-info"><span class="info-label">OUTLINE</span>
+                                    <p class="info-desc">Created the new graduate recruitment site for Fujifilm Imaging
+                                        Systems.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card" data-cursor="view">
+                        <video class="card-bg-video" autoplay muted loop playsinline>
+                            <source src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/n33iw-gkqw3.webm"
+                                type="video/webm">
+                        </video>
+                        <div class="card-mask"></div>
+                        <div class="card-inner">
+                            <div class="card-header">
+                                <div class="header-top-row">
+                                    <div class="project-number">PROJECT <span>03</span></div>
+                                    <div class="project-tags"><span class="tag-pill">APP</span><span
+                                            class="tag-pill">UI/UX</span></div>
+                                </div>
+                                <div class="header-main-row">
+                                    <h2 class="project-title" data-effect="text-reveal">NEON FUSION</h2>
+                                    <div class="view-btn">VIEW</div>
+                                </div>
+                            </div>
+                            <div class="card-body-overlay">
+                                <div class="card-info"><span class="info-label">OUTLINE</span>
+                                    <p class="info-desc">A conceptual UI study for a next-generation music streaming
+                                        service.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- EXPLOSIVE ZOOM SECTION -->
+            <section class="section-explosive-zoom" id="lab">
+                <div class="explosive-wrapper">
+                    <div class="center-stage">
+                        <video autoplay muted loop playsinline>
+                            <source src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/nn.webm"
+                                type="video/webm">
+                        </video>
+                        <div class="center-text-overlay">
+                            <h2>Motion Templates</h2>
+                            <p>for ready-to-move designers</p>
+                        </div>
+                    </div>
+                    <div class="float-item pos-1"><img
+                            src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/2.png" class="float-img"
+                            alt="Nature"></div>
+                    <div class="float-item pos-2"><img
+                            src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/4.png" class="float-img3"
+                            alt="Nature"></div>
+                    <div class="float-item pos-3" style="text-align:right;"><img
+                            src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/3-1.png" class="float-img2"
+                            alt="Nature"></div>
+                    <div class="float-item pos-4">
+                        <div class="float-pill">VEEPS</div>
+                    </div>
+                    <div class="float-item pos-5"><img
+                            src="https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?q=80&w=300"
+                            class="float-img" style="width:120px; height:120px;"></div>
+                </div>
+            </section>
+
+            <!-- UPDATED HORIZONTAL SCROLL -->
+            <section class="section-horizontal-staggered">
+                <div class="horizontal-staggered-wrapper">
+                    <!-- Panel 1 (UPDATED WITH WIREFRAME ICON) -->
+                    <div class="staggered-card" data-cursor="view">
+                        <div class="staggered-header">
+                            <div class="stat-dots">
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                            </div>
+                            <div class="staggered-num">62+</div>
+                        </div>
+
+                        <!-- NEW WIREFRAME ICON WRAPPER -->
+                        <div class="wireframe-icon-wrapper">
+                            <svg viewBox="0 0 400 400">
+                                <!-- 1. 外圈大虛線圓 -->
+                                <circle cx="200" cy="200" r="190" class="wf-wireframe wf-outer-dashed" />
+
+                                <!-- 2. 垂直貫穿軸線 -->
+                                <line x1="200" y1="10" x2="200" y2="390" class="wf-wireframe wf-axis-line" />
+
+                                <!-- 3. 上方透視環 (橢圓) -->
+                                <ellipse cx="200" cy="100" rx="140" ry="35" class="wf-wireframe wf-latitude-ring" />
+
+                                <!-- 4. 下方透視環 -->
+                                <ellipse cx="200" cy="300" rx="140" ry="35" class="wf-wireframe wf-latitude-ring" />
+
+                                <!-- 5. 中間赤道環群 (密集區) -->
+                                <ellipse cx="200" cy="200" rx="170" ry="50" class="wf-wireframe wf-equator-ring"
+                                    style="animation-delay: 0s" />
+                                <ellipse cx="200" cy="200" rx="120" ry="35" class="wf-wireframe wf-equator-ring"
+                                    style="animation-delay: 0.5s" />
+                                <ellipse cx="200" cy="200" rx="70" ry="20" class="wf-wireframe wf-equator-ring"
+                                    style="animation-delay: 1s" />
+
+                                <!-- 6. 關鍵節點 (白點) -->
+                                <circle cx="200" cy="100" r="3" class="wf-node-dot" />
+                                <circle cx="200" cy="200" r="4" class="wf-node-dot" style="animation-delay: 0.5s" />
+                                <circle cx="200" cy="300" r="3" class="wf-node-dot" />
+                            </svg>
+                        </div>
+
+                        <div class="staggered-footer">
+                            <div class="staggered-title">PROJECTS</div>
+                            <div class="staggered-desc">WEBSITES DESIGNED & BUILT FOR STARTUPS, AGENCIES, AND BRANDS
+                                WORLDWIDE.</div>
+                        </div>
+                    </div>
+                    <!-- Panel 2 (WITH ATOMIC ICON) -->
+                    <div class="staggered-card" data-cursor="view">
+                        <div class="staggered-header">
+                            <div class="stat-dots">
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                            </div>
+                            <div class="staggered-num">3+</div>
+                        </div>
+
+                        <!-- Inserted Atomic Icon Here -->
+                        <div class="atomic-icon-wrapper">
+                            <svg viewBox="0 0 400 400" style="width: 100%; height: 100%;">
+                                <defs>
+                                    <path id="baseOrbit" d="M60,200 a140,60 0 1,0 280,0 a140,60 0 1,0 -280,0" />
+                                </defs>
+
+                                <!-- Tech UI Outer Dashed -->
+                                <circle cx="200" cy="200" r="190" class="outer-dashed" />
+                                <circle cx="200" cy="200" r="175" class="inner-ring" />
+
+                                <!-- Orbit 1 -->
+                                <g transform="rotate(-30, 200, 200)">
+                                    <use href="#baseOrbit" class="orbit-line" />
+                                    <circle cx="60" cy="200" r="1.5" fill="#ccff00" opacity="0.8" />
+                                    <circle cx="340" cy="200" r="1.5" fill="#ccff00" opacity="0.8" />
+                                    <circle r="4" class="electron">
+                                        <animateMotion repeatCount="indefinite" dur="3s" rotate="auto">
+                                            <mpath href="#baseOrbit" />
+                                        </animateMotion>
+                                    </circle>
+                                </g>
+
+                                <!-- Orbit 2 -->
+                                <g transform="rotate(30, 200, 200)">
+                                    <use href="#baseOrbit" class="orbit-line" />
+                                    <circle r="4" class="electron">
+                                        <animateMotion repeatCount="indefinite" dur="4s" begin="-1s" rotate="auto">
+                                            <mpath href="#baseOrbit" />
+                                        </animateMotion>
+                                    </circle>
+                                </g>
+
+                                <!-- Orbit 3 -->
+                                <g transform="rotate(90, 200, 200)">
+                                    <use href="#baseOrbit" class="orbit-line" />
+                                    <circle r="4" class="electron">
+                                        <animateMotion repeatCount="indefinite" dur="5s" begin="-2.5s" rotate="auto">
+                                            <mpath href="#baseOrbit" />
+                                        </animateMotion>
+                                    </circle>
+                                </g>
+
+                                <!-- Center Core -->
+                                <circle cx="200" cy="200" r="15" class="center-core">
+                                    <animate attributeName="r" values="15;18;15" dur="2s" repeatCount="indefinite" />
+                                    <animate attributeName="opacity" values="0.8;1;0.8" dur="2s"
+                                        repeatCount="indefinite" />
+                                </circle>
+                            </svg>
+                        </div>
+
+                        <div class="staggered-footer">
+                            <div class="staggered-title">YEARS EXPERIENCE</div>
+                            <div class="staggered-desc">REFINING PROCESS, CLARITY, AND PERFORMANCE-DRIVEN DESIGN.</div>
+                        </div>
+                    </div>
+                    <!-- Panel 3 (WITH GEOMETRIC ICON) -->
+                    <div class="staggered-card" data-cursor="view">
+                        <div class="staggered-header">
+                            <div class="stat-dots">
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                            </div>
+                            <div class="staggered-num">98%</div>
+                        </div>
+
+                        <!-- Inserted Geometric Icon Here -->
+                        <div class="geometric-icon-wrapper">
+                            <svg viewBox="-200 -200 400 400">
+                                <defs>
+                                    <!-- Using specific ID to avoid conflicts -->
+                                    <linearGradient id="geoGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+                                        <stop offset="0%" stop-color="#ccff00" />
+                                        <stop offset="50%" stop-color="#dfff80" />
+                                        <stop offset="100%" stop-color="#ccff00" />
+                                    </linearGradient>
+                                </defs>
+
+                                <!-- 1. Diagonal Cross (Background) -->
+                                <rect x="-50" y="-140" width="100" height="280" rx="50"
+                                    class="geo-shape geo-diagonal-cross" transform="rotate(45)" />
+                                <rect x="-50" y="-140" width="100" height="280" rx="50"
+                                    class="geo-shape geo-diagonal-cross" transform="rotate(-45)" />
+
+                                <!-- 2. Main Cross (Foreground) -->
+                                <rect x="-50" y="-150" width="100" height="300" rx="50"
+                                    class="geo-shape geo-main-cross" />
+                                <rect x="-50" y="-150" width="100" height="300" rx="50" class="geo-shape geo-main-cross"
+                                    transform="rotate(90)" />
+                            </svg>
+                        </div>
+
+                        <div class="staggered-footer">
+                            <div class="staggered-title">CLIENT SATISFACTION</div>
+                            <div class="staggered-desc">LONG-TERM RELATIONSHIPS, STRONG COMMUNICATION, AND CLEAR
+                                DELIVERY.</div>
+                        </div>
+                    </div>
+                    <!-- Panel 4 (UPDATED WITH HOLOGRAPHIC ICON) -->
+                    <div class="staggered-card" data-cursor="view">
+                        <div class="staggered-header">
+                            <div class="stat-dots">
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                            </div>
+                            <div class="staggered-num">5+</div>
+                        </div>
+
+                        <!-- NEW HOLOGRAPHIC GEOMETRY ICON WRAPPER -->
+                        <div class="holographic-icon-wrapper">
+                            <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                                <!-- 1. Outer Square -->
+                                <rect x="20" y="20" width="360" height="360" class="hg-shape hg-layer-outer" />
+
+                                <!-- 2. Octagon -->
+                                <polygon points="200,20 310,80 380,200 310,320 200,380 90,320 20,200 90,80"
+                                    class="hg-shape hg-layer-flow" />
+
+                                <!-- 3. Diamond -->
+                                <polygon points="200,20 380,200 200,380 20,200" class="hg-shape hg-layer-breathe" />
+
+                                <!-- 4. Circle -->
+                                <circle cx="200" cy="200" r="90" class="hg-shape hg-layer-pulse" />
+
+                                <!-- 5. Core Square -->
+                                <rect x="145" y="145" width="110" height="110" class="hg-shape hg-layer-core" />
+                            </svg>
+                        </div>
+
+                        <div class="staggered-footer">
+                            <div class="staggered-title">AVG RATING</div>
+                            <div class="staggered-desc">TRUSTED BY FOUNDERS, CREATIVES & TEAMS ACROSS DIFFERENT
+                                INDUSTRIES.</div>
+                        </div>
+                    </div>
+                    <!-- Panel 5 -->
+                    <div class="staggered-card" data-cursor="view">
+                        <div class="staggered-header">
+                            <div class="stat-dots">
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                                <div class="stat-dot"></div>
+                            </div>
+                            <div class="staggered-num">10+</div>
+                        </div>
+                        <div class="staggered-footer">
+                            <div class="staggered-title">AWARDS</div>
+                            <div class="staggered-desc">RECOGNITION FOR EXCELLENCE IN DIGITAL DESIGN AND DEVELOPMENT.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PINNED TEXT REVEAL -->
+            <section class="section-pinned-text">
+                <div class="pinned-text-container">
+                    <h2 class="pinned-text-title">Fusion is where energy converges</h2>
+                    <div class="pinned-text-body">
+                        <p class="pinned-line">「融核」，象徵著能量的聚合! 在這個 AI 與創意高速融合的時代，</p>
+                        <p class="pinned-line">融核數位設計是一個集結 AI、影像敘事、網頁體驗、視覺策略 的創意實驗室。</p>
+                        <p class="pinned-line">我們將複雜的資訊轉化為易懂、有力且富含情感的視覺體驗，</p>
+                        <p class="pinned-line highlight">從品牌、到網站、到影片，用一致且具影響力的風格說一個完整的故事。</p>
+                        <p class="pinned-line special" style="color:#ccff00; opacity: 0.1;">推動品牌前進的力量。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LEGACY GRID -->
+            <div class="legacy-grid-wrapper" id="grid">
+                <div class="legacy-container">
+                    <div class="col-left">
+                        <article class="grid-card">
+                            <div class="media ratio-1" data-cursor="view">
+                                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"
+                                    class="photo-webgl-source webgl-target">
+                            </div>
+                            <div class="info">
+                                <h2 class="title" data-effect="text-reveal">Kinetic Sandscapes</h2>
+                                <p class="meta">2025 – Branding</p>
+                            </div>
+                        </article>
+                        <article class="grid-card">
+                            <div class="media ratio-3" data-cursor="view">
+                                <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop"
+                                    class="photo-webgl-source webgl-target">
+                            </div>
+                            <div class="info">
+                                <h2 class="title" data-effect="text-reveal">Neon Structure</h2>
+                                <p class="meta">2024 – Architecture</p>
+                            </div>
+                        </article>
+                        <article class="grid-card">
+                            <div class="media ratio-3" data-cursor="view">
+                                <img src="https://images.unsplash.com/photo-1571212515416-f223d633f06c?q=80&w=2574&auto=format&fit=crop"
+                                    class="photo-webgl-source webgl-target">
+                            </div>
+                            <div class="info">
+                                <h2 class="title" data-effect="text-reveal">Brooklyn Brewery</h2>
+                                <p class="meta">2025 – Photography</p>
+                            </div>
+                        </article>
+                        <article class="grid-card">
+                            <div class="media ratio-2" data-cursor="view">
+                                <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=2676&auto=format&fit=crop"
+                                    class="photo-webgl-source webgl-target">
+                            </div>
+                            <div class="info">
+                                <h2 class="title" data-effect="text-reveal">Regenerative</h2>
+                                <p class="meta">2025 – Photography</p>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="col-right">
+                        <article class="grid-card">
+                            <div class="media ratio-2" data-cursor="view">
+                                <img src="https://images.unsplash.com/photo-1493324623722-e4d0752538cb?q=80&w=2670&auto=format&fit=crop"
+                                    class="photo-webgl-source webgl-target">
+                            </div>
+                            <div class="info">
+                                <h2 class="title" data-effect="text-reveal">Hopscotch Payments</h2>
+                                <p class="meta">2025 – Development</p>
+                            </div>
+                        </article>
+                        <article class="grid-card">
+                            <div class="media ratio-4" data-cursor="view">
+                                <img src="https://images.unsplash.com/photo-1616469829941-c7200edec809?q=80&w=2670&auto=format&fit=crop"
+                                    class="photo-webgl-source webgl-target">
+                            </div>
+                            <div class="info">
+                                <h2 class="title" data-effect="text-reveal">Stories Worthwhile</h2>
+                                <p class="meta">2025 – UI/UX Design</p>
+                            </div>
+                        </article>
+                        <article class="grid-card">
+                            <div class="media ratio-1" data-cursor="view">
+                                <img src="https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?q=80&w=2670&auto=format&fit=crop"
+                                    class="photo-webgl-source webgl-target">
+                            </div>
+                            <div class="info">
+                                <h2 class="title" data-effect="text-reveal">Urban Exploration</h2>
+                                <p class="meta">2024 – Strategy</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <footer class="main-footer" id="contact">
+                <!-- Top Marquee -->
+                <div class="footer-marquee">
+                    <div class="footer-track">
+                        <span class="footer-marquee-item">LET'S WORK TOGETHER •</span>
+                        <span class="footer-marquee-item">START A PROJECT •</span>
+                        <span class="footer-marquee-item">SAY HELLO •</span>
+                        <span class="footer-marquee-item">LET'S WORK TOGETHER •</span>
+                        <span class="footer-marquee-item">START A PROJECT •</span>
+                        <span class="footer-marquee-item">SAY HELLO •</span>
+                    </div>
+                </div>
+                <div>
+                    <img src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/nlogo.png"
+                        style="width: 100%; height: auto; display: block;">
+                </div>
+
+                <div class="footer-content">
+                    <div class="footer-grid">
+                        <div class="footer-col">
+                            <span class="col-title">Socials</span>
+                            <a href="#" class="footer-link">Instagram</a>
+                            <a href="#" class="footer-link">Twitter</a>
+                            <a href="#" class="footer-link">LinkedIn</a>
+                        </div>
+                        <div class="footer-col">
+                            <span class="col-title">Navigation</span>
+                            <a href="#" class="footer-link">Work</a>
+                            <a href="#" class="footer-link">Studio</a>
+                            <a href="#" class="footer-link">News</a>
+                        </div>
+                        <div class="footer-col">
+                            <span class="col-title">Contact</span>
+                            <a href="mailto:hello@nuclearlabs.com" class="footer-link">hello@nuclearlabs.com</a>
+                            <span class="address-text">Tokyo, Japan</span>
+                        </div>
+                        <div class="footer-col back-to-top-col">
+                            <button id="scrollTopBtn" class="scroll-top-circle">
+                                <i class="fas fa-arrow-up"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="footer-bottom">
+                        <h1 class="giant-footer-text">NUCLEAR LABS</h1>
+                    </div>
+                </div>
+            </footer>
+        </main>
+
+        <!-- MENU OVERLAY -->
+        <div class="overlay-menu" id="menuOverlay">
+            <div class="overlay-header">
+                <div class="close-btn" id="closeMenu" data-cursor="hover">
+                    <div class="close-icon"></div>
+                </div>
+            </div>
+
+            <div class="menu-content">
+                <ul class="nav-list" id="navList">
+                    <li class="nav-item">
+                        <div class="nav-item-wrapper"><span class="nav-num">01</span><a href="#" class="nav-link"
+                                data-cursor="hover">WORK</a></div>
+                        <div class="nav-meta-tag">Case Studies</div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-item-wrapper"><span class="nav-num">02</span><a href="#" class="nav-link"
+                                data-cursor="hover">ABOUT</a></div>
+                        <div class="nav-meta-tag">Studio Profile</div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-item-wrapper"><span class="nav-num">03</span><a href="#" class="nav-link"
+                                data-cursor="hover">SERVICES</a></div>
+                        <div class="nav-meta-tag">Capabilities</div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-item-wrapper"><span class="nav-num">04</span><a href="#" class="nav-link"
+                                data-cursor="hover">INSIGHTS</a></div>
+                        <div class="nav-meta-tag">Latest News</div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-item-wrapper"><span class="nav-num">05</span><a href="#" class="nav-link"
+                                data-cursor="hover">CONTACT</a></div>
+                        <div class="nav-meta-tag">Get in Touch</div>
+                    </li>
+                </ul>
+
+                <div class="menu-footer-info">
+                    <div class="footer-col">
+                        <div class="footer-label">SAY HELLO</div>
+                        <div>HELLO@NUCLEARLABS.COM</div>
+                    </div>
+                    <div class="footer-col">
+                        <div class="footer-label">LOCATED</div>
+                        <div>TOKYO, JAPAN</div>
+                    </div>
+                    <div class="footer-col">
+                        <div class="footer-label">SOCIALS</div>
+                        <div class="social-links"><a href="#" class="social-link">IG</a></div>
+                    </div>
+                    <div class="footer-col">
+                        <div class="footer-label">COPYRIGHT</div>
+                        <div>©2025 NUCLEAR LABS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Video element for MediaPipe (Hidden) -->
+    <video class="input_video"></video>
+
+    <!-- GSAP Core & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        window.addEventListener('load', function () {
+
+            if (typeof gsap === 'undefined' || typeof Lenis === 'undefined') return;
+
+            if (window.ScrollTrigger) {
+                gsap.registerPlugin(ScrollTrigger);
+            }
+
+            // 1. Lenis Smooth Scroll
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                direction: 'vertical',
+                gestureDirection: 'vertical',
+                smooth: true,
+                mouseMultiplier: 1,
+                smoothTouch: false,
+                touchMultiplier: 2
+            });
+
+            // Tech Dashboard Logic (UPDATED)
+            const techIndicator = document.getElementById('techIndicator');
+            const hudScrollVal = document.getElementById('hudScrollVal');
+
+            if (window.ScrollTrigger) {
+                lenis.on('scroll', ScrollTrigger.update);
+                gsap.ticker.add((time) => {
+                    lenis.raf(time * 1000);
+
+                    // Update Dashboard Indicator based on scroll progress
+                    const scrollProgress = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+                    const percent = Math.min(Math.max(scrollProgress * 100, 0), 100);
+
+                    if (techIndicator) {
+                        techIndicator.style.top = `${percent}%`;
+                    }
+
+                    // Update HUD
+                    if (hudScrollVal) {
+                        hudScrollVal.innerText = Math.floor(window.scrollY).toString().padStart(4, '0');
+                    }
+                });
+                gsap.ticker.lagSmoothing(0);
+            }
+
+            // Tech Anchors Click Event
+            document.querySelectorAll('.tech-anchor-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const targetId = item.getAttribute('data-target');
+                    const targetEl = document.querySelector(targetId);
+                    if (targetEl) {
+                        lenis.scrollTo(targetEl);
+                    }
+                });
+            });
+
+            // 2. Loading Animation
+            lenis.stop();
+            const loaderCounter = document.querySelector(".loader-counter");
+            const loaderBar = document.querySelector(".loader-progress-bar");
+            const loaderScreen = document.querySelector(".loader-screen");
+
+            const loadTl = gsap.timeline({
+                onComplete: () => {
+                    lenis.start();
+                }
+            });
+
+            let progressObj = { val: 0 };
+
+            loadTl.to(progressObj, {
+                val: 100,
+                duration: 2.5,
+                ease: "power2.inOut",
+                onUpdate: () => {
+                    loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
+                    loaderBar.style.width = `${progressObj.val}%`;
+                }
+            })
+                .to(loaderScreen, {
+                    yPercent: -100,
+                    duration: 1.2,
+                    ease: "power4.inOut",
+                    delay: 0.2
+                });
+
+
+            // --- Cursor Logic ---
+            const cursorDot = document.querySelector('#nu-wrapper .cursor-dot');
+            const cursorFollower = document.querySelector('#nu-wrapper .cursor-follower');
+            const cursorText = document.querySelector('#nu-wrapper .cursor-text');
+            const xTo = gsap.quickSetter(cursorDot, "x", "px"), yTo = gsap.quickSetter(cursorDot, "y", "px");
+            const xToFollower = gsap.quickSetter(cursorFollower, "x", "px"), yToFollower = gsap.quickSetter(cursorFollower, "y", "px");
+            let mouseX = 0, mouseY = 0, followerPos = { x: 0, y: 0 };
+
+            gsap.set(cursorDot, { xPercent: -50, yPercent: -50 });
+            gsap.set(cursorFollower, { xPercent: -50, yPercent: -50 });
+
+            document.getElementById('nu-wrapper').addEventListener('mousemove', e => {
+                mouseX = e.clientX; mouseY = e.clientY; xTo(mouseX); yTo(mouseY);
+            });
+
+            gsap.ticker.add(() => {
+                const dt = 1.0 - Math.pow(1.0 - 0.1, gsap.ticker.deltaRatio());
+                followerPos.x += (mouseX - followerPos.x) * dt; followerPos.y += (mouseY - followerPos.y) * dt;
+                xToFollower(followerPos.x); yToFollower(followerPos.y);
+            });
+            document.querySelectorAll('[data-cursor]').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    document.body.classList.add('hovered');
+                    if (el.dataset.cursor === 'view') cursorText.innerText = "VIEW"; else cursorText.innerText = "";
+                });
+                el.addEventListener('mouseleave', () => {
+                    document.body.classList.remove('hovered'); cursorText.innerText = "";
+                });
+            });
+
+            // --- Text Reveal Logic ---
+            const splitText = (element) => {
+                const text = element.innerText;
+                element.innerHTML = text.split("").map(char => `<span class="char">${char === ' ' ? '&nbsp;' : char}</span>`).join("");
+            };
+            document.querySelectorAll('[data-effect="text-reveal"]').forEach(el => {
+                splitText(el);
+                const chars = el.querySelectorAll('.char');
+                if (window.ScrollTrigger) {
+                    gsap.fromTo(chars,
+                        { opacity: 0, y: 50, filter: "blur(10px)", fontWeight: 100 },
+                        {
+                            opacity: 1, y: 0, filter: "blur(0px)", fontWeight: 800,
+                            duration: 1, stagger: 0.05, ease: "power4.out",
+                            scrollTrigger: { trigger: el, start: "top 80%" }
+                        }
+                    );
+                }
+            });
+
+            // --- Horizontal Staggered Scroll Animation ---
+            if (window.ScrollTrigger) {
+                const hSectionStaggered = document.querySelector('.section-horizontal-staggered');
+                if (hSectionStaggered) {
+                    const wrapper = document.querySelector('.horizontal-staggered-wrapper');
+                    const getScrollAmount = () => -(wrapper.scrollWidth - window.innerWidth);
+
+                    gsap.to(wrapper, {
+                        x: getScrollAmount,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: hSectionStaggered,
+                            pin: true,
+                            scrub: 1,
+                            invalidateOnRefresh: true,
+                            end: () => "+=" + wrapper.scrollWidth
+                        }
+                    });
+                }
+            }
+
+            // --- Explosive Zoom Section ---
+            if (window.ScrollTrigger) {
+                const exploSection = document.querySelector(".section-explosive-zoom");
+                if (exploSection) {
+                    const exploTl = gsap.timeline({
+                        scrollTrigger: {
+                            trigger: ".section-explosive-zoom",
+                            start: "top top",
+                            end: "bottom bottom",
+                            scrub: 1,
+                            pin: ".explosive-wrapper"
+                        }
+                    });
+                    exploTl.fromTo(".center-stage", { scale: 0.8, borderRadius: "20px" }, { scale: 2.5, borderRadius: "0px", duration: 1, ease: "power2.inOut" }, 0);
+                    exploTl.to(".pos-1", { x: -300, y: -300, opacity: 0, scale: 1.5, duration: 0.8 }, 0);
+                    exploTl.to(".pos-2", { x: -400, y: 200, opacity: 0, scale: 1.2, duration: 0.9 }, 0);
+                    exploTl.to(".pos-3", { x: 400, y: -100, opacity: 0, scale: 1.5, duration: 0.7 }, 0);
+                    exploTl.to(".pos-4", { x: 300, y: 300, opacity: 0, scale: 1.2, duration: 0.8 }, 0);
+                    exploTl.to(".pos-5", { y: 200, opacity: 0, scale: 2, duration: 0.5 }, 0);
+                }
+            }
+
+            // --- Card Stack Pinning ---
+            if (window.ScrollTrigger) {
+                gsap.utils.toArray(".project-card").forEach((card, i) => {
+                    ScrollTrigger.create({
+                        trigger: card,
+                        start: `top top+=${i * 0}`,
+                        pin: i === 2 ? false : true,
+                        pinSpacing: false
+                    });
+                });
+            }
+
+            // --- Menu Logic ---
+            const menuTl = gsap.timeline({ paused: true });
+            gsap.set(".nav-link", { y: "110%", skewY: 10 });
+            gsap.set(".nav-item", { borderBottomColor: "rgba(0,0,0,0)" });
+            gsap.set(".menu-footer-info", { opacity: 0, y: 20 });
+
+            menuTl.to("#menuOverlay", { autoAlpha: 1, clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: "power4.inOut" })
+                .to(".nav-link", { y: "0%", skewY: 0, duration: 0.8, stagger: 0.05, ease: "power4.out" }, "-=0.6")
+                .to(".menu-footer-info", { opacity: 1, y: 0, duration: 0.5 }, "-=0.4");
+
+            const openBtn = document.getElementById('openMenu');
+            if (openBtn) openBtn.addEventListener('click', () => { lenis.stop(); menuTl.restart(); });
+
+            const closeBtn = document.getElementById('closeMenu');
+            if (closeBtn) closeBtn.addEventListener('click', () => { menuTl.reverse(); setTimeout(() => lenis.start(), 1000); });
+
+            // Scroll Top Button
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            if (scrollTopBtn) {
+                scrollTopBtn.addEventListener('click', () => {
+                    lenis.scrollTo(0);
+                });
+            }
+
+            // --- Theme Toggle Logic (NEW) ---
+            const themeToggleBtn = document.getElementById('themeToggle');
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    document.body.classList.toggle('light-mode');
+                    const icon = themeToggleBtn.querySelector('i');
+                    if (document.body.classList.contains('light-mode')) {
+                        icon.classList.remove('fa-sun');
+                        icon.classList.add('fa-moon');
+                    } else {
+                        icon.classList.remove('fa-moon');
+                        icon.classList.add('fa-sun');
+                    }
+                });
+            }
+
+            /* --- Grid Effects --- */
+            const gridCards = document.querySelectorAll('.legacy-grid-wrapper .grid-card');
+            const cardsData = [];
+
+            gridCards.forEach((card, index) => {
+                const media = card.querySelector('.media');
+                const img = card.querySelector('img');
+                const uniqueId = `distortion-filter-${index}`;
+
+                const svgFilter = `
+          <svg style="position: absolute; width: 0; height: 0; pointer-events: none;">
+              <defs>
+                  <filter id="${uniqueId}">
+                      <feTurbulence type="fractalNoise" baseFrequency="0.01 0.003" numOctaves="5" seed="${index}" result="noise"/>
+                      <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="B" class="displacement-map" />
+                  </filter>
+              </defs>
+          </svg>
+      `;
+                document.body.insertAdjacentHTML('beforeend', svgFilter);
+                img.style.filter = `url(#${uniqueId})`;
+                const displacementMap = document.querySelector(`#${uniqueId} .displacement-map`);
+
+                const cardObj = { media: media, img: img, map: displacementMap, isHovered: false };
+                cardsData.push(cardObj);
+
+                media.addEventListener('mouseenter', () => {
+                    cardObj.isHovered = true;
+                    gsap.to(displacementMap, { attr: { scale: 50 }, duration: 0.4, ease: "power2.out", overwrite: true });
+                    gsap.to(img, { scale: 1.15, duration: 0.5, ease: "power2.out", overwrite: true });
+                });
+
+                media.addEventListener('mouseleave', () => {
+                    cardObj.isHovered = false;
+                });
+
+                gsap.set(img, { height: "140%", top: "-20%", scale: 1.1 });
+                gsap.set(media, { clipPath: "inset(0 0 100% 0)" });
+
+                if (window.ScrollTrigger) {
+                    gsap.to(img, {
+                        yPercent: 20, ease: "none",
+                        scrollTrigger: { trigger: media, start: "top bottom", end: "bottom top", scrub: true }
+                    });
+                    const revealTl = gsap.timeline({ scrollTrigger: { trigger: card, start: "top 85%", duration: 1.5, ease: "power4.inOut" } });
+                    revealTl.to(media, { clipPath: "inset(0 0 0% 0)", duration: 1.5, ease: "power4.inOut" });
+                }
+            });
+
+            gsap.ticker.add(() => {
+                const velocity = lenis.velocity || 0;
+                const distortionAmount = Math.min(Math.abs(velocity) * 8.0, 150);
+
+                cardsData.forEach(card => {
+                    gsap.set(card.media, {
+                        scaleY: 1 + Math.min(Math.abs(velocity) * 0.005, 0.25),
+                        scaleX: 1 - Math.min(Math.abs(velocity) * 0.002, 0.1)
+                    });
+
+                    if (!card.isHovered) {
+                        gsap.to(card.map, { attr: { scale: distortionAmount }, duration: 0.15, ease: "power1.out", overwrite: "auto" });
+                        const velocityScale = 1.1 + Math.min(Math.abs(velocity) * 0.005, 0.15);
+                        gsap.to(card.img, { scale: velocityScale, duration: 0.15, overwrite: "auto" });
+                    }
+                });
+            });
+
+
+            /* --- Particle Background --- */
+            class ParticleBackground {
+                constructor() {
+                    this.container = document.getElementById('bg-canvas');
+                    if (!this.container || typeof THREE === 'undefined') return;
+
+                    this.scene = new THREE.Scene();
+                    this.scene.fog = new THREE.FogExp2(0x050505, 0.05);
+                    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                    this.camera.position.z = 2.8;
+
+                    this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                    this.container.appendChild(this.renderer.domElement);
+
+                    this.particlesMesh = null;
+                    this.coreParticlesMesh = null;
+                    this.clock = new THREE.Clock();
+                    this.mouseX = 0; this.mouseY = 0;
+                    this.params = { scatter: 0 };
+                    this.handFactor = 0; this.handScatterTarget = 0;
+                    this.particlesCount = 6000;
+                    this.initialPosArray = new Float32Array(this.particlesCount * 3);
+                    this.randomSpreadArray = new Float32Array(this.particlesCount * 3);
+
+                    this.initParticles();
+                    this.initEvents();
+                }
+
+                createCircleTexture() {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 64; canvas.height = 64;
+                    const ctx = canvas.getContext('2d');
+                    const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+                    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+                    gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.8)');
+                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, 64, 64);
+                    return new THREE.CanvasTexture(canvas);
+                }
+
+                initParticles() {
+                    // Outer sphere
+                    const particlesGeometry = new THREE.BufferGeometry();
+                    const posArray = new Float32Array(this.particlesCount * 3);
+                    const colorArray = new Float32Array(this.particlesCount * 3);
+                    const colorBottom = new THREE.Color(0x515151);
+                    const colorMiddle = new THREE.Color(0x1d1d1d);
+                    const colorTop = new THREE.Color(0xb3b3b3);
+
+                    for (let i = 0; i < this.particlesCount; i++) {
+                        const radius = 1.3 + (Math.random() - 0.5) * 0.5;
+                        const theta = Math.acos(THREE.MathUtils.randFloatSpread(2));
+                        const phi = THREE.MathUtils.randFloatSpread(360);
+                        const x = radius * Math.sin(theta) * Math.cos(phi);
+                        const y = radius * Math.sin(theta) * Math.sin(phi);
+                        const z = radius * Math.cos(theta);
+                        posArray[i * 3] = x; posArray[i * 3 + 1] = y; posArray[i * 3 + 2] = z;
+                        this.initialPosArray[i * 3] = x; this.initialPosArray[i * 3 + 1] = y; this.initialPosArray[i * 3 + 2] = z;
+                        this.randomSpreadArray[i * 3] = (Math.random() - 0.5) * 2.0;
+                        this.randomSpreadArray[i * 3 + 1] = (Math.random() - 0.5) * 2.0;
+                        this.randomSpreadArray[i * 3 + 2] = (Math.random() - 0.5) * 2.0;
+
+                        let normalizedY = (y + 1.5) / 3;
+                        normalizedY = Math.max(0, Math.min(1, normalizedY));
+                        let mixedColor;
+                        if (normalizedY < 0.45) {
+                            const t = normalizedY / 0.45;
+                            mixedColor = colorBottom.clone().lerp(colorMiddle, t * t);
+                        } else {
+                            const t = (normalizedY - 0.45) / 0.55;
+                            mixedColor = colorMiddle.clone().lerp(colorTop, t);
+                        }
+                        colorArray[i * 3] = mixedColor.r; colorArray[i * 3 + 1] = mixedColor.g; colorArray[i * 3 + 2] = mixedColor.b;
+                    }
+                    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+                    particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+                    const material = new THREE.PointsMaterial({ size: 0.02, map: this.createCircleTexture(), vertexColors: true, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false });
+                    this.particlesMesh = new THREE.Points(particlesGeometry, material);
+                    this.scene.add(this.particlesMesh);
+
+                    // Core
+                    this.coreCount = 6000;
+                    const coreGeometry = new THREE.BufferGeometry();
+                    const corePosArray = new Float32Array(this.coreCount * 3);
+                    const coreColorArray = new Float32Array(this.coreCount * 3);
+                    this.coreInitialPosArray = new Float32Array(this.coreCount * 3);
+                    this.coreRandomSpreadArray = new Float32Array(this.coreCount * 3);
+                    const coreColor = new THREE.Color(0xffffff);
+                    for (let i = 0; i < this.coreCount; i++) {
+                        const radius = 0.78 * Math.cbrt(Math.random());
+                        const theta = Math.acos(THREE.MathUtils.randFloatSpread(2));
+                        const phi = THREE.MathUtils.randFloatSpread(360);
+                        const x = radius * Math.sin(theta) * Math.cos(phi);
+                        const y = radius * Math.sin(theta) * Math.sin(phi);
+                        const z = radius * Math.cos(theta);
+                        corePosArray[i * 3] = x; corePosArray[i * 3 + 1] = y; corePosArray[i * 3 + 2] = z;
+                        this.coreInitialPosArray[i * 3] = x; this.coreInitialPosArray[i * 3 + 1] = y; this.coreInitialPosArray[i * 3 + 2] = z;
+                        this.coreRandomSpreadArray[i * 3] = (Math.random() - 0.5) * 1.5;
+                        this.coreRandomSpreadArray[i * 3 + 1] = (Math.random() - 0.5) * 1.5;
+                        this.coreRandomSpreadArray[i * 3 + 2] = (Math.random() - 0.5) * 1.5;
+                        coreColorArray[i * 3] = coreColor.r; coreColorArray[i * 3 + 1] = coreColor.g; coreColorArray[i * 3 + 2] = coreColor.b;
+                    }
+                    coreGeometry.setAttribute('position', new THREE.BufferAttribute(corePosArray, 3));
+                    coreGeometry.setAttribute('color', new THREE.BufferAttribute(coreColorArray, 3));
+                    const coreMaterial = new THREE.PointsMaterial({ size: 0.012, map: this.createCircleTexture(), vertexColors: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false });
+                    this.coreParticlesMesh = new THREE.Points(coreGeometry, coreMaterial);
+                    this.scene.add(this.coreParticlesMesh);
+                }
+
+                initEvents() {
+                    window.addEventListener('mousemove', (event) => {
+                        this.mouseX = event.clientX / window.innerWidth - 0.5;
+                        this.mouseY = event.clientY / window.innerHeight - 0.5;
+                    });
+                    window.addEventListener('resize', () => {
+                        this.camera.aspect = window.innerWidth / window.innerHeight;
+                        this.camera.updateProjectionMatrix();
+                        this.renderer.setSize(window.innerWidth, window.innerHeight);
+                    });
+                }
+
+                updateHandState(isHandDetected, isOpenHand) {
+                    const targetFactor = isHandDetected ? 1.0 : 0.0;
+                    this.handFactor = THREE.MathUtils.lerp(this.handFactor, targetFactor, 0.1);
+                    const targetScatter = isOpenHand ? 1.0 : 0.0;
+                    this.handScatterTarget = THREE.MathUtils.lerp(this.handScatterTarget, targetScatter, 0.1);
+                }
+
+                render() {
+                    if (!this.renderer) return;
+                    const elapsedTime = this.clock.getElapsedTime();
+                    const scrollScatter = this.params.scatter;
+                    const scatterVal = THREE.MathUtils.lerp(scrollScatter, this.handScatterTarget, this.handFactor);
+                    const breatheStrength = 0.02 * (1 - scatterVal * 0.5);
+                    const breathe = 0.8 + Math.sin(elapsedTime * 0.5) * breatheStrength;
+                    const easeProgress = Math.pow(scatterVal, 2.5);
+
+                    if (this.particlesMesh) {
+                        this.particlesMesh.rotation.y = elapsedTime * 0.08 + (scatterVal * 1.5);
+                        this.particlesMesh.rotation.y += this.mouseX * 0.05;
+                        this.particlesMesh.rotation.x = -elapsedTime * 0.02 + (this.mouseY * 0.05);
+                        const positions = this.particlesMesh.geometry.attributes.position.array;
+                        const initialPositions = this.initialPosArray;
+                        const randomSpreads = this.randomSpreadArray;
+                        const count = this.particlesCount;
+                        const scatterIntensity = 6.0;
+
+                        for (let i = 0; i < count; i++) {
+                            const i3 = i * 3;
+                            const ix = initialPositions[i3]; const iy = initialPositions[i3 + 1]; const iz = initialPositions[i3 + 2];
+                            const rx = randomSpreads[i3]; const ry = randomSpreads[i3 + 1]; const rz = randomSpreads[i3 + 2];
+                            const explosionFactor = easeProgress * scatterIntensity;
+                            const noiseFactor = easeProgress * 3.0;
+                            const riseFactor = easeProgress * 2.0;
+                            positions[i3] = (ix * breathe) + (ix * explosionFactor) + (rx * noiseFactor);
+                            positions[i3 + 1] = (iy * breathe) + (iy * explosionFactor) + (ry * noiseFactor) + (Math.abs(ry) * riseFactor);
+                            positions[i3 + 2] = (iz * breathe) + (iz * explosionFactor) + (rz * noiseFactor);
+                        }
+                        this.particlesMesh.geometry.attributes.position.needsUpdate = true;
+                    }
+
+                    if (this.coreParticlesMesh) {
+                        this.coreParticlesMesh.rotation.y = -elapsedTime * 0.1 + (scatterVal * 0.5);
+                        this.coreParticlesMesh.rotation.z = elapsedTime * 0.05;
+                        const corePositions = this.coreParticlesMesh.geometry.attributes.position.array;
+                        const coreInitial = this.coreInitialPosArray;
+                        const coreSpread = this.coreRandomSpreadArray;
+                        const coreCount = this.coreCount;
+                        const coreScatterIntensity = 8.0;
+
+                        for (let i = 0; i < coreCount; i++) {
+                            const i3 = i * 3;
+                            const ix = coreInitial[i3]; const iy = coreInitial[i3 + 1]; const iz = coreInitial[i3 + 2];
+                            const rx = coreSpread[i3]; const ry = coreSpread[i3 + 1]; const rz = coreSpread[i3 + 2];
+                            const explosionFactor = easeProgress * coreScatterIntensity;
+                            const noiseFactor = easeProgress * 2.0;
+                            const riseFactor = easeProgress * 1.5;
+                            corePositions[i3] = (ix * breathe) + (ix * explosionFactor) + (rx * noiseFactor);
+                            corePositions[i3 + 1] = (iy * breathe) + (iy * explosionFactor) + (ry * noiseFactor) + (Math.abs(ry) * riseFactor);
+                            corePositions[i3 + 2] = (iz * breathe) + (iz * explosionFactor) + (rz * noiseFactor);
+                        }
+                        this.coreParticlesMesh.geometry.attributes.position.needsUpdate = true;
+                    }
+                    this.renderer.render(this.scene, this.camera);
+                }
+            }
+
+            const particleBg = new ParticleBackground();
+
+            if (window.ScrollTrigger && particleBg && particleBg.params) {
+                gsap.to(particleBg.params, {
+                    scatter: 1, ease: "power1.inOut",
+                    scrollTrigger: { trigger: ".particle-pin-spacer", start: "top top", end: "bottom top", scrub: true }
+                });
+                ScrollTrigger.create({
+                    trigger: ".particle-pin-spacer", start: "top top", end: "bottom top", scrub: true,
+                    onUpdate: (self) => {
+                        const text = document.querySelector('.intro-overlay-text');
+                        if (text) text.style.opacity = 1 - self.progress * 3;
+                    }
+                });
+            }
+
+            const pinnedTextSection = document.querySelector('.section-pinned-text');
+            const pinnedLines = gsap.utils.toArray('.pinned-line, .pinned-text-title');
+
+            if (window.ScrollTrigger && pinnedTextSection && pinnedLines.length > 0 && particleBg && particleBg.params) {
+                const pinTl = gsap.timeline({
+                    scrollTrigger: { trigger: ".section-pinned-text", start: "top top", end: "+=200%", pin: true, scrub: 0.5 }
+                });
+                pinTl.to(particleBg.params, { scatter: 0, duration: 2, ease: "power2.inOut" }, 0);
+                pinnedLines.forEach((line, i) => {
+                    pinTl.to(line, { color: getComputedStyle(document.body).getPropertyValue('--text-main').trim(), opacity: 1, filter: "blur(0px)", duration: 1, ease: "power2.out" }, i === 0 ? 0.5 : "-=0.8");
+                    if (line.classList.contains('special') && line.style.color) {
+                        pinTl.to(line, { color: "#ccff00", opacity: 1, filter: "blur(0px)", duration: 1 }, "<");
+                    }
+                });
+                pinTl.to(particleBg.params, { scatter: 1, duration: 2, ease: "power2.inOut" }, ">+0.5");
+            }
+
+            function raf(time) {
+                if (particleBg && typeof particleBg.render === 'function') {
+                    particleBg.render();
+                }
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+
+
+            /* --- MediaPipe Hands --- */
+            const videoElement = document.querySelector('.input_video');
+            const toggleCameraBtn = document.getElementById('toggleCamera');
+            let isCameraActive = false;
+            let camera = null;
+
+            function onResults(results) {
+                if (!isCameraActive || !particleBg) return;
+                if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                    const landmarks = results.multiHandLandmarks[0];
+                    const wrist = landmarks[0];
+                    const tips = [4, 8, 12, 16, 20];
+                    let totalDist = 0;
+                    tips.forEach(idx => {
+                        const tip = landmarks[idx];
+                        const dx = tip.x - wrist.x;
+                        const dy = tip.y - wrist.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        totalDist += dist;
+                    });
+                    const avgDist = totalDist / 5;
+                    let isOpen = false;
+                    if (avgDist > 0.35) isOpen = true;
+                    particleBg.updateHandState(true, isOpen);
+                } else {
+                    particleBg.updateHandState(false, false);
+                }
+            }
+
+            if (window.Hands && window.Camera) {
+                const hands = new Hands({
+                    locateFile: (file) => {
+                        return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+                    }
+                });
+                hands.setOptions({ maxNumHands: 1, modelComplexity: 0, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+                hands.onResults(onResults);
+                camera = new Camera(videoElement, {
+                    onFrame: async () => { if (isCameraActive) await hands.send({ image: videoElement }); },
+                    width: 640, height: 480
+                });
+                if (toggleCameraBtn) {
+                    toggleCameraBtn.addEventListener('click', () => {
+                        if (!isCameraActive) {
+                            camera.start().then(() => {
+                                isCameraActive = true;
+                                toggleCameraBtn.classList.add('active');
+                                toggleCameraBtn.innerHTML = '<i class="fas fa-video"></i>';
+                            });
+                        } else {
+                            camera.stop();
+                            isCameraActive = false;
+                            toggleCameraBtn.classList.remove('active');
+                            toggleCameraBtn.innerHTML = '<i class="fas fa-video-slash"></i>';
+                            particleBg.updateHandState(false, false);
+                        }
+                    });
+                }
+            } else {
+                console.warn('MediaPipe Hands 或 Camera 沒有載入，手勢控制停用。');
+            }
+
+        });
+    </script>
+</body>
+
+</html>

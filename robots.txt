@@ -1,0 +1,76 @@
+# robots.txt for nuclearlabs.com
+# 更新日期: 2026-01-08
+
+# 允許所有搜尋引擎爬取
+User-agent: *
+Allow: /
+
+# 禁止爬取的目錄和文件
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
+Disallow: /cgi-bin/
+Disallow: /*.php$
+Disallow: /search?
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+
+# 禁止爬取特定文件類型
+Disallow: /*.json$
+Disallow: /*.xml$
+Disallow: /*.txt$
+Disallow: /*.log$
+
+# 允許爬取 CSS 和 JavaScript（Google 建議）
+Allow: /css/
+Allow: /js/
+Allow: /*.css$
+Allow: /*.js$
+
+# 允許爬取圖片
+Allow: /images/
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.gif$
+Allow: /*.webp$
+Allow: /*.svg$
+
+# Sitemap 位置
+Sitemap: https://www.nuclearlabs.com/sitemap.xml
+
+# Google 特定設定
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /images/
+
+User-agent: Googlebot-Video
+Allow: /videos/
+
+# Bing 特定設定
+User-agent: Bingbot
+Allow: /
+
+# 禁止特定爬蟲（如果需要）
+# User-agent: BadBot
+# Disallow: /
+
+# 爬取延遲（秒）- 謹慎使用，可能影響索引速度
+# Crawl-delay: 10
+
+# ==========================================
+# 使用說明：
+# ==========================================
+# 1. 替換 "yourwebsite.com" 為您的實際網域
+# 2. 根據您的網站結構調整禁止爬取的目錄
+# 3. 確保 Sitemap URL 正確
+# 4. 將此文件放在網站根目錄
+# 5. 測試工具: https://www.google.com/webmasters/tools/robots-testing-tool
+#
+# 重要提示：
+# - robots.txt 是公開的，不要用它隱藏敏感資訊
+# - 使用 noindex meta 標籤或 HTTP headers 來真正阻止索引
+# - Allow 和 Disallow 規則按照最具體的規則優先
+# ==========================================
