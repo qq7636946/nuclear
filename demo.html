@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>サントリー烏龍茶 | Suntory Oolong Tea Style</title>
+
+    <!-- Google Fonts: Noto Serif JP (Traditional/Premium) & Noto Sans JP (Modern/Clean) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS (via CDN for single file portability) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Configuration for Tailwind to add custom colors/fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'oolong-dark': '#1a1a1a',
+                        'oolong-brown': '#8B5A2B',
+                        'oolong-gold': '#C5A059',
+                        'oolong-bg': '#f9f9f9',
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans JP"', 'sans-serif'],
+                        serif: ['"Noto Serif JP"', 'serif'],
+                    },
+                    backgroundImage: {
+                        'paper-texture': "url('https://www.transparenttextures.com/patterns/cream-paper.png')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Utilities */
+        body {
+            font-feature-settings: "palt";
+        }
+
+        /* Vertical Text Class (Tategaki) */
+        .writing-vertical {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            letter-spacing: 0.1em;
+        }
+
+        /* Animation Classes */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transition: opacity 1s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+        }
+
+        /* Delay utilities */
+        .delay-100 {
+            transition-delay: 100ms;
+        }
+
+        .delay-200 {
+            transition-delay: 200ms;
+        }
+
+        .delay-300 {
+            transition-delay: 300ms;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #C5A059;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8B5A2B;
+        }
+    </style>
+</head>
+
+<body class="bg-white text-oolong-dark font-sans antialiased overflow-x-hidden">
+
+    <!-- Header -->
+    <header
+        class="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100 transition-all duration-300"
+        id="header">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer">
+                    <div
+                        class="w-8 h-8 bg-oolong-gold rounded-full flex items-center justify-center text-white font-serif font-bold">
+                        S</div>
+                    <h1 class="font-serif text-xl tracking-widest font-bold">サントリー烏龍茶</h1>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#"
+                        class="text-gray-600 hover:text-oolong-brown transition-colors font-serif text-sm tracking-wide">TOP</a>
+                    <a href="#"
+                        class="text-gray-600 hover:text-oolong-brown transition-colors font-serif text-sm tracking-wide">製品情報</a>
+                    <a href="#"
+                        class="text-gray-600 hover:text-oolong-brown transition-colors font-serif text-sm tracking-wide">品質保証</a>
+                    <a href="#"
+                        class="text-gray-600 hover:text-oolong-brown transition-colors font-serif text-sm tracking-wide">CM・動画</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-oolong-dark focus:outline-none">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full">
+            <div class="px-4 pt-2 pb-6 space-y-1 text-center">
+                <a href="#" class="block px-3 py-3 text-gray-800 font-serif hover:bg-gray-50">TOP</a>
+                <a href="#" class="block px-3 py-3 text-gray-800 font-serif hover:bg-gray-50">製品情報</a>
+                <a href="#" class="block px-3 py-3 text-gray-800 font-serif hover:bg-gray-50">品質保証</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden pt-20">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1576092768241-dec231844f74?q=80&w=2070&auto=format&fit=crop"
+                alt="Tea Background" class="w-full h-full object-cover opacity-90 object-center">
+            <div class="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-white"></div>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center fade-up visible">
+            <div class="inline-block bg-white/80 backdrop-blur-sm p-8 md:p-12 shadow-sm border border-white/50">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Suntory_logo.svg/2560px-Suntory_logo.svg.png"
+                    alt="Suntory" class="h-4 mx-auto mb-6 opacity-60">
+                <h2
+                    class="font-serif text-4xl md:text-6xl font-bold tracking-widest text-oolong-dark mb-4 writing-vertical h-64 mx-auto leading-loose">
+                    おいしいは<br>うれしい
+                </h2>
+                <p class="font-sans text-xs md:text-sm text-gray-600 tracking-widest mt-8 uppercase">Suntory Oolong Tea
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statement / Philosophy Section -->
+    <section class="py-24 bg-white relative">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-12">
+
+            <!-- Vertical Text Statement -->
+            <div class="md:w-1/2 h-[400px] flex justify-center fade-up">
+                <p
+                    class="font-serif text-lg md:text-xl leading-loose tracking-widest text-gray-800 writing-vertical h-full mx-auto md:mx-0 border-l border-gray-200 pl-8">
+                    食べることを楽しむ。<br>
+                    サントリー烏龍茶は、<br>
+                    どんな時もその気持ちの味方でいたい。<br>
+                    厳選した茶葉と製法から生まれる、<br>
+                    すっきりした味わい。
+                </p>
+            </div>
+
+            <!-- Image Grid -->
+            <div class="md:w-1/2 grid grid-cols-2 gap-4 fade-up delay-200">
+                <img src="https://images.unsplash.com/photo-1563822249548-9a72b6353cd1?q=80&w=987&auto=format&fit=crop"
+                    class="w-full h-64 object-cover rounded-sm shadow-md translate-y-8">
+                <img src="https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?q=80&w=987&auto=format&fit=crop"
+                    class="w-full h-64 object-cover rounded-sm shadow-md -translate-y-8">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-oolong-bg">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="text-center mb-16 fade-up">
+                <h3 class="font-serif text-2xl md:text-3xl text-oolong-dark mb-4">商品特徴</h3>
+                <div class="w-12 h-0.5 bg-oolong-gold mx-auto"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white p-8 text-center shadow-sm hover:shadow-md transition-shadow fade-up delay-100">
+                    <div
+                        class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 text-green-700">
+                        <i data-lucide="leaf" class="w-8 h-8"></i>
+                    </div>
+                    <h4 class="font-serif text-lg font-bold mb-3">福建省<br><span class="text-sm font-normal">推奨茶葉</span>
+                    </h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">中国福建省が推奨する<br>茶葉を使用</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-white p-8 text-center shadow-sm hover:shadow-md transition-shadow fade-up delay-200">
+                    <div
+                        class="w-16 h-16 bg-yellow-50 rounded-full flex items-center justify-center mx-auto mb-6 text-yellow-600">
+                        <i data-lucide="sparkles" class="w-8 h-8"></i>
+                    </div>
+                    <h4 class="font-serif text-lg font-bold mb-3">おいしさ</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">独自のブレンド技術で<br>深いコクとスッキリ感</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-white p-8 text-center shadow-sm hover:shadow-md transition-shadow fade-up delay-300">
+                    <div
+                        class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6 text-red-700">
+                        <i data-lucide="activity" class="w-8 h-8"></i>
+                    </div>
+                    <h4 class="font-serif text-lg font-bold mb-3">機能性<br><span class="text-sm font-normal">関与成分</span>
+                    </h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">ウーロン茶重合<br>ポリフェノール配合</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-white p-8 text-center shadow-sm hover:shadow-md transition-shadow fade-up delay-100">
+                    <div
+                        class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-700">
+                        <i data-lucide="heart" class="w-8 h-8"></i>
+                    </div>
+                    <h4 class="font-serif text-lg font-bold mb-3">健康機能</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">おなかの脂肪を<br>減らすのを助ける</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scientific Data / OTPP Section -->
+    <section class="py-24 bg-white border-t border-gray-100">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <!-- Text Content -->
+                <div class="lg:w-1/2 fade-up">
+                    <h3 class="font-serif text-2xl md:text-3xl leading-snug mb-6">
+                        BMIが高めの方の<br>
+                        おなかの脂肪を<br>
+                        <span class="text-oolong-brown">減らすのを助ける</span>
+                    </h3>
+                    <p class="text-sm text-gray-600 leading-loose mb-6 text-justify">
+                        ウーロン茶重合ポリフェノール(OTPP)70mgを、食事の際に1日2回、16週間継続摂取させることにより、プラセボ飲料摂取と比較して、BMIが高めの方のおなかの脂肪(腹部全脂肪面積)の低減が期待できることが示されました。
+                    </p>
+                    <div
+                        class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-gray-500 border-t border-gray-100 pt-4">
+                        <div>
+                            <strong class="block mb-1 text-gray-800">試験対象者：</strong>
+                            20歳以上65歳未満、BMI高めの男女
+                        </div>
+                        <div>
+                            <strong class="block mb-1 text-gray-800">摂取方法：</strong>
+                            食事の際に1日2回、16週間
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graph Visualization -->
+                <div class="lg:w-1/2 w-full fade-up delay-200">
+                    <div class="bg-gray-50 p-8 rounded-lg relative">
+                        <h4
+                            class="text-center font-bold text-gray-700 mb-8 border-b border-gray-200 pb-2 inline-block mx-auto">
+                            腹部全脂肪面積変化量の推移</h4>
+
+                        <div class="flex items-end h-64 justify-around px-4 relative">
+                            <!-- Y-axis line -->
+                            <div class="absolute left-0 top-0 bottom-0 w-px bg-gray-300"></div>
+                            <!-- X-axis line -->
+                            <div class="absolute left-0 right-0 bottom-0 h-px bg-gray-300"></div>
+
+                            <!-- Bar 1 (Placebo) -->
+                            <div class="w-16 md:w-24 bg-gray-300 h-2 relative group flex flex-col justify-end items-center transition-all duration-1000"
+                                style="height: 10%;">
+                                <span class="absolute -top-6 text-xs font-bold text-gray-500">プラセボ</span>
+                            </div>
+
+                            <!-- Bar 2 (OTPP) - Animated down -->
+                            <div
+                                class="w-16 md:w-24 bg-oolong-brown relative group flex flex-col justify-start items-center transition-all duration-1000 h-48 rounded-b-sm translate-y-[50%]">
+                                <span
+                                    class="absolute -bottom-8 text-xs font-bold text-oolong-brown font-serif">OTPP飲料</span>
+                                <div
+                                    class="absolute inset-0 flex items-center justify-center text-white font-bold text-lg">
+                                    -20cm²</div>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-gray-400 mt-12 text-right">※グラフはイメージです</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Showcase -->
+    <section class="py-24 bg-gradient-to-b from-white to-gray-50">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div class="fade-up">
+                <h3 class="font-serif text-3xl font-bold mb-2">サントリー烏龍茶 OTPP</h3>
+                <p class="text-sm text-gray-500 mb-12">Suntory Oolong Tea</p>
+
+                <!-- Bottle Image Area -->
+                <div class="relative w-64 mx-auto mb-12 group">
+                    <!-- Circle Background -->
+                    <div
+                        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-oolong-gold/10 rounded-full blur-xl group-hover:bg-oolong-gold/20 transition-all duration-500">
+                    </div>
+
+                    <!-- Product Image (Placeholder mimicking a bottle) -->
+                    <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=1000&auto=format&fit=crop"
+                        alt="Oolong Tea Bottle"
+                        class="relative z-10 w-full h-auto drop-shadow-2xl transform group-hover:scale-105 transition-transform duration-500 mask-image-bottle rounded-xl">
+                </div>
+
+                <!-- Product Details Box -->
+                <div class="bg-white border border-gray-200 p-8 text-left max-w-2xl mx-auto shadow-sm">
+                    <div
+                        class="flex flex-col md:flex-row justify-between items-baseline border-b border-gray-100 pb-4 mb-4">
+                        <h4 class="font-bold text-lg text-oolong-dark">機能性表示食品</h4>
+                        <span class="text-xs text-gray-500">届出番号 G1049</span>
+                    </div>
+
+                    <div class="space-y-4 text-xs md:text-sm text-gray-600 leading-relaxed">
+                        <p>
+                            <span class="font-bold text-gray-800">【届出表示】</span><br>
+                            本品には、ウーロン茶重合ポリフェノール(ウーロンホモビスフラバンBとして)が含まれます。これには、BMIが高めの方のおなかの脂肪を減らす機能があることが報告されています。
+                        </p>
+                        <p>
+                            <span class="font-bold text-gray-800">【一日摂取目安量】</span><br>
+                            お食事の際に1日2回(1回500ml)を目安にお飲みください。
+                        </p>
+                    </div>
+
+                    <div class="mt-6 bg-gray-50 p-4 text-[10px] text-gray-400 space-y-1">
+                        <p>・食生活は、主食、主菜、副菜を基本に、食事のバランスを。</p>
+                        <p>・本品は、疾病の診断、治療、予防を目的としたものではありません。</p>
+                    </div>
+                </div>
+
+                <div class="mt-12">
+                    <a href="#"
+                        class="inline-flex items-center justify-center px-8 py-4 border border-oolong-brown text-oolong-brown hover:bg-oolong-brown hover:text-white transition-all duration-300 font-serif tracking-widest text-sm group">
+                        商品詳細を見る
+                        <i data-lucide="arrow-right"
+                            class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-oolong-dark text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="mb-8">
+                <h2 class="font-serif text-2xl tracking-widest font-bold text-oolong-gold">SUNTORY</h2>
+                <p class="text-xs text-gray-500 mt-2 tracking-widest">SUNTORY BEVERAGE & FOOD</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-6 mb-12 text-xs text-gray-400 font-sans">
+                <a href="#" class="hover:text-white transition-colors">企業情報</a>
+                <a href="#" class="hover:text-white transition-colors">ニュースリリース</a>
+                <a href="#" class="hover:text-white transition-colors">プライバシーポリシー</a>
+                <a href="#" class="hover:text-white transition-colors">ご利用にあたって</a>
+            </div>
+
+            <div class="w-full h-px bg-white/10 mb-8"></div>
+
+            <p class="text-[10px] text-gray-500 font-sans">
+                &copy; SUNTORY BEVERAGE & FOOD LIMITED. ALL RIGHTS RESERVED.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Logic -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Stop observing once visible (optional, remove if you want re-trigger)
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Target elements
+        document.querySelectorAll('.fade-up, .fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Header Background on Scroll
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('shadow-md');
+                header.classList.replace('h-20', 'h-16');
+            } else {
+                header.classList.remove('shadow-md');
+                header.classList.replace('h-16', 'h-20');
+            }
+        });
+    </script>
+</body>
+
+</html>
