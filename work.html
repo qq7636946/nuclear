@@ -8,15 +8,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WORK ARCHIVE // NUCLEAR LABS SYSTEM V3</title>
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Montserrat:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&family=Syncopate:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Montserrat:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&family=Syncopate:wght@400;700&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Core Libraries -->
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -36,14 +38,18 @@
             --font-display: 'Syncopate', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         /* 修正滾動問題：移除 height: 100%，改用 min-height */
         html {
             overflow-x: hidden;
             height: auto;
         }
-        
+
         body {
             background-color: #000;
             color: var(--text-main);
@@ -52,7 +58,7 @@
             min-height: 100vh;
             height: auto;
         }
-        
+
         /* TRANSITION CURTAIN */
         .transition-curtain {
             position: fixed;
@@ -64,7 +70,7 @@
             z-index: 10000;
             pointer-events: none;
             /* Start state: Covering the screen */
-            clip-path: inset(0 0 0 0); 
+            clip-path: inset(0 0 0 0);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -82,8 +88,10 @@
         /* Background Noise Canvas */
         #bg-canvas {
             position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             z-index: -1;
             opacity: 0.4;
             pointer-events: none;
@@ -92,51 +100,122 @@
         /* Global Grid Lines */
         .global-grid-lines {
             position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             z-index: -1;
             pointer-events: none;
-            background: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
             background-size: calc(100% / 6) 100%;
         }
 
         /* Custom Cursor */
         .cursor-wrapper {
-            position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; mix-blend-mode: difference;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
         }
+
         .cursor-dot {
-            width: 10px; height: 10px; background: #fff; border-radius: 50%; position: absolute; top: 0; left: 0;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
+
         .cursor-follower {
-            width: 50px; height: 50px; border: 1px solid #fff; border-radius: 50%; position: absolute; top: 0; left: 0;
-            display: flex; justify-content: center; align-items: center; transition: width 0.3s, height 0.3s, background-color 0.3s;
+            width: 50px;
+            height: 50px;
+            border: 1px solid #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
         }
-        .cursor-text { font-size: 10px; font-weight: 800; opacity: 0; text-transform: uppercase; color: #000; }
-        
-        body.hovered .cursor-follower { 
-            width: 90px; height: 90px; 
-            background: #fff; 
-            border-color: #fff; 
+
+        .cursor-text {
+            font-size: 10px;
+            font-weight: 800;
+            opacity: 0;
+            text-transform: uppercase;
+            color: #000;
         }
-        body.hovered .cursor-text { opacity: 1; }
-        body.hovered .cursor-dot { opacity: 0; }
+
+        body.hovered .cursor-follower {
+            width: 90px;
+            height: 90px;
+            background: #fff;
+            border-color: #fff;
+        }
+
+        body.hovered .cursor-text {
+            opacity: 1;
+        }
+
+        body.hovered .cursor-dot {
+            opacity: 0;
+        }
 
         /* =========================================
            NAVBAR
            ========================================= */
         .header-container {
-            position: fixed; top: 40px; left: 0; right: 0; z-index: 100;
-            display: flex; justify-content: center; pointer-events: none;
+            position: fixed;
+            top: 40px;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            pointer-events: none;
             mix-blend-mode: exclusion;
         }
+
         .pill-header {
-            width: 90%; max-width: 1400px; height: 70px;
-            display: flex; justify-content: space-between; align-items: center;
+            width: 90%;
+            max-width: 1400px;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             pointer-events: auto;
         }
-        .brand-logo { font-family: var(--font-display); font-weight: 700; color: #fff; text-decoration: none; font-size: 1.2rem; }
-        .back-link { font-family: var(--font-tech); color: var(--neon-color); text-decoration: none; border: 1px solid var(--neon-color); padding: 8px 20px; border-radius: 20px; transition: 0.3s; text-transform: uppercase; font-size: 0.8rem;}
-        .back-link:hover { background: var(--neon-color); color: #000; }
+
+        .brand-logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .back-link {
+            font-family: var(--font-tech);
+            color: var(--neon-color);
+            text-decoration: none;
+            border: 1px solid var(--neon-color);
+            padding: 8px 20px;
+            border-radius: 20px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .back-link:hover {
+            background: var(--neon-color);
+            color: #000;
+        }
 
         /* =========================================
            WORK LIST HEADER
@@ -145,9 +224,14 @@
             padding: 200px 5vw 100px 5vw;
             border-bottom: 1px solid var(--card-border);
         }
+
         .page-title-row {
-            display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
         }
+
         .big-title {
             font-family: var(--font-display);
             font-size: clamp(3rem, 10vw, 8rem);
@@ -159,19 +243,42 @@
             -webkit-text-stroke: 2px #fff;
             position: relative;
         }
-        .big-title span { color: var(--neon-color); -webkit-text-stroke: 0; }
-        
+
+        .big-title span {
+            color: var(--neon-color);
+            -webkit-text-stroke: 0;
+        }
+
         .filter-group {
-            display: flex; gap: 20px; margin-top: 20px;
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
         }
+
         .filter-btn {
-            background: transparent; border: none; color: var(--text-muted);
-            font-family: var(--font-tech); font-size: 1rem; cursor: pointer;
-            position: relative; padding-bottom: 5px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-family: var(--font-tech);
+            font-size: 1rem;
+            cursor: pointer;
+            position: relative;
+            padding-bottom: 5px;
         }
-        .filter-btn.active, .filter-btn:hover { color: var(--neon-color); }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            color: var(--neon-color);
+        }
+
         .filter-btn.active::after {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: var(--neon-color);
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--neon-color);
         }
 
         /* =========================================
@@ -187,15 +294,15 @@
 
         /* Main Content Wrapper for Scale Effect */
         #main-content {
-            transform-origin: center top; 
+            transform-origin: center top;
             will-change: transform;
         }
 
         .irregular-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 0; 
-            row-gap: 120px; 
+            gap: 0;
+            row-gap: 120px;
             position: relative;
         }
 
@@ -206,8 +313,8 @@
             flex-direction: column;
             text-decoration: none;
             color: #fff;
-            margin-bottom: 40px; 
-            width: 100%; 
+            margin-bottom: 40px;
+            width: 100%;
             box-sizing: border-box;
         }
 
@@ -219,14 +326,16 @@
             border-radius: 4px;
             background: #111;
         }
-        
+
         .work-img {
-            width: 100%; height: 100%; object-fit: cover;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s;
             transform: scale(1.1);
             filter: grayscale(100%) contrast(1.1);
         }
-        
+
         .work-item:hover .work-img {
             transform: scale(1);
             filter: grayscale(0%) contrast(1);
@@ -234,22 +343,48 @@
 
         /* Tech Overlays */
         .tech-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: border-color 0.3s;
             z-index: 2;
         }
-        .work-item:hover .tech-overlay { border-color: rgba(204, 255, 0, 0.3); }
+
+        .work-item:hover .tech-overlay {
+            border-color: rgba(204, 255, 0, 0.3);
+        }
 
         .tech-corner {
-            position: absolute; width: 15px; height: 15px;
+            position: absolute;
+            width: 15px;
+            height: 15px;
             border: 2px solid transparent;
             transition: all 0.3s;
         }
-        .work-item:hover .tech-corner { border-color: var(--neon-color); width: 25px; height: 25px; }
-        .tl { top: -1px; left: -1px; border-top: 1px solid rgba(255,255,255,0.3); border-left: 1px solid rgba(255,255,255,0.3); }
-        .br { bottom: -1px; right: -1px; border-bottom: 1px solid rgba(255,255,255,0.3); border-right: 1px solid rgba(255,255,255,0.3); }
+
+        .work-item:hover .tech-corner {
+            border-color: var(--neon-color);
+            width: 25px;
+            height: 25px;
+        }
+
+        .tl {
+            top: -1px;
+            left: -1px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .br {
+            bottom: -1px;
+            right: -1px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+        }
 
         /* Typography */
         .work-info {
@@ -259,105 +394,281 @@
             border-left: 2px solid transparent;
             transition: border-color 0.3s;
         }
-        .work-item:hover .work-info { border-left-color: var(--neon-color); }
+
+        .work-item:hover .work-info {
+            border-left-color: var(--neon-color);
+        }
 
         .work-index {
-            font-family: var(--font-tech); font-size: 0.8rem; color: var(--neon-color); margin-bottom: 5px; display: block; opacity: 0.8;
+            font-family: var(--font-tech);
+            font-size: 0.8rem;
+            color: var(--neon-color);
+            margin-bottom: 5px;
+            display: block;
+            opacity: 0.8;
         }
+
         .work-title {
-            font-family: var(--font-display); font-size: clamp(1.8rem, 2.5vw, 3.5rem); font-weight: 700;
-            text-transform: uppercase; line-height: 1; letter-spacing: -1px;
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 2.5vw, 3.5rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1;
+            letter-spacing: -1px;
             transition: color 0.3s;
         }
-        .work-item:hover .work-title { color: var(--neon-color); }
-        
+
+        .work-item:hover .work-title {
+            color: var(--neon-color);
+        }
+
         .work-tags {
-            margin-top: 8px; font-family: var(--font-tech); font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px;
+            margin-top: 8px;
+            font-family: var(--font-tech);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
         }
 
         /* --- DESKTOP LAYOUT CLASSES --- */
         @media (min-width: 1024px) {
-            .work-item { margin-bottom: 0; }
+            .work-item {
+                margin-bottom: 0;
+            }
 
             /* Type A: Hero Left */
-            .layout-type-a { width: 58%; margin-right: 42%; }
-            .layout-type-a .work-media { aspect-ratio: 16/10; }
+            .layout-type-a {
+                width: 58%;
+                margin-right: 42%;
+            }
+
+            .layout-type-a .work-media {
+                aspect-ratio: 16/10;
+            }
 
             /* Type B: Vertical Right */
-            .layout-type-b { width: 33.33%; margin-left: 66.66%; margin-top: -150px; transform: translateY(150px); }
-            .layout-type-b .work-media { aspect-ratio: 4/5; }
+            .layout-type-b {
+                width: 33.33%;
+                margin-left: 66.66%;
+                margin-top: -150px;
+                transform: translateY(150px);
+            }
+
+            .layout-type-b .work-media {
+                aspect-ratio: 4/5;
+            }
 
             /* Type C: Wide Horizontal Offset */
-            .layout-type-c { width: 75%; margin-left: 16.66%; display: flex; flex-direction: row-reverse; align-items: flex-end; gap: 30px; margin-top: 50px; }
-            .layout-type-c .work-media { aspect-ratio: 21/9; width: 75%; }
-            .layout-type-c .work-info { width: 25%; text-align: right; border-left: none; border-right: 2px solid transparent; padding-right: 12px; padding-left: 0; margin-bottom: 20px;}
-            .layout-type-c:hover .work-info { border-right-color: var(--neon-color); border-left-color: transparent;}
+            .layout-type-c {
+                width: 75%;
+                margin-left: 16.66%;
+                display: flex;
+                flex-direction: row-reverse;
+                align-items: flex-end;
+                gap: 30px;
+                margin-top: 50px;
+            }
+
+            .layout-type-c .work-media {
+                aspect-ratio: 21/9;
+                width: 75%;
+            }
+
+            .layout-type-c .work-info {
+                width: 25%;
+                text-align: right;
+                border-left: none;
+                border-right: 2px solid transparent;
+                padding-right: 12px;
+                padding-left: 0;
+                margin-bottom: 20px;
+            }
+
+            .layout-type-c:hover .work-info {
+                border-right-color: var(--neon-color);
+                border-left-color: transparent;
+            }
 
             /* Type D: Small Insert */
-            .layout-type-d { width: 33.33%; margin-left: 41.66%; margin-top: -150px; z-index: 5; }
-            .layout-type-d .work-media { aspect-ratio: 1/1; }
+            .layout-type-d {
+                width: 33.33%;
+                margin-left: 41.66%;
+                margin-top: -150px;
+                z-index: 5;
+            }
+
+            .layout-type-d .work-media {
+                aspect-ratio: 1/1;
+            }
 
             /* Type E: Minimal/Typography */
-            .layout-type-e { width: 33.33%; margin-left: 58.33%; margin-top: 80px; text-align: left; }
-            .layout-type-e .work-media { height: 2px; opacity: 0.2; margin-bottom: 20px; background: var(--neon-color); width: 50px; }
-            .layout-type-e .work-title { font-size: 4rem; line-height: 0.9; }
+            .layout-type-e {
+                width: 33.33%;
+                margin-left: 58.33%;
+                margin-top: 80px;
+                text-align: left;
+            }
+
+            .layout-type-e .work-media {
+                height: 2px;
+                opacity: 0.2;
+                margin-bottom: 20px;
+                background: var(--neon-color);
+                width: 50px;
+            }
+
+            .layout-type-e .work-title {
+                font-size: 4rem;
+                line-height: 0.9;
+            }
 
             /* Type F: Tall Left */
-            .layout-type-f { width: 41.66%; margin-left: 8.33%; margin-top: 100px; }
-            .layout-type-f .work-media { aspect-ratio: 3/4; }
+            .layout-type-f {
+                width: 41.66%;
+                margin-left: 8.33%;
+                margin-top: 100px;
+            }
 
-             /* Type G: Full Width */
-             .layout-type-g { width: 100%; margin-top: 50px; }
-            .layout-type-g .work-media { aspect-ratio: 2.35/1; }
-            .layout-type-g .work-info { position: absolute; bottom: 40px; left: 40px; z-index: 10; mix-blend-mode: exclusion; }
-            .layout-type-g:hover .work-info { border-left: none; }
-            .layout-type-g .work-title { color: #fff; }
+            .layout-type-f .work-media {
+                aspect-ratio: 3/4;
+            }
+
+            /* Type G: Full Width */
+            .layout-type-g {
+                width: 100%;
+                margin-top: 50px;
+            }
+
+            .layout-type-g .work-media {
+                aspect-ratio: 2.35/1;
+            }
+
+            .layout-type-g .work-info {
+                position: absolute;
+                bottom: 40px;
+                left: 40px;
+                z-index: 10;
+                mix-blend-mode: exclusion;
+            }
+
+            .layout-type-g:hover .work-info {
+                border-left: none;
+            }
+
+            .layout-type-g .work-title {
+                color: #fff;
+            }
         }
 
         .work-video {
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: opacity 0.3s;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            transition: opacity 0.3s;
         }
-        .work-item:hover .work-video { opacity: 1; }
+
+        .work-item:hover .work-video {
+            opacity: 1;
+        }
 
         /* Tech Sidebar */
         .tech-sidebar {
-            position: fixed; right: 40px; top: 50%; transform: translateY(-50%);
-            display: flex; flex-direction: column; align-items: flex-end;
-            mix-blend-mode: difference; z-index: 50;
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            mix-blend-mode: difference;
+            z-index: 50;
         }
+
         .tech-line {
-            width: 1px; height: 30vh; background: rgba(255,255,255,0.2); position: relative;
+            width: 1px;
+            height: 30vh;
+            background: rgba(255, 255, 255, 0.2);
+            position: relative;
         }
+
         .tech-progress {
-            position: absolute; top: 0; left: 0; width: 100%; height: 0%; background: var(--neon-color);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: var(--neon-color);
         }
+
         .tech-coords {
-            font-family: var(--font-tech); font-size: 10px; margin-top: 20px; text-align: right; line-height: 1.5; color: var(--neon-color);
+            font-family: var(--font-tech);
+            font-size: 10px;
+            margin-top: 20px;
+            text-align: right;
+            line-height: 1.5;
+            color: var(--neon-color);
         }
 
         /* Footer */
         .list-footer {
-            padding: 150px 0; text-align: center; border-top: 1px solid var(--card-border);
+            padding: 150px 0;
+            text-align: center;
+            border-top: 1px solid var(--card-border);
             margin-top: 100px;
         }
+
         .next-project-link {
-            font-family: var(--font-display); font-size: 5vw; color: transparent; -webkit-text-stroke: 1px #fff;
-            text-decoration: none; transition: 0.3s;
+            font-family: var(--font-display);
+            font-size: 5vw;
+            color: transparent;
+            -webkit-text-stroke: 1px #fff;
+            text-decoration: none;
+            transition: 0.3s;
         }
-        .next-project-link:hover { color: var(--neon-color); -webkit-text-stroke: 1px var(--neon-color); }
+
+        .next-project-link:hover {
+            color: var(--neon-color);
+            -webkit-text-stroke: 1px var(--neon-color);
+        }
 
         @media (max-width: 1024px) {
-            .irregular-grid { flex-direction: column; gap: 80px; }
-            .work-item { width: 100% !important; margin-left: 0 !important; margin-right: 0 !important; margin-top: 0 !important; transform: none !important; }
-            .work-media { aspect-ratio: 16/10 !important; width: 100% !important; }
-            .work-info { width: 100% !important; text-align: left !important; border-right: none !important; border-left: 2px solid transparent !important; padding: 10px 0 0 12px !important; position: relative !important; top: auto !important; left: auto !important; bottom: auto !important; mix-blend-mode: normal !important;}
-        }
+            .irregular-grid {
+                flex-direction: column;
+                gap: 80px;
+            }
 
+            .work-item {
+                width: 100% !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                margin-top: 0 !important;
+                transform: none !important;
+            }
+
+            .work-media {
+                aspect-ratio: 16/10 !important;
+                width: 100% !important;
+            }
+
+            .work-info {
+                width: 100% !important;
+                text-align: left !important;
+                border-right: none !important;
+                border-left: 2px solid transparent !important;
+                padding: 10px 0 0 12px !important;
+                position: relative !important;
+                top: auto !important;
+                left: auto !important;
+                bottom: auto !important;
+                mix-blend-mode: normal !important;
+            }
+        }
     </style>
 </head>
 
 <body>
-    
+
     <!-- TRANSITION CURTAIN -->
     <div class="transition-curtain">
         <div class="transition-logo">NUCLEAR LABS</div>
@@ -379,7 +690,9 @@
     </div>
 
     <div class="tech-sidebar">
-        <div class="tech-line"><div class="tech-progress" id="progressBar"></div></div>
+        <div class="tech-line">
+            <div class="tech-progress" id="progressBar"></div>
+        </div>
         <div class="tech-coords">
             Y: <span id="scrollVal">0000</span><br>
             OBJ: 15
@@ -387,7 +700,7 @@
     </div>
 
     <main id="main-content">
-        
+
         <section class="work-header-section">
             <div class="page-title-row">
                 <h1 class="big-title" data-speed="0.5">SELECTED<br><span>WORKS</span></h1>
@@ -400,15 +713,29 @@
             </div>
         </section>
 
+        <!-- Circular Reveal Transition Section -->
+        <section class="circular-reveal-section">
+            <div class="circle-mask-wrapper">
+                <div class="circle-mask"></div>
+            </div>
+            <div class="reveal-content">
+                <h2 class="reveal-title">SELECTED<br><span>WORKS</span></h2>
+            </div>
+        </section>
+
         <!-- 15 ITEMS IRREGULAR GRID (FLEX) -->
         <section class="work-list-container">
             <div class="irregular-grid">
-                
+
                 <!-- 01: Type A -->
                 <a href="#" class="work-item layout-type-a" data-cursor="view">
                     <div class="work-media">
-                        <div class="tech-overlay"><div class="tech-corner tl"></div><div class="tech-corner br"></div></div>
-                        <video class="work-video" autoplay muted loop playsinline src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/logo.mp4"></video>
+                        <div class="tech-overlay">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner br"></div>
+                        </div>
+                        <video class="work-video" autoplay muted loop playsinline
+                            src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/logo.mp4"></video>
                     </div>
                     <div class="work-info">
                         <span class="work-index">01 // 2025</span>
@@ -420,8 +747,13 @@
                 <!-- 02: Type B -->
                 <a href="#" class="work-item layout-type-b" data-cursor="view" data-speed="1.1">
                     <div class="work-media">
-                        <div class="tech-overlay"><div class="tech-corner tl"></div><div class="tech-corner br"></div></div>
-                        <img class="work-img" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" alt="Abstract Art">
+                        <div class="tech-overlay">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner br"></div>
+                        </div>
+                        <img class="work-img"
+                            src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"
+                            alt="Abstract Art">
                     </div>
                     <div class="work-info">
                         <span class="work-index">02 // 2025</span>
@@ -433,8 +765,13 @@
                 <!-- 03: Type C -->
                 <a href="#" class="work-item layout-type-c" data-cursor="view">
                     <div class="work-media">
-                        <div class="tech-overlay"><div class="tech-corner tl"></div><div class="tech-corner br"></div></div>
-                        <img class="work-img" src="https://images.unsplash.com/photo-1492571350019-22de08371fd3?q=80&w=2553&auto=format&fit=crop" alt="Tokyo">
+                        <div class="tech-overlay">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner br"></div>
+                        </div>
+                        <img class="work-img"
+                            src="https://images.unsplash.com/photo-1492571350019-22de08371fd3?q=80&w=2553&auto=format&fit=crop"
+                            alt="Tokyo">
                     </div>
                     <div class="work-info">
                         <span class="work-index">03 // 2024</span>
@@ -446,8 +783,12 @@
                 <!-- 04: Type D -->
                 <a href="#" class="work-item layout-type-d" data-cursor="view" data-speed="1.3">
                     <div class="work-media">
-                        <div class="tech-overlay"><div class="tech-corner tl"></div><div class="tech-corner br"></div></div>
-                        <video class="work-video" autoplay muted loop playsinline src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/nn.webm"></video>
+                        <div class="tech-overlay">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner br"></div>
+                        </div>
+                        <video class="work-video" autoplay muted loop playsinline
+                            src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/nn.webm"></video>
                     </div>
                     <div class="work-info">
                         <span class="work-index">04 // R&D</span>
@@ -459,8 +800,13 @@
                 <!-- 05: Type F -->
                 <a href="#" class="work-item layout-type-f" data-cursor="view" data-speed="1.05">
                     <div class="work-media">
-                        <div class="tech-overlay"><div class="tech-corner tl"></div><div class="tech-corner br"></div></div>
-                        <img class="work-img" src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop" alt="Cyberpunk">
+                        <div class="tech-overlay">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner br"></div>
+                        </div>
+                        <img class="work-img"
+                            src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop"
+                            alt="Cyberpunk">
                     </div>
                     <div class="work-info">
                         <span class="work-index">05 // 2024</span>
@@ -482,8 +828,13 @@
                 <!-- 07: Type G -->
                 <a href="#" class="work-item layout-type-g" data-cursor="view">
                     <div class="work-media">
-                        <div class="tech-overlay"><div class="tech-corner tl"></div><div class="tech-corner br"></div></div>
-                        <img class="work-img" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2672&auto=format&fit=crop" alt="Earth">
+                        <div class="tech-overlay">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner br"></div>
+                        </div>
+                        <img class="work-img"
+                            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2672&auto=format&fit=crop"
+                            alt="Earth">
                     </div>
                     <div class="work-info">
                         <span class="work-index">07 // 2024</span>
@@ -493,10 +844,16 @@
                 </a>
 
                 <!-- 08: Type B (Vertical) -->
-                <a href="#" class="work-item layout-type-b" style="margin-top: 0; transform: translateY(0);" data-cursor="view" data-speed="1.15">
+                <a href="#" class="work-item layout-type-b" style="margin-top: 0; transform: translateY(0);"
+                    data-cursor="view" data-speed="1.15">
                     <div class="work-media">
-                        <div class="tech-overlay"><div class="tech-corner tl"></div><div class="tech-corner br"></div></div>
-                        <img class="work-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=2864&auto=format&fit=crop" alt="Fashion">
+                        <div class="tech-overlay">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner br"></div>
+                        </div>
+                        <img class="work-img"
+                            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=2864&auto=format&fit=crop"
+                            alt="Fashion">
                     </div>
                     <div class="work-info">
                         <span class="work-index">08 // 2023</span>
@@ -506,10 +863,16 @@
                 </a>
 
                 <!-- 09: Type A (Hero Left) -->
-                <a href="#" class="work-item layout-type-a" style="margin-left: 8.33%; width: 58%; margin-right: auto;" data-cursor="view">
+                <a href="#" class="work-item layout-type-a" style="margin-left: 8.33%; width: 58%; margin-right: auto;"
+                    data-cursor="view">
                     <div class="work-media">
-                        <div class="tech-overlay"><div class="tech-corner tl"></div><div class="tech-corner br"></div></div>
-                        <img class="work-img" src="https://images.unsplash.com/photo-1519638399535-1b036603ac77?q=80&w=2662&auto=format&fit=crop" alt="Abstract">
+                        <div class="tech-overlay">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner br"></div>
+                        </div>
+                        <img class="work-img"
+                            src="https://images.unsplash.com/photo-1519638399535-1b036603ac77?q=80&w=2662&auto=format&fit=crop"
+                            alt="Abstract">
                     </div>
                     <div class="work-info">
                         <span class="work-index">09 // 2023</span>
@@ -519,10 +882,16 @@
                 </a>
 
                 <!-- 10: Type D (Small Insert) -->
-                <a href="#" class="work-item layout-type-d" style="margin-left: 66.66%; margin-top: -150px;" data-cursor="view" data-speed="1.4">
+                <a href="#" class="work-item layout-type-d" style="margin-left: 66.66%; margin-top: -150px;"
+                    data-cursor="view" data-speed="1.4">
                     <div class="work-media">
-                        <div class="tech-overlay"><div class="tech-corner tl"></div><div class="tech-corner br"></div></div>
-                        <img class="work-img" src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2670&auto=format&fit=crop" alt="Liquid">
+                        <div class="tech-overlay">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner br"></div>
+                        </div>
+                        <img class="work-img"
+                            src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2670&auto=format&fit=crop"
+                            alt="Liquid">
                     </div>
                     <div class="work-info">
                         <span class="work-index">10 // EXP</span>
@@ -534,10 +903,16 @@
                 <!-- 11: Type C (Wide Offset) -->
                 <a href="#" class="work-item layout-type-c" style="flex-direction: row;" data-cursor="view">
                     <div class="work-media">
-                        <div class="tech-overlay"><div class="tech-corner tl"></div><div class="tech-corner br"></div></div>
-                        <img class="work-img" src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=2574&auto=format&fit=crop" alt="Architecture">
+                        <div class="tech-overlay">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner br"></div>
+                        </div>
+                        <img class="work-img"
+                            src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=2574&auto=format&fit=crop"
+                            alt="Architecture">
                     </div>
-                    <div class="work-info" style="text-align: left; border-right: none; border-left: 2px solid transparent; padding-left: 12px;">
+                    <div class="work-info"
+                        style="text-align: left; border-right: none; border-left: 2px solid transparent; padding-left: 12px;">
                         <span class="work-index">11 // 2023</span>
                         <h2 class="work-title">URBAN DECAY</h2>
                         <div class="work-tags">PHOTOGRAPHY / ART DIRECTION</div>
@@ -545,10 +920,16 @@
                 </a>
 
                 <!-- 12: Type F (Tall Left) -->
-                <a href="#" class="work-item layout-type-f" style="margin-top: 50px;" data-cursor="view" data-speed="1.1">
+                <a href="#" class="work-item layout-type-f" style="margin-top: 50px;" data-cursor="view"
+                    data-speed="1.1">
                     <div class="work-media">
-                        <div class="tech-overlay"><div class="tech-corner tl"></div><div class="tech-corner br"></div></div>
-                        <img class="work-img" src="https://images.unsplash.com/photo-1580927752452-89d86da3fa0a?q=80&w=2670&auto=format&fit=crop" alt="Code">
+                        <div class="tech-overlay">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner br"></div>
+                        </div>
+                        <img class="work-img"
+                            src="https://images.unsplash.com/photo-1580927752452-89d86da3fa0a?q=80&w=2670&auto=format&fit=crop"
+                            alt="Code">
                     </div>
                     <div class="work-info">
                         <span class="work-index">12 // 2022</span>
@@ -558,7 +939,8 @@
                 </a>
 
                 <!-- 13: Type E (Minimal) -->
-                <a href="#" class="work-item layout-type-e" style="margin-left: 58.33%; margin-top: 150px;" data-cursor="view">
+                <a href="#" class="work-item layout-type-e" style="margin-left: 58.33%; margin-top: 150px;"
+                    data-cursor="view">
                     <div class="work-media"></div>
                     <div class="work-info" style="border:none; padding:0;">
                         <span class="work-index">13 // DATA</span>
@@ -568,10 +950,16 @@
                 </a>
 
                 <!-- 14: Type B (Vertical Right) -->
-                <a href="#" class="work-item layout-type-b" style="margin-left: 8.33%; margin-top: 50px; transform: none;" data-cursor="view" data-speed="1.2">
+                <a href="#" class="work-item layout-type-b"
+                    style="margin-left: 8.33%; margin-top: 50px; transform: none;" data-cursor="view" data-speed="1.2">
                     <div class="work-media">
-                        <div class="tech-overlay"><div class="tech-corner tl"></div><div class="tech-corner br"></div></div>
-                        <img class="work-img" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2670&auto=format&fit=crop" alt="Landscape">
+                        <div class="tech-overlay">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner br"></div>
+                        </div>
+                        <img class="work-img"
+                            src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2670&auto=format&fit=crop"
+                            alt="Landscape">
                     </div>
                     <div class="work-info">
                         <span class="work-index">14 // 2022</span>
@@ -581,10 +969,16 @@
                 </a>
 
                 <!-- 15: Type A (Hero End) -->
-                <a href="#" class="work-item layout-type-a" style="margin-left: 41.66%; margin-top: 100px;" data-cursor="view">
+                <a href="#" class="work-item layout-type-a" style="margin-left: 41.66%; margin-top: 100px;"
+                    data-cursor="view">
                     <div class="work-media">
-                        <div class="tech-overlay"><div class="tech-corner tl"></div><div class="tech-corner br"></div></div>
-                        <img class="work-img" src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2674&auto=format&fit=crop" alt="Nature">
+                        <div class="tech-overlay">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner br"></div>
+                        </div>
+                        <img class="work-img"
+                            src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2674&auto=format&fit=crop"
+                            alt="Nature">
                     </div>
                     <div class="work-info">
                         <span class="work-index">15 // 2022</span>
@@ -622,31 +1016,31 @@
         gsap.registerPlugin(ScrollTrigger);
 
         // --- PAGE TRANSITION LOGIC (ZOOM EFFECTS) ---
-        
+
         // 1. Entrance Animation (Load)
         window.addEventListener('load', () => {
             const tl = gsap.timeline();
 
             // Set Initial Scale for Entrance Zoom Out Effect
-            gsap.set('#main-content', { scale: 1.15 }); 
-            
+            gsap.set('#main-content', { scale: 1.15 });
+
             // Reveal logo
             tl.to('.transition-logo', { opacity: 1, duration: 0.5, ease: "power2.out" })
-              // Curtain Up
-              .to('.transition-curtain', { 
-                  clipPath: "inset(0 0 100% 0)", 
-                  duration: 1.2, 
-                  ease: "power4.inOut",
-                  delay: 0.2
-              })
-              // Scale Content Down (Zoom Out) SIMULTANEOUSLY with curtain
-              .to('#main-content', { 
-                  scale: 1, 
-                  duration: 1.5, 
-                  ease: "power3.out" 
-              }, "-=1.2") // Start overlap with curtain
-              
-              .set('.transition-curtain', { display: 'none' });
+                // Curtain Up
+                .to('.transition-curtain', {
+                    clipPath: "inset(0 0 100% 0)",
+                    duration: 1.2,
+                    ease: "power4.inOut",
+                    delay: 0.2
+                })
+                // Scale Content Down (Zoom Out) SIMULTANEOUSLY with curtain
+                .to('#main-content', {
+                    scale: 1,
+                    duration: 1.5,
+                    ease: "power3.out"
+                }, "-=1.2") // Start overlap with curtain
+
+                .set('.transition-curtain', { display: 'none' });
 
             gsap.from('.big-title', { y: 100, opacity: 0, duration: 1.2, delay: 0.8, ease: "power4.out" });
         });
@@ -657,12 +1051,12 @@
         internalLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 const href = link.getAttribute('href');
-                if(!href || href === '#') return;
+                if (!href || href === '#') return;
 
                 e.preventDefault();
 
                 gsap.set('.transition-curtain', { display: 'flex', clipPath: "inset(100% 0 0 0)" });
-                
+
                 const tl = gsap.timeline({
                     onComplete: () => {
                         window.location.href = href;
@@ -670,23 +1064,23 @@
                 });
 
                 // Curtain Down
-                tl.to('.transition-curtain', { 
-                    clipPath: "inset(0 0 0 0)", 
-                    duration: 0.8, 
-                    ease: "power4.inOut" 
-                })
-                .to('.transition-logo', { opacity: 1, duration: 0.3 }, "-=0.3")
-                // Add Subtle Zoom In & Fade Out for Content leaving
-                .to('#main-content', {
-                    scale: 0.95,
-                    opacity: 0.5,
+                tl.to('.transition-curtain', {
+                    clipPath: "inset(0 0 0 0)",
                     duration: 0.8,
-                    ease: "power2.inOut"
-                }, "-=0.8");
+                    ease: "power4.inOut"
+                })
+                    .to('.transition-logo', { opacity: 1, duration: 0.3 }, "-=0.3")
+                    // Add Subtle Zoom In & Fade Out for Content leaving
+                    .to('#main-content', {
+                        scale: 0.95,
+                        opacity: 0.5,
+                        duration: 0.8,
+                        ease: "power2.inOut"
+                    }, "-=0.8");
             });
         });
 
-        
+
         // --- PARALLAX & SCROLL REVEAL ---
         document.querySelectorAll('[data-speed]').forEach(item => {
             gsap.to(item, {
@@ -704,12 +1098,12 @@
         const workItems = document.querySelectorAll('.work-item');
         workItems.forEach(item => {
             const media = item.querySelector('.work-media');
-            if(media) {
-                gsap.fromTo(media, 
+            if (media) {
+                gsap.fromTo(media,
                     { clipPath: "inset(100% 0 0 0)", scale: 1.1 },
-                    { 
+                    {
                         clipPath: "inset(0% 0 0 0)", scale: 1,
-                        duration: 1, 
+                        duration: 1,
                         ease: "power4.inOut",
                         scrollTrigger: {
                             trigger: item,
@@ -718,9 +1112,9 @@
                     }
                 );
             }
-            
+
             const info = item.querySelector('.work-info');
-            if(info) {
+            if (info) {
                 gsap.fromTo(info,
                     { opacity: 0, y: 30 },
                     { opacity: 1, y: 0, duration: 1, delay: 0.1, scrollTrigger: { trigger: item, start: "top 100%" } }
@@ -731,7 +1125,7 @@
         // Sidebar Progress
         const progressBar = document.getElementById('progressBar');
         const scrollVal = document.getElementById('scrollVal');
-        
+
         lenis.on('scroll', (e) => {
             const progress = e.progress * 100;
             progressBar.style.height = `${progress}%`;
@@ -742,7 +1136,7 @@
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorFollower = document.querySelector('.cursor-follower');
         const cursorText = document.querySelector('.cursor-text');
-        
+
         const xTo = gsap.quickSetter(cursorDot, "x", "px");
         const yTo = gsap.quickSetter(cursorDot, "y", "px");
         const xToFollower = gsap.quickSetter(cursorFollower, "x", "px");
@@ -773,7 +1167,7 @@
             el.addEventListener('mouseenter', () => {
                 document.body.classList.add('hovered');
                 cursorText.innerText = el.dataset.cursor === 'view' ? "VIEW CASE" : "";
-                if(el.dataset.cursor === 'view') {
+                if (el.dataset.cursor === 'view') {
                     gsap.to(cursorFollower, { width: 100, height: 100, duration: 0.3 });
                 }
             });
@@ -794,7 +1188,7 @@
         const geometry = new THREE.BufferGeometry();
         const count = 2000;
         const positions = new Float32Array(count * 3);
-        for(let i=0; i<count*3; i++) {
+        for (let i = 0; i < count * 3; i++) {
             positions[i] = (Math.random() - 0.5) * 10;
         }
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -819,4 +1213,5 @@
 
     </script>
 </body>
+
 </html>

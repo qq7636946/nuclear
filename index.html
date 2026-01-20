@@ -686,7 +686,7 @@
         /* 2. Corner HUD (Bottom Left) */
         #tech-hud-left {
             position: fixed;
-            bottom: 40px;
+            bottom: 20px;
             left: 40px;
             z-index: 800;
             font-family: var(--font-tech);
@@ -1738,81 +1738,179 @@
             display: block;
         }
 
-        /* --- Legacy Grid --- */
+        /* --- Legacy Grid (Irregular Masonry Layout) --- */
         #nu-wrapper .legacy-grid-wrapper {
             background-color: transparent;
             color: var(--text-main);
             position: relative;
             z-index: 10;
+            min-height: 250vh;
         }
 
         #nu-wrapper .legacy-container {
             max-width: 1600px;
             margin: 0 auto;
-            padding: 150px 40px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8vw;
-            width: 100%;
+            padding: 180px 80px;
+            position: relative;
+            min-height: 240vh;
         }
 
-        #nu-wrapper .col-left {
-            display: flex;
-            flex-direction: column;
-            gap: 150px;
-        }
-
+        /* Remove old column styles */
+        #nu-wrapper .col-left,
         #nu-wrapper .col-right {
-            display: flex;
-            flex-direction: column;
-            gap: 150px;
-            padding-top: 250px;
+            display: contents;
         }
 
         #nu-wrapper .grid-card {
-            width: 100%;
-            position: relative;
+            position: absolute;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #nu-wrapper .grid-card:hover {
+            transform: translateY(-8px) rotate(0deg) !important;
+            z-index: 100;
+        }
+
+        /* Irregular positioning - refined magazine-style layout */
+        #nu-wrapper .grid-card:nth-child(1) {
+            width: 320px;
+            top: 3%;
+            left: 6%;
+            transform: rotate(-1.5deg);
+        }
+
+        #nu-wrapper .grid-card:nth-child(2) {
+            width: 450px;
+            top: 1%;
+            left: 32%;
+            transform: rotate(0.5deg);
+        }
+
+        #nu-wrapper .grid-card:nth-child(3) {
+            width: 280px;
+            top: 6%;
+            right: 8%;
+            transform: rotate(-0.8deg);
+        }
+
+        #nu-wrapper .grid-card:nth-child(4) {
+            width: 350px;
+            top: 28%;
+            left: 4%;
+            transform: rotate(1.2deg);
+        }
+
+        #nu-wrapper .grid-card:nth-child(5) {
+            width: 300px;
+            top: 26%;
+            left: 38%;
+            transform: rotate(-1deg);
+        }
+
+        #nu-wrapper .grid-card:nth-child(6) {
+            width: 380px;
+            top: 32%;
+            right: 6%;
+            transform: rotate(0.8deg);
+        }
+
+        #nu-wrapper .grid-card:nth-child(7) {
+            width: 340px;
+            top: 54%;
+            left: 8%;
+            transform: rotate(-0.5deg);
+        }
+
+        #nu-wrapper .grid-card:nth-child(8) {
+            width: 290px;
+            top: 52%;
+            left: 42%;
+            transform: rotate(1.5deg);
+        }
+
+        #nu-wrapper .grid-card:nth-child(9) {
+            width: 360px;
+            top: 58%;
+            right: 10%;
+            transform: rotate(-1.2deg);
+        }
+
+        #nu-wrapper .grid-card:nth-child(10) {
+            width: 400px;
+            top: 78%;
+            left: 28%;
+            transform: rotate(0.6deg);
         }
 
         #nu-wrapper .media {
             background-color: transparent;
             width: 100%;
+            height: auto;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             position: relative;
             z-index: 2;
+            border-radius: 6px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
         }
 
-        #nu-wrapper .ratio-1 {
-            aspect-ratio: 680 / 540;
+        /* Varied aspect ratios for organic feel */
+        #nu-wrapper .grid-card:nth-child(1) .media {
+            aspect-ratio: 3 / 4;
         }
 
-        #nu-wrapper .ratio-2 {
-            aspect-ratio: 652 / 860;
+        #nu-wrapper .grid-card:nth-child(2) .media {
+            aspect-ratio: 16 / 9;
         }
 
-        #nu-wrapper .ratio-3 {
-            aspect-ratio: 436 / 580;
-            width: 70%;
+        #nu-wrapper .grid-card:nth-child(3) .media {
+            aspect-ratio: 4 / 5;
         }
 
-        #nu-wrapper .ratio-4 {
-            aspect-ratio: 544 / 520;
-            width: 85%;
+        #nu-wrapper .grid-card:nth-child(4) .media {
+            aspect-ratio: 1 / 1;
+        }
+
+        #nu-wrapper .grid-card:nth-child(5) .media {
+            aspect-ratio: 3 / 4;
+        }
+
+        #nu-wrapper .grid-card:nth-child(6) .media {
+            aspect-ratio: 16 / 10;
+        }
+
+        #nu-wrapper .grid-card:nth-child(7) .media {
+            aspect-ratio: 4 / 3;
+        }
+
+        #nu-wrapper .grid-card:nth-child(8) .media {
+            aspect-ratio: 4 / 5;
+        }
+
+        #nu-wrapper .grid-card:nth-child(9) .media {
+            aspect-ratio: 5 / 4;
+        }
+
+        #nu-wrapper .grid-card:nth-child(10) .media {
+            aspect-ratio: 16 / 9;
         }
 
         #nu-wrapper .photo-webgl-source {
             width: 100%;
-            height: 140%;
+            height: 100%;
             object-fit: cover;
             opacity: 1;
             will-change: transform, filter;
             position: relative;
-            transform: scale(1.1);
-            transition: transform 0.1s linear;
+            transform: scale(1);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #nu-wrapper .grid-card:hover .photo-webgl-source {
+            transform: scale(1.05);
         }
 
         #nu-wrapper .info {
@@ -1823,7 +1921,7 @@
         }
 
         #nu-wrapper .title {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
             margin-bottom: 8px;
             letter-spacing: -0.02em;
@@ -1832,6 +1930,75 @@
 
         #nu-wrapper .meta {
             color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1400px) {
+            #nu-wrapper .legacy-container {
+                padding: 140px 50px;
+            }
+
+            #nu-wrapper .grid-card:nth-child(1) {
+                width: 280px;
+            }
+
+            #nu-wrapper .grid-card:nth-child(2) {
+                width: 380px;
+            }
+
+            #nu-wrapper .grid-card:nth-child(3) {
+                width: 240px;
+            }
+
+            #nu-wrapper .grid-card:nth-child(4) {
+                width: 300px;
+            }
+
+            #nu-wrapper .grid-card:nth-child(5) {
+                width: 260px;
+            }
+
+            #nu-wrapper .grid-card:nth-child(6) {
+                width: 320px;
+            }
+
+            #nu-wrapper .grid-card:nth-child(7) {
+                width: 290px;
+            }
+
+            #nu-wrapper .grid-card:nth-child(8) {
+                width: 250px;
+            }
+
+            #nu-wrapper .grid-card:nth-child(9) {
+                width: 310px;
+            }
+
+            #nu-wrapper .grid-card:nth-child(10) {
+                width: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #nu-wrapper .legacy-container {
+                padding: 80px 20px;
+                min-height: auto;
+            }
+
+            #nu-wrapper .grid-card {
+                position: relative !important;
+                width: 100% !important;
+                transform: rotate(0deg) !important;
+                margin-bottom: 40px;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+            }
+
+            #nu-wrapper .media {
+                aspect-ratio: 4 / 3 !important;
+            }
         }
 
         /* --- Footer --- */
@@ -3002,87 +3169,115 @@
             <!-- LEGACY GRID -->
             <div class="legacy-grid-wrapper" id="grid">
                 <div class="legacy-container">
-                    <div class="col-left">
-                        <article class="grid-card">
-                            <div class="media ratio-1" data-cursor="view">
-                                <video src="recruit/assets/images/video1.mp4" autoplay muted loop playsinline
-                                    class="photo-webgl-source webgl-target"
-                                    style="object-fit: cover; width: 100%; height: 100%;"></video>
-                                <div class="noise-overlay"></div>
-                            </div>
-                            <div class="info">
-                                <h2 class="title" data-effect="text-reveal">Kinetic Sandscapes</h2>
-                                <p class="meta">2025 – Branding</p>
-                            </div>
-                        </article>
-                        <article class="grid-card">
-                            <div class="media ratio-3" data-cursor="view">
-                                <video src="recruit/assets/images/video5.mp4" autoplay muted loop playsinline
-                                    class="photo-webgl-source webgl-target"
-                                    style="object-fit: cover; width: 100%; height: 100%;"></video>
-                            </div>
-                            <div class="info">
-                                <h2 class="title" data-effect="text-reveal">Neon Structure</h2>
-                                <p class="meta">2024 – Architecture</p>
-                            </div>
-                        </article>
-                        <article class="grid-card">
-                            <div class="media ratio-3" data-cursor="view">
-                                <img src="https://images.unsplash.com/photo-1571212515416-f223d633f06c?q=80&w=2574&auto=format&fit=crop"
-                                    class="photo-webgl-source webgl-target">
-                            </div>
-                            <div class="info">
-                                <h2 class="title" data-effect="text-reveal">Brooklyn Brewery</h2>
-                                <p class="meta">2025 – Photography</p>
-                            </div>
-                        </article>
-                        <article class="grid-card">
-                            <div class="media ratio-2" data-cursor="view">
-                                <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=2676&auto=format&fit=crop"
-                                    class="photo-webgl-source webgl-target">
-                            </div>
-                            <div class="info">
-                                <h2 class="title" data-effect="text-reveal">Regenerative</h2>
-                                <p class="meta">2025 – Photography</p>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="col-right">
-                        <article class="grid-card">
-                            <div class="media ratio-2" data-cursor="view">
-                                <video src="recruit/assets/images/video3.mp4" autoplay muted loop playsinline
-                                    class="photo-webgl-source webgl-target"
-                                    style="object-fit: cover; width: 100%; height: 100%;"></video>
-                                <div class="noise-overlay"></div>
-                            </div>
-                            <div class="info">
-                                <h2 class="title" data-effect="text-reveal">Hopscotch Payments</h2>
-                                <p class="meta">2025 – Development</p>
-                            </div>
-                        </article>
-                        <article class="grid-card">
-                            <div class="media ratio-4" data-cursor="view">
-                                <video src="recruit/assets/images/video2.mp4" autoplay muted loop playsinline
-                                    class="photo-webgl-source webgl-target"
-                                    style="object-fit: cover; width: 100%; height: 100%;"></video>
-                                <div class="noise-overlay"></div>
-                            </div>
-                            <div class="info">
-                                <h2 class="title" data-effect="text-reveal">Stories Worthwhile</h2>
-                                <p class="meta">2025 – UI/UX Design</p>
-                            </div>
-                        </article>
-                        <article class="grid-card">
-                            <div class="media ratio-1" data-cursor="view">
-                                <img src="https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?q=80&w=2670&auto=format&fit=crop"
-                                    class="photo-webgl-source webgl-target">
-                            </div>
-                            <div class="info">
-                                <h2 class="title" data-effect="text-reveal">Urban Exploration</h2>
-                                <p class="meta">2024 – Strategy</p>
-                            </div>
-                        </article>
-                    </div>
+                    <article class="grid-card">
+                        <div class="media ratio-1" data-cursor="view">
+                            <video src="recruit/assets/images/video1.mp4" autoplay muted loop playsinline
+                                class="photo-webgl-source webgl-target"
+                                style="object-fit: cover; width: 100%; height: 100%;"></video>
+                            <div class="noise-overlay"></div>
+                        </div>
+                        <div class="info">
+                            <h2 class="title" data-effect="text-reveal">Kinetic Sandscapes</h2>
+                            <p class="meta">2025 – Branding</p>
+                        </div>
+                    </article>
+                    <article class="grid-card">
+                        <div class="media ratio-3" data-cursor="view">
+                            <video src="recruit/assets/images/video5.mp4" autoplay muted loop playsinline
+                                class="photo-webgl-source webgl-target"
+                                style="object-fit: cover; width: 100%; height: 100%;"></video>
+                        </div>
+                        <div class="info">
+                            <h2 class="title" data-effect="text-reveal">Neon Structure</h2>
+                            <p class="meta">2024 – Architecture</p>
+                        </div>
+                    </article>
+                    <article class="grid-card">
+                        <div class="media ratio-3" data-cursor="view">
+                            <img src="https://images.unsplash.com/photo-1571212515416-f223d633f06c?q=80&w=2574&auto=format&fit=crop"
+                                class="photo-webgl-source webgl-target">
+                        </div>
+                        <div class="info">
+                            <h2 class="title" data-effect="text-reveal">Brooklyn Brewery</h2>
+                            <p class="meta">2025 – Photography</p>
+                        </div>
+                    </article>
+                    <article class="grid-card">
+                        <div class="media ratio-2" data-cursor="view">
+                            <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=2676&auto=format&fit=crop"
+                                class="photo-webgl-source webgl-target">
+                        </div>
+                        <div class="info">
+                            <h2 class="title" data-effect="text-reveal">Regenerative</h2>
+                            <p class="meta">2025 – Photography</p>
+                        </div>
+                    </article>
+                    <article class="grid-card">
+                        <div class="media ratio-2" data-cursor="view">
+                            <video src="recruit/assets/images/video3.mp4" autoplay muted loop playsinline
+                                class="photo-webgl-source webgl-target"
+                                style="object-fit: cover; width: 100%; height: 100%;"></video>
+                            <div class="noise-overlay"></div>
+                        </div>
+                        <div class="info">
+                            <h2 class="title" data-effect="text-reveal">Hopscotch Payments</h2>
+                            <p class="meta">2025 – Development</p>
+                        </div>
+                    </article>
+                    <article class="grid-card">
+                        <div class="media ratio-4" data-cursor="view">
+                            <video src="recruit/assets/images/video2.mp4" autoplay muted loop playsinline
+                                class="photo-webgl-source webgl-target"
+                                style="object-fit: cover; width: 100%; height: 100%;"></video>
+                            <div class="noise-overlay"></div>
+                        </div>
+                        <div class="info">
+                            <h2 class="title" data-effect="text-reveal">Stories Worthwhile</h2>
+                            <p class="meta">2025 – UI/UX Design</p>
+                        </div>
+                    </article>
+                    <article class="grid-card">
+                        <div class="media ratio-1" data-cursor="view">
+                            <img src="https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?q=80&w=2670&auto=format&fit=crop"
+                                class="photo-webgl-source webgl-target">
+                        </div>
+                        <div class="info">
+                            <h2 class="title" data-effect="text-reveal">Urban Exploration</h2>
+                            <p class="meta">2024 – Strategy</p>
+                        </div>
+                    </article>
+                    <article class="grid-card">
+                        <div class="media ratio-2" data-cursor="view">
+                            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=2574&auto=format&fit=crop"
+                                class="photo-webgl-source webgl-target">
+                        </div>
+                        <div class="info">
+                            <h2 class="title" data-effect="text-reveal">Digital Horizons</h2>
+                            <p class="meta">2025 – Web Design</p>
+                        </div>
+                    </article>
+                    <article class="grid-card">
+                        <div class="media ratio-3" data-cursor="view">
+                            <video src="recruit/assets/images/video4.mp4" autoplay muted loop playsinline
+                                class="photo-webgl-source webgl-target"
+                                style="object-fit: cover; width: 100%; height: 100%;"></video>
+                            <div class="noise-overlay"></div>
+                        </div>
+                        <div class="info">
+                            <h2 class="title" data-effect="text-reveal">Motion Graphics</h2>
+                            <p class="meta">2025 – Animation</p>
+                        </div>
+                    </article>
+                    <article class="grid-card">
+                        <div class="media ratio-1" data-cursor="view">
+                            <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2670&auto=format&fit=crop"
+                                class="photo-webgl-source webgl-target">
+                        </div>
+                        <div class="info">
+                            <h2 class="title" data-effect="text-reveal">Cosmic Journey</h2>
+                            <p class="meta">2025 – Creative Direction</p>
+                        </div>
+                    </article>
                 </div>
             </div>
 
@@ -3148,7 +3343,7 @@
             <div class="menu-content">
                 <ul class="nav-list" id="navList">
                     <li class="nav-item">
-                        <div class="nav-item-wrapper"><span class="nav-num">01</span><a href="#" class="nav-link"
+                        <div class="nav-item-wrapper"><span class="nav-num">01</span><a href="work.html" class="nav-link"
                                 data-cursor="hover">WORK</a></div>
                         <div class="nav-meta-tag">Case Studies</div>
                     </li>
