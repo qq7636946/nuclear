@@ -806,6 +806,45 @@
             #tech-hud-left {
                 display: none;
             }
+
+            /* ===================================
+               PROJECT CARD 手機版修正
+               =================================== */
+            /* 修正 VIEW 按鈕變形問題 */
+            #nu-wrapper .view-btn {
+                width: 70px !important;
+                height: 70px !important;
+                min-width: 70px;
+                min-height: 70px;
+                aspect-ratio: 1 / 1;
+                flex-shrink: 0;
+                font-size: 0.75rem;
+            }
+
+            /* 修正標題字體大小，避免換行問題 */
+            #nu-wrapper .project-title {
+                font-size: 1.8rem !important;
+                line-height: 1.1;
+                max-width: 100%;
+                word-break: break-word;
+            }
+
+            /* 調整 tag pills 大小 */
+            #nu-wrapper .tag-pill {
+                font-size: 0.65rem;
+                padding: 4px 10px;
+            }
+
+            /* 調整 project number */
+            #nu-wrapper .project-number {
+                font-size: 0.85rem;
+            }
+
+            /* 確保 header-main-row 有足夠空間 */
+            #nu-wrapper .header-main-row {
+                gap: 15px;
+                align-items: center;
+            }
         }
 
 
@@ -1075,6 +1114,64 @@
             left: 40%;
             filter: blur(4px);
             opacity: 0.7;
+        }
+
+        /* ===================================
+           MOBILE RWD - EXPLOSIVE ZOOM 焦點模式
+           =================================== */
+        @media (max-width: 768px) {
+
+            /* 隱藏所有浮動元素 */
+            #nu-wrapper .float-item.pos-1,
+            #nu-wrapper .float-item.pos-2,
+            #nu-wrapper .float-item.pos-3,
+            #nu-wrapper .float-item.pos-4,
+            #nu-wrapper .float-item.pos-5 {
+                display: none !important;
+            }
+
+            /* 修正 section 高度，避免大量空白 */
+            #nu-wrapper .section-explosive-zoom {
+                height: auto !important;
+                min-height: 80vh;
+            }
+
+            /* 重點元素滿版顯示 */
+            #nu-wrapper .explosive-wrapper {
+                position: relative !important;
+                height: auto !important;
+                min-height: 80vh;
+                padding: 40px 20px;
+            }
+
+            #nu-wrapper .center-stage {
+                position: static;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+                min-height: 60vh;
+                transform: none !important;
+                border-radius: 12px;
+                margin: 0 auto;
+            }
+
+            #nu-wrapper .center-stage video {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            #nu-wrapper .center-text-overlay {
+                padding: 20px;
+            }
+
+            #nu-wrapper .center-text-overlay h2 {
+                font-size: 2rem;
+            }
+
+            #nu-wrapper .center-text-overlay p {
+                font-size: 0.9rem;
+            }
         }
 
         /* --- HORIZONTAL STATS SCROLL --- */
@@ -2723,11 +2820,17 @@
             <div class="particle-pin-spacer" id="home">
                 <div class="pinned-content">
                     <!-- Spline Viewer (Single responsive instance) -->
-                    <div class="spline-container">
+                    <div class="spline-container spline_pc">
                         <div class="spline-wrapper">
                             <spline-viewer loading="lazy"
                                 url="https://prod.spline.design/P9GeC1WeLuHJmIu9/scene.splinecode"></spline-viewer>
                         </div>
+                    </div>
+
+
+                    <div class="spline_mobile">
+                        <spline-viewer
+                            url="https://prod.spline.design/rcBB4ZRQXel88K6R/scene.splinecode"></spline-viewer>
                     </div>
 
 
@@ -3712,21 +3815,26 @@
             if (window.ScrollTrigger) {
                 const exploSection = document.querySelector(".section-explosive-zoom");
                 if (exploSection) {
-                    const exploTl = gsap.timeline({
-                        scrollTrigger: {
-                            trigger: ".section-explosive-zoom",
-                            start: "top top",
-                            end: "bottom bottom",
-                            scrub: 1,
-                            pin: ".explosive-wrapper"
-                        }
-                    });
-                    exploTl.fromTo(".center-stage", { scale: 0.8, borderRadius: "20px" }, { scale: 2.5, borderRadius: "0px", duration: 1, ease: "power2.inOut" }, 0);
-                    exploTl.to(".pos-1", { x: -300, y: -300, opacity: 0, scale: 1.5, duration: 0.8 }, 0);
-                    exploTl.to(".pos-2", { x: -400, y: 200, opacity: 0, scale: 1.2, duration: 0.9 }, 0);
-                    exploTl.to(".pos-3", { x: 400, y: -100, opacity: 0, scale: 1.5, duration: 0.7 }, 0);
-                    exploTl.to(".pos-4", { x: 300, y: 300, opacity: 0, scale: 1.2, duration: 0.8 }, 0);
-                    exploTl.to(".pos-5", { y: 200, opacity: 0, scale: 2, duration: 0.5 }, 0);
+                    // 只在桌面版啟用 pin 效果和動畫（手機版正常捲動）
+                    const isMobile = window.innerWidth <= 768;
+
+                    if (!isMobile) {
+                        const exploTl = gsap.timeline({
+                            scrollTrigger: {
+                                trigger: ".section-explosive-zoom",
+                                start: "top top",
+                                end: "bottom bottom",
+                                scrub: 1,
+                                pin: ".explosive-wrapper"
+                            }
+                        });
+                        exploTl.fromTo(".center-stage", { scale: 0.8, borderRadius: "20px" }, { scale: 2.5, borderRadius: "0px", duration: 1, ease: "power2.inOut" }, 0);
+                        exploTl.to(".pos-1", { x: -300, y: -300, opacity: 0, scale: 1.5, duration: 0.8 }, 0);
+                        exploTl.to(".pos-2", { x: -400, y: 200, opacity: 0, scale: 1.2, duration: 0.9 }, 0);
+                        exploTl.to(".pos-3", { x: 400, y: -100, opacity: 0, scale: 1.5, duration: 0.7 }, 0);
+                        exploTl.to(".pos-4", { x: 300, y: 300, opacity: 0, scale: 1.2, duration: 0.8 }, 0);
+                        exploTl.to(".pos-5", { y: 200, opacity: 0, scale: 2, duration: 0.5 }, 0);
+                    }
                 }
             }
 
