@@ -339,12 +339,12 @@
         }
 
         #nu-wrapper .circle-text-path {
-fill: #fff;
-    font-family: 'Syncopate', sans-serif;
-    font-weight: normal;
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+            fill: #fff;
+            font-family: 'Syncopate', sans-serif;
+            font-weight: normal;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         #nu-wrapper .scroll-arrow-center {
@@ -3343,8 +3343,8 @@ fill: #fff;
             <div class="menu-content">
                 <ul class="nav-list" id="navList">
                     <li class="nav-item">
-                        <div class="nav-item-wrapper"><span class="nav-num">01</span><a href="work.html" class="nav-link"
-                                data-cursor="hover">WORK</a></div>
+                        <div class="nav-item-wrapper"><span class="nav-num">01</span><a href="work.html"
+                                class="nav-link" data-cursor="hover">WORK</a></div>
                         <div class="nav-meta-tag">Case Studies</div>
                     </li>
                     <li class="nav-item">
@@ -3456,35 +3456,82 @@ fill: #fff;
                 });
             });
 
-            // 2. Loading Animation
+            // 2. Loading Animation (結合 Spline 載入狀態)
             lenis.stop();
             const loaderCounter = document.querySelector(".loader-counter");
             const loaderBar = document.querySelector(".loader-progress-bar");
             const loaderScreen = document.querySelector(".loader-screen");
 
-            const loadTl = gsap.timeline({
-                onComplete: () => {
-                    lenis.start();
-                }
-            });
-
             let progressObj = { val: 0 };
+            let splineLoaded = false;
+            let trickleComplete = false;
 
-            loadTl.to(progressObj, {
-                val: 100,
-                duration: 2.5,
+            // 監聽 spline-viewer 的 load 事件
+            const splineViewer = document.querySelector('spline-viewer');
+            if (splineViewer) {
+                splineViewer.addEventListener('load', () => {
+                    splineLoaded = true;
+                    // 如果假進度已完成，立即跑到 100%
+                    if (trickleComplete) {
+                        completeLoading();
+                    }
+                });
+            }
+
+            // 完成載入的函數
+            function completeLoading() {
+                // 從當前位置快速跑到 100%
+                gsap.to(progressObj, {
+                    val: 100,
+                    duration: 0.5,
+                    ease: "power2.out",
+                    onUpdate: () => {
+                        loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
+                        loaderBar.style.width = `${progressObj.val}%`;
+                    },
+                    onComplete: () => {
+                        // 執行退場動畫
+                        gsap.to(loaderScreen, {
+                            yPercent: -100,
+                            duration: 1.2,
+                            ease: "power4.inOut",
+                            delay: 0.2,
+                            onComplete: () => {
+                                lenis.start();
+                            }
+                        });
+                    }
+                });
+            }
+
+            // 假進度（Trickle）: 2 秒內跑到 90%
+            gsap.to(progressObj, {
+                val: 90,
+                duration: 2,
                 ease: "power2.inOut",
                 onUpdate: () => {
                     loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
                     loaderBar.style.width = `${progressObj.val}%`;
+                },
+                onComplete: () => {
+                    trickleComplete = true;
+                    // 如果 Spline 已經載入完成，立即執行 100%
+                    if (splineLoaded) {
+                        completeLoading();
+                    } else {
+                        // 否則緩慢移動到 92%，等待 Spline 載入
+                        gsap.to(progressObj, {
+                            val: 92,
+                            duration: 2,
+                            ease: "power1.inOut",
+                            onUpdate: () => {
+                                loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
+                                loaderBar.style.width = `${progressObj.val}%`;
+                            }
+                        });
+                    }
                 }
-            })
-                .to(loaderScreen, {
-                    yPercent: -100,
-                    duration: 1.2,
-                    ease: "power4.inOut",
-                    delay: 0.2
-                });
+            });
 
 
             // --- Cursor Logic ---
