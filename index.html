@@ -3466,17 +3466,43 @@
             let splineLoaded = false;
             let trickleComplete = false;
 
-            // 監聽 spline-viewer 的 load 事件
-            const splineViewer = document.querySelector('spline-viewer');
-            if (splineViewer) {
-                splineViewer.addEventListener('load', () => {
+            // 監聽所有 spline-viewer 的 load 事件
+            const splineViewers = document.querySelectorAll('spline-viewer');
+            let loadedCount = 0;
+            const totalSplineViewers = splineViewers.length;
+
+            function onSplineLoad() {
+                loadedCount++;
+                // 當所有 spline-viewer 載入完成（或至少有一個載入）
+                if (!splineLoaded && loadedCount >= 1) {
                     splineLoaded = true;
+                    console.log('Spline loaded:', loadedCount, '/', totalSplineViewers);
                     // 如果假進度已完成，立即跑到 100%
                     if (trickleComplete) {
                         completeLoading();
                     }
-                });
+                }
             }
+
+            // 為每個 spline-viewer 註冊事件監聽
+            splineViewers.forEach((viewer, index) => {
+                // 嘗試監聽多種可能的事件
+                viewer.addEventListener('load', onSplineLoad);
+                viewer.addEventListener('ready', onSplineLoad);
+
+                console.log(`Spline viewer ${index + 1} event listeners registered`);
+            });
+
+            // 超時保護：6 秒後強制完成（即使 Spline 沒載入）
+            setTimeout(() => {
+                if (!splineLoaded) {
+                    console.log('Spline load timeout - proceeding anyway');
+                    splineLoaded = true;
+                    if (trickleComplete) {
+                        completeLoading();
+                    }
+                }
+            }, 6000);
 
             // 完成載入的函數
             function completeLoading() {
