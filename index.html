@@ -92,6 +92,8 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Spline Viewer -->
     <script defer type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"></script>
+    <!-- lottie -->
+    <script type="module" src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"></script>
 
     <!-- ==========================================
          GSAP Animation Library (Deferred)
@@ -197,6 +199,18 @@
             color: #fff;
         }
 
+        /* Lottie Logo Animation */
+        #lottie-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            z-index: 2;
+        }
+
+
         .loader-content {
             display: flex;
             justify-content: space-between;
@@ -268,6 +282,33 @@
         /* Invert Particles Canvas in Light Mode for cool effect */
         body.light-mode #bg-canvas {
             filter: invert(1) opacity(0.6);
+        }
+
+        /* =========================================
+           PAGE TRANSITION OVERLAY
+           ========================================= */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .transition-logo {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--neon-color);
+            letter-spacing: 2px;
+            opacity: 0;
+            text-transform: uppercase;
         }
 
         #nu-wrapper {
@@ -592,6 +633,131 @@
         }
 
         /* =========================================================
+           GLASSMORPHISM SCROLL NAV (NEW)
+           ========================================================= */
+        #nu-wrapper .glass-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(-100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        #nu-wrapper .glass-nav.visible {
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        #nu-wrapper .glass-nav-left {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        #nu-wrapper .glass-nav-center {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #nu-wrapper .glass-nav-right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        #nu-wrapper .glass-nav-logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            font-family: 'Syncopate', sans-serif;
+        }
+
+        #nu-wrapper .glass-nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px 24px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #nu-wrapper .glass-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        #nu-wrapper .glass-nav-menu-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #nu-wrapper .glass-nav-menu-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            #nu-wrapper .glass-nav {
+                padding: 0 20px;
+                height: 60px;
+            }
+
+            #nu-wrapper .glass-nav-logo {
+                font-size: 16px;
+            }
+
+            #nu-wrapper .glass-nav-btn {
+                padding: 8px 16px;
+                font-size: 0.75rem;
+            }
+
+            #nu-wrapper .glass-nav-menu-btn {
+                padding: 8px 16px;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* =========================================================
            TECH DASHBOARD UI (NEW ADDITIONS)
            ========================================================= */
 
@@ -690,7 +856,7 @@
 
         .tech-anchor-text {
             position: absolute;
-            right: 35px;
+            right: 20px;
             font-size: 12px;
             opacity: 0;
             transform: translateX(10px);
@@ -844,6 +1010,13 @@
             #nu-wrapper .header-main-row {
                 gap: 15px;
                 align-items: center;
+            }
+
+            /* 手機版卡片邊距調整（較小邊距） */
+            #nu-wrapper .project-card {
+                width: calc(100% - 40px);
+                margin: 0 20px;
+                border-radius: 20px;
             }
         }
 
@@ -1728,6 +1901,10 @@
             position: relative;
             z-index: 4;
             padding-bottom: 0;
+            /* CRITICAL: 不能有 transform, filter 或 perspective，否則會破壞子元素的 position: fixed */
+            transform: none !important;
+            filter: none !important;
+            will-change: auto !important;
         }
 
         #nu-wrapper .card-stack-container {
@@ -1736,7 +1913,8 @@
         }
 
         #nu-wrapper .project-card {
-            width: 100%;
+            width: calc(100% - 80px);
+            margin: 0 40px;
             height: 100vh;
             background-color: var(--btn-bg);
             /* Use btn-bg which toggles black/white */
@@ -1746,6 +1924,7 @@
             display: flex;
             flex-direction: column;
             border-top: 1px solid var(--card-border);
+            border-radius: 30px;
             overflow: hidden;
             transform: translate3d(0, 0, 0);
             will-change: transform;
@@ -2294,6 +2473,169 @@
             -webkit-text-stroke: 2px var(--neon-color);
         }
 
+        /* =========================================
+           EXPLOSIVE ZOOM SECTION
+           ========================================= */
+        /* #nu-wrapper .section-explosive-zoom {
+            height: 250vh;
+            background: transparent;
+            z-index: 6;
+        } */
+
+        #nu-wrapper .explosive-wrapper {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #nu-wrapper .center-stage {
+            position: relative;
+            width: 65vw;
+            aspect-ratio: 16/9;
+            z-index: 10;
+            transform-origin: center center;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        #nu-wrapper .center-stage video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #nu-wrapper .center-text-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 2;
+        }
+
+        #nu-wrapper .center-text-overlay h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            color: #fff;
+            /* Video overlay always white */
+        }
+
+        #nu-wrapper .center-text-overlay p {
+            font-size: 1rem;
+            opacity: 0.7;
+            color: #fff;
+        }
+
+        /* Floating Items */
+        #nu-wrapper .float-item {
+            position: absolute;
+            z-index: 5;
+            will-change: transform, opacity;
+        }
+
+        #nu-wrapper .float-item.pos-1 {
+            top: 15%;
+            left: 10%;
+        }
+
+        #nu-wrapper .float-item.pos-2 {
+            top: 25%;
+            right: 8%;
+        }
+
+        #nu-wrapper .float-item.pos-3 {
+            bottom: 20%;
+            right: 12%;
+        }
+
+        #nu-wrapper .float-item.pos-4 {
+            bottom: 15%;
+            left: 8%;
+        }
+
+        #nu-wrapper .float-item.pos-5 {
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+        }
+
+        #nu-wrapper .float-img,
+        #nu-wrapper .float-img2,
+        #nu-wrapper .float-img3 {
+            width: 180px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            object-fit: cover;
+        }
+
+        #nu-wrapper .float-img2 {
+            width: 200px;
+        }
+
+        #nu-wrapper .float-img3 {
+            width: 160px;
+        }
+
+        #nu-wrapper .float-pill {
+            background: var(--neon-color);
+            color: #000;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 20px rgba(204, 255, 0, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            #nu-wrapper .center-stage {
+                width: 80vw;
+            }
+
+            #nu-wrapper .float-img,
+            #nu-wrapper .float-img2,
+            #nu-wrapper .float-img3 {
+                width: 120px;
+            }
+
+            #nu-wrapper .float-pill {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #nu-wrapper .section-explosive-zoom {
+                height: 200vh;
+            }
+
+            #nu-wrapper .center-stage {
+                width: 90vw;
+            }
+
+            #nu-wrapper .float-item {
+                display: none;
+                /* Hide floating items on mobile for cleaner experience */
+            }
+
+            #nu-wrapper .center-text-overlay h2 {
+                font-size: 1.8rem;
+            }
+
+            #nu-wrapper .center-text-overlay p {
+                font-size: 0.8rem;
+            }
+        }
+
         /* --- Menu Overlay --- */
         #nu-wrapper .overlay-menu {
             position: fixed;
@@ -2617,6 +2959,191 @@
         .input_video {
             display: none;
         }
+
+        /* =========================================
+           EXPLOSIVE ZOOM SECTION
+           ========================================= */
+        #nu-wrapper .section-explosive-zoom {
+            position: relative;
+            width: 100%;
+            height: 300vh;
+            /* 3x viewport height for scroll distance */
+            background-color: transparent;
+            z-index: 10;
+            transform: none !important;
+            /* CRITICAL: Prevent any transform to avoid breaking ScrollTrigger pin */
+        }
+
+        #nu-wrapper .explosive-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #nu-wrapper .center-stage {
+            position: absolute;
+            width: clamp(500px, 65vw, 1200px);
+            /* Increased from 50vw to 65vw */
+            height: clamp(350px, 45vh, 700px);
+            /* Increased from 40vh to 45vh */
+            border-radius: 20px;
+            overflow: hidden;
+            z-index: 10;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            transform-origin: center;
+        }
+
+        #nu-wrapper .center-stage video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #nu-wrapper .center-text-overlay {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            z-index: 20;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        #nu-wrapper .center-text-overlay h2 {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 700;
+            margin: 0 0 5px 0;
+            letter-spacing: -1px;
+        }
+
+        #nu-wrapper .center-text-overlay p {
+            font-size: clamp(0.8rem, 1.2vw, 1rem);
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        #nu-wrapper .float-item {
+            position: absolute;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        #nu-wrapper .float-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Position each floating item around the center */
+        #nu-wrapper .float-item.pos-1 {
+            top: 12%;
+            bottom: auto;
+            left: 6%;
+            right: auto;
+            width: clamp(120px, 12vw, 180px);
+            height: clamp(90px, 9vh, 140px);
+        }
+
+        #nu-wrapper .float-item.pos-2 {
+            top: auto;
+            bottom: 25%;
+            left: 5%;
+            right: auto;
+            width: clamp(100px, 10vw, 150px);
+            height: clamp(100px, 10vh, 150px);
+            border-radius: 16px;
+        }
+
+        #nu-wrapper .float-item.pos-3 {
+            top: 18%;
+            bottom: auto;
+            left: auto;
+            right: 10%;
+            width: clamp(160px, 16vw, 240px);
+            height: clamp(160px, 16vh, 240px);
+            border-radius: 16px;
+        }
+
+        #nu-wrapper .float-item.pos-4 {
+            top: auto;
+            bottom: 30%;
+            left: auto;
+            right: 15%;
+            width: auto;
+            height: auto;
+        }
+
+        #nu-wrapper .float-pill {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            /* Ensure it doesn't stretch */
+            white-space: nowrap;
+        }
+
+        #nu-wrapper .float-item.pos-5 {
+            top: auto;
+            bottom: 8%;
+            left: 50%;
+            right: auto;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            filter: blur(3px);
+            opacity: 0.6;
+        }
+
+        /* Float images specific styling */
+        #nu-wrapper .float-img {
+            border-radius: 12px;
+        }
+
+        #nu-wrapper .float-img2 {
+            border-radius: 12px;
+        }
+
+        #nu-wrapper .float-img3 {
+            border-radius: 12px;
+        }
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            #nu-wrapper .section-explosive-zoom {
+                height: auto;
+                /* Normal scroll on mobile */
+                min-height: 100vh;
+            }
+
+            #nu-wrapper .explosive-wrapper {
+                position: relative;
+                /* Not pinned on mobile */
+            }
+
+            #nu-wrapper .center-stage {
+                width: 90vw;
+                height: 60vw;
+            }
+
+            #nu-wrapper .float-item {
+                display: none;
+                /* Hide floating items on mobile for cleaner look */
+            }
+        }
     </style>
 
     <!-- ==========================================
@@ -2691,6 +3218,7 @@
     <!-- 0. LOADING SCREEN -->
     <div class="loader-screen" id="nuLoader">
         <div class="loader-progress-bar"></div>
+
         <div class="loader-content">
             <div class="loader-counter">000</div>
             <div class="loader-text">
@@ -2700,6 +3228,8 @@
             </div>
         </div>
     </div>
+
+
 
     <!-- WRAPPER START -->
     <div id="nu-wrapper">
@@ -2717,7 +3247,7 @@
         </div>
 
         <!-- NEW: TECH DASHBOARD SIDE NAV (RIGHT) -->
-        <div id="tech-dashboard-nav">
+        <div id="tech-dashboard-nav" data-transition-element>
             <div class="tech-nav-label-top">ALTITUDE_REF</div>
 
             <div class="tech-scale-container">
@@ -2798,8 +3328,21 @@
             </div>
         </div>
 
+        <!-- Glassmorphism Scroll Navigation -->
+        <div class="glass-nav" id="glassNav">
+            <div class="glass-nav-left">
+                <a href="#" class="glass-nav-btn" data-cursor="hover">START NOW</a>
+            </div>
+            <div class="glass-nav-center">
+                <a href="#" class="glass-nav-logo" data-cursor="hover">NUCLEAR LABS</a>
+            </div>
+            <div class="glass-nav-right">
+                <button class="glass-nav-menu-btn" id="glassMenuBtn" data-cursor="hover">MENU</button>
+            </div>
+        </div>
+
         <!-- Header -->
-        <div class="header-container">
+        <div class="header-container" data-transition-element>
             <header class="pill-header">
                 <a href="#" class="brand-logo" data-cursor="hover">NUCLEAR LABS</a>
                 <div class="header-actions">
@@ -2835,7 +3378,7 @@
 
 
                     <!-- Text Overlay -->
-                    <div class="intro-overlay-text">
+                    <div class="intro-overlay-text" data-transition-element>
                         <h2>透過 AI、動態與互動編碼灌注靈魂</h2>
                     </div>
 
@@ -2860,7 +3403,7 @@
             </div>
 
             <!-- CROSSED MARQUEE SECTION (UPDATED) -->
-            <section class="section-crossed-marquee">
+            <section class="section-crossed-marquee" data-transition-element>
                 <!-- Strip 1 -->
                 <div class="marquee-strip custom-style strip-1">
                     <div class="marquee-track">
@@ -2964,7 +3507,7 @@
 
 
             <!-- CARD STACK -->
-            <div class="section-stack-wrapper" id="work">
+            <div class="section-stack-wrapper" id="work" data-transition-element>
                 <div class="card-stack-container">
                     <div class="project-card" data-cursor="view">
                         <video class="card-bg-video" autoplay muted loop playsinline>
@@ -3080,7 +3623,7 @@
             </section>
 
             <!-- UPDATED HORIZONTAL SCROLL -->
-            <section class="section-horizontal-staggered">
+            <section class="section-horizontal-staggered" data-transition-element>
                 <div class="horizontal-staggered-wrapper">
                     <!-- Panel 1 (UPDATED WITH WIREFRAME ICON) -->
                     <div class="staggered-card" data-cursor="view">
@@ -3549,6 +4092,121 @@
     </div>
 
     <script>
+        /* ========================================
+           PAGE TRANSITION MANAGER CLASS
+           ======================================== */
+        class PageTransitionManager {
+            constructor() {
+                this.overlay = document.querySelector('.page-transition-overlay');
+                this.logo = document.querySelector('.transition-logo');
+                this.isTransitioning = false;
+            }
+
+            // 退場動畫 (Exit): UI 元素淡出 → 遮罩覆蓋 → 頁面跳轉
+            exitAnimation(callback) {
+                if (this.isTransitioning) return;
+                this.isTransitioning = true;
+
+                // 停止 Lenis 滾動
+                if (window.lenis) window.lenis.stop();
+
+                const tl = gsap.timeline({
+                    onComplete: () => {
+                        if (callback) callback();
+                    }
+                });
+
+                // 1. UI 元素 stagger 向上滑出
+                tl.to('[data-transition-element]', {
+                    y: -50,
+                    opacity: 0,
+                    stagger: 0.03,
+                    duration: 0.5,
+                    ease: 'power2.in'
+                });
+
+                // 2. 黑色遮罩從下往上覆蓋
+                tl.to(this.overlay, {
+                    clipPath: 'inset(0 0 0% 0)',
+                    duration: 0.8,
+                    ease: 'power4.inOut'
+                }, '-=0.3');
+
+                // 3. Logo 淡入
+                tl.to(this.logo, {
+                    opacity: 1,
+                    duration: 0.3
+                }, '-=0.4');
+
+                return tl;
+            }
+
+            // 進場動畫 (Entry): 遮罩揭開 → UI 元素淡入
+            entryAnimation() {
+                const tl = gsap.timeline({
+                    onComplete: () => {
+                        this.isTransitioning = false;
+                        // 恢復 Lenis 滾動
+                        if (window.lenis) window.lenis.start();
+                    }
+                });
+
+                // 1. Logo 淡出
+                tl.to(this.logo, {
+                    opacity: 0,
+                    duration: 0.3
+                });
+
+                // 2. 遮罩從上往下揭開
+                tl.to(this.overlay, {
+                    clipPath: 'inset(0 0 100% 0)',
+                    duration: 0.8,
+                    ease: 'power4.inOut'
+                }, '-=0.1');
+
+                // 3. UI 元素 stagger 向下滑入
+                tl.from('[data-transition-element]', {
+                    y: 50,
+                    opacity: 0,
+                    stagger: 0.03,
+                    duration: 0.6,
+                    ease: 'power2.out'
+                }, '-=0.5');
+
+                return tl;
+            }
+
+            // Link Interception: 攔截內部連結，先執行退場動畫再跳轉
+            interceptLinks() {
+                const links = document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"])');
+
+                links.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        const href = link.getAttribute('href');
+
+                        // 忽略外部連結、錨點、mailto 和 tel
+                        if (!href ||
+                            href.startsWith('http') ||
+                            href.startsWith('#') ||
+                            href.startsWith('mailto:') ||
+                            href.startsWith('tel:')) {
+                            return;
+                        }
+
+                        e.preventDefault();
+
+                        // 執行退場動畫後導航
+                        this.exitAnimation(() => {
+                            window.location.href = href;
+                        });
+                    });
+                });
+            }
+        }
+
+        /* ========================================
+           MAIN INITIALIZATION
+           ======================================== */
         window.addEventListener('load', function () {
 
             if (typeof gsap === 'undefined' || typeof Lenis === 'undefined') return;
@@ -3557,8 +4215,8 @@
                 gsap.registerPlugin(ScrollTrigger);
             }
 
-            // 1. Lenis Smooth Scroll
-            const lenis = new Lenis({
+            // 1. Lenis Smooth Scroll (CRITICAL: 使用 window.lenis 使其全局可訪問)
+            window.lenis = new Lenis({
                 duration: 1.2,
                 easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
                 direction: 'vertical',
@@ -3574,9 +4232,9 @@
             const hudScrollVal = document.getElementById('hudScrollVal');
 
             if (window.ScrollTrigger) {
-                lenis.on('scroll', ScrollTrigger.update);
+                window.lenis.on('scroll', ScrollTrigger.update);
                 gsap.ticker.add((time) => {
-                    lenis.raf(time * 1000);
+                    window.lenis.raf(time * 1000);
 
                     // Update Dashboard Indicator based on scroll progress
                     const scrollProgress = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
@@ -3600,13 +4258,13 @@
                     const targetId = item.getAttribute('data-target');
                     const targetEl = document.querySelector(targetId);
                     if (targetEl) {
-                        lenis.scrollTo(targetEl);
+                        window.lenis.scrollTo(targetEl);
                     }
                 });
             });
 
             // 2. Loading Animation (結合 Spline 載入狀態)
-            lenis.stop();
+            window.lenis.stop();
             const loaderCounter = document.querySelector(".loader-counter");
             const loaderBar = document.querySelector(".loader-progress-bar");
             const loaderScreen = document.querySelector(".loader-screen");
@@ -3661,6 +4319,10 @@
                     breatheAnimation.kill();
                 }
 
+                // 初始化轉場管理器
+                const transitionManager = new PageTransitionManager();
+                const overlay = document.querySelector('.page-transition-overlay');
+
                 // 從當前位置快速跑到 100%
                 gsap.to(progressObj, {
                     val: 100,
@@ -3671,74 +4333,106 @@
                         loaderBar.style.width = `${progressObj.val}%`;
                     },
                     onComplete: () => {
-                        // 執行退場動畫（縮短延遲）
-                        gsap.to(loaderScreen, {
-                            yPercent: -100,
-                            duration: 1,
-                            ease: "power4.inOut",
-                            delay: 0.15,
-                            onComplete: () => {
-                                lenis.start();
-                            }
-                        });
+                        // 標記已訪問
+                        sessionStorage.setItem('visited', 'true');
+
+                        // 核心轉場邏輯：
+                        // 1. 確保轉場遮罩覆蓋全屏
+                        gsap.set(overlay, { clipPath: 'inset(0 0 0 0)' });
+                        gsap.set('.transition-logo', { opacity: 1 }); // 確保 Logo 可見
+
+                        // 2. 隱藏原有的 Loading Screen
+                        loaderScreen.style.display = 'none';
+
+                        // 3. 執行進場動畫 (Reveal)
+                        transitionManager.entryAnimation();
+
+                        // 4. 初始化連結攔截 (確保導航時有退場動畫)
+                        transitionManager.interceptLinks();
                     }
                 });
             }
 
-            // 優化的多階段假進度（更自然的載入感受）
-            const trickleTimeline = gsap.timeline();
+            // SessionStorage 檢查：如果是回訪用戶，直接跳過 loading
+            if (sessionStorage.getItem('visited')) {
+                // 隱藏 loading
+                loaderScreen.style.display = 'none';
 
-            // 階段 1: 快速啟動 0 → 60%（模擬快速初始化）
-            trickleTimeline.to(progressObj, {
-                val: 60,
-                duration: 0.8,
-                ease: "power2.out",
-                onUpdate: () => {
-                    loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
-                    loaderBar.style.width = `${progressObj.val}%`;
-                }
-            })
-                // 階段 2: 減速 60% → 85%（模擬資源載入）
-                .to(progressObj, {
-                    val: 85,
-                    duration: 0.6,
-                    ease: "power1.inOut",
+                // 立即初始化並執行進場
+                const transitionManager = new PageTransitionManager();
+                gsap.set('.page-transition-overlay', { clipPath: 'inset(0 0 0 0)' });
+                gsap.set('.transition-logo', { opacity: 1 });
+                transitionManager.entryAnimation();
+                transitionManager.interceptLinks();
+
+                // 標記 Spline 為已加載以免觸發超時邏輯
+                splineLoaded = true;
+                trickleComplete = true;
+
+                // 啟動 Lenis (entryAnimation 會做，但在這裡確保)
+                // window.lenis.start(); // entryAnimation onComplete 會呼叫
+            } else {
+                // 首次訪問：執行完整的假進度動畫
+                startLoadingSequence();
+            }
+
+            function startLoadingSequence() {
+                // 優化的多階段假進度（更自然的載入感受）
+                const trickleTimeline = gsap.timeline();
+
+                // 階段 1: 快速啟動 0 → 60%（模擬快速初始化）
+                trickleTimeline.to(progressObj, {
+                    val: 60,
+                    duration: 0.8,
+                    ease: "power2.out",
                     onUpdate: () => {
                         loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
                         loaderBar.style.width = `${progressObj.val}%`;
                     }
                 })
-                // 階段 3: 緩慢接近 85% → 90%（模擬最後處理）
-                .to(progressObj, {
-                    val: 90,
-                    duration: 0.4,
-                    ease: "power1.in",
-                    onUpdate: () => {
-                        loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
-                        loaderBar.style.width = `${progressObj.val}%`;
-                    },
-                    onComplete: () => {
-                        trickleComplete = true;
-                        // 如果 Spline 已經載入完成，立即執行 100%
-                        if (splineLoaded) {
-                            completeLoading();
-                        } else {
-                            // 否則進入「呼吸等待」模式：90.0% ↔ 90.8%（避免顯示91）
-                            breatheAnimation = gsap.to(progressObj, {
-                                val: 90.8,
-                                duration: 1.2,
-                                ease: "sine.inOut",
-                                yoyo: true,
-                                repeat: -1,
-                                onUpdate: () => {
-                                    loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
-                                    loaderBar.style.width = `${progressObj.val}%`;
-                                }
-                            });
+                    // 階段 2: 減速 60% → 85%（模擬資源載入）
+                    .to(progressObj, {
+                        val: 85,
+                        duration: 0.6,
+                        ease: "power1.inOut",
+                        onUpdate: () => {
+                            loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
+                            loaderBar.style.width = `${progressObj.val}%`;
                         }
-                    }
-                });
+                    })
+                    // 階段 3: 緩慢接近 85% → 90%（模擬最後處理）
+                    .to(progressObj, {
+                        val: 90,
+                        duration: 0.4,
+                        ease: "power1.in",
+                        onUpdate: () => {
+                            loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
+                            loaderBar.style.width = `${progressObj.val}%`;
+                        },
+                        onComplete: () => {
+                            trickleComplete = true;
+                            // 如果 Spline 已經載入完成，立即執行 100%
+                            if (splineLoaded) {
+                                completeLoading();
+                            } else {
+                                // 否則進入「呼吸等待」模式：90.0% ↔ 90.8%（避免顯示91）
+                                breatheAnimation = gsap.to(progressObj, {
+                                    val: 90.8,
+                                    duration: 1.2,
+                                    ease: "sine.inOut",
+                                    yoyo: true,
+                                    repeat: -1,
+                                    onUpdate: () => {
+                                        loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
+                                        loaderBar.style.width = `${progressObj.val}%`;
+                                    }
+                                });
+                            }
+                        }
+                    });
 
+
+            }
 
             // --- Cursor Logic ---
             const cursorDot = document.querySelector('#nu-wrapper .cursor-dot');
@@ -3838,16 +4532,42 @@
                 }
             }
 
-            // --- Card Stack Pinning ---
+            // --- Card Stack Pinning with Shrinking Effect ---
             if (window.ScrollTrigger) {
-                gsap.utils.toArray(".project-card").forEach((card, i) => {
-                    ScrollTrigger.create({
-                        trigger: card,
-                        start: `top top+=${i * 0}`,
-                        pin: i === 2 ? false : true,
-                        pinSpacing: false
+                const cards = gsap.utils.toArray(".project-card");
+                const isMobile = window.innerWidth <= 768;
+
+                // 只在桌面版啟用內縮效果
+                if (!isMobile) {
+                    cards.forEach((card, i) => {
+                        // 只有前面的卡片需要 pin（第3張不 pin）
+                        const shouldPin = i < cards.length - 1;
+
+                        if (shouldPin) {
+                            ScrollTrigger.create({
+                                trigger: card,
+                                start: "top top",
+                                pin: true,
+                                pinSpacing: false,
+                                endTrigger: cards[i + 1],
+                                end: "top top",
+                                onUpdate: (self) => {
+                                    // 當卡片被固定時，添加內縮效果
+                                    const progress = self.progress;
+                                    const scale = 1 - (progress * 0.15); // 縮小到 0.85（更強烈）
+                                    const yOffset = progress * 40; // 向上移動 40px（更明顯）
+
+                                    gsap.to(card, {
+                                        scale: scale,
+                                        y: -yOffset,
+                                        duration: 0.3,
+                                        ease: "power2.out"
+                                    });
+                                }
+                            });
+                        }
                     });
-                });
+                }
             }
 
             // --- Menu Logic ---
@@ -3861,16 +4581,16 @@
                 .to(".menu-footer-info", { opacity: 1, y: 0, duration: 0.5 }, "-=0.4");
 
             const openBtn = document.getElementById('openMenu');
-            if (openBtn) openBtn.addEventListener('click', () => { lenis.stop(); menuTl.restart(); });
+            if (openBtn) openBtn.addEventListener('click', () => { window.lenis.stop(); menuTl.restart(); });
 
             const closeBtn = document.getElementById('closeMenu');
-            if (closeBtn) closeBtn.addEventListener('click', () => { menuTl.reverse(); setTimeout(() => lenis.start(), 1000); });
+            if (closeBtn) closeBtn.addEventListener('click', () => { menuTl.reverse(); setTimeout(() => window.lenis.start(), 1000); });
 
             // Scroll Top Button
             const scrollTopBtn = document.getElementById('scrollTopBtn');
             if (scrollTopBtn) {
                 scrollTopBtn.addEventListener('click', () => {
-                    lenis.scrollTo(0);
+                    window.lenis.scrollTo(0);
                 });
             }
 
@@ -3925,7 +4645,7 @@
             });
 
             gsap.ticker.add(() => {
-                const velocity = lenis.velocity || 0;
+                const velocity = window.lenis.velocity || 0;
                 const distortionAmount = Math.min(Math.abs(velocity) * 8.0, 150);
 
                 cardsData.forEach(card => {
@@ -4149,6 +4869,7 @@
                 });
             }
 
+
             const pinnedTextSection = document.querySelector('.section-pinned-text');
             const pinnedLines = gsap.utils.toArray('.pinned-line, .pinned-text-title');
 
@@ -4235,6 +4956,34 @@
                 }
             } else {
                 console.warn('MediaPipe Hands 或 Camera 沒有載入，手勢控制停用。');
+            }
+
+            // =========================================================
+            // GLASSMORPHISM NAV SCROLL CONTROL
+            // =========================================================
+            const glassNav = document.getElementById('glassNav');
+            const glassMenuBtn = document.getElementById('glassMenuBtn');
+            const openMenuBtn = document.getElementById('openMenu');
+            let lastScrollTop = 0;
+            let scrollThreshold = 100; // Show nav after scrolling 100px
+
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+                if (scrollTop > scrollThreshold) {
+                    glassNav.classList.add('visible');
+                } else {
+                    glassNav.classList.remove('visible');
+                }
+
+                lastScrollTop = scrollTop;
+            });
+
+            // Connect glass nav menu button to existing menu
+            if (glassMenuBtn && openMenuBtn) {
+                glassMenuBtn.addEventListener('click', () => {
+                    openMenuBtn.click(); // Trigger existing menu
+                });
             }
 
         });
