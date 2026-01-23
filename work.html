@@ -200,21 +200,48 @@
             font-size: 1.2rem;
         }
 
-        .back-link {
-            font-family: var(--font-tech);
-            color: var(--neon-color);
-            text-decoration: none;
-            border: 1px solid var(--neon-color);
-            padding: 8px 20px;
-            border-radius: 20px;
-            transition: 0.3s;
-            text-transform: uppercase;
-            font-size: 0.8rem;
+        .header-actions {
+            display: flex;
+            gap: 12px;
         }
 
-        .back-link:hover {
-            background: var(--neon-color);
-            color: #000;
+        .btn {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 12px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s, color 0.3s;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-menu {
+            width: 60px;
+        }
+
+        .hamburger-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .hamburger-icon span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background-color: currentColor;
+        }
+
+        .btn-contact {
+            padding: 0 24px;
         }
 
         /* =========================================
@@ -664,15 +691,219 @@
                 mix-blend-mode: normal !important;
             }
         }
+
+        /* =========================================
+           PAGE TRANSITION OVERLAY
+           ========================================= */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .transition-logo {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--neon-color);
+            letter-spacing: 2px;
+            opacity: 1;
+            /* Default visible for work.html entry */
+            text-transform: uppercase;
+        }
+
+        /* =========================================
+           MENU OVERLAY
+           ========================================= */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--neon-color);
+            z-index: 9998;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            clip-path: inset(0 0 100% 0);
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .menu-content {
+            width: 90%;
+            max-width: 1200px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            padding: 100px 0;
+        }
+
+        .close-menu-btn {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: transparent;
+            border: 2px solid #000;
+            color: #000;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s, background-color 0.3s;
+            font-weight: 300;
+            line-height: 1;
+        }
+
+        .close-menu-btn:hover {
+            transform: rotate(90deg) scale(1.1);
+            background-color: #000;
+            color: var(--neon-color);
+        }
+
+        .menu-nav {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: baseline;
+            gap: 30px;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .menu-number {
+            font-family: var(--font-tech);
+            font-size: 0.9rem;
+            color: rgba(0, 0, 0, 0.4);
+            min-width: 40px;
+        }
+
+        .menu-link {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 700;
+            color: #000;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            transition: transform 0.3s, color 0.3s;
+            position: relative;
+        }
+
+        .menu-link:hover {
+            transform: translateX(20px);
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .menu-link.active::after {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: #000;
+            border-radius: 50%;
+        }
+
+        .menu-desc {
+            font-family: var(--font-tech);
+            font-size: 0.8rem;
+            color: rgba(0, 0, 0, 0.5);
+            margin-left: auto;
+            text-transform: uppercase;
+        }
+
+        .menu-footer {
+            margin-top: auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            opacity: 0;
+        }
+
+        .menu-social {
+            display: flex;
+            gap: 30px;
+        }
+
+        .menu-social a {
+            font-family: var(--font-tech);
+            font-size: 0.9rem;
+            color: #000;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .menu-social a:hover {
+            opacity: 0.6;
+        }
+
+        .menu-email {
+            font-family: var(--font-tech);
+            font-size: 0.9rem;
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .menu-link {
+                font-size: 2rem;
+            }
+
+            .menu-desc {
+                display: none;
+            }
+
+            .menu-footer {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+
+            .close-menu-btn {
+                top: 40px;
+                width: 50px;
+                height: 50px;
+            }
+        }
     </style>
 </head>
 
 <body>
-
-    <!-- TRANSITION CURTAIN -->
-    <div class="transition-curtain">
+    <!-- PAGE TRANSITION OVERLAY -->
+    <div class="page-transition-overlay" style="clip-path: inset(0 0 0 0);">
         <div class="transition-logo">NUCLEAR LABS</div>
     </div>
+
+    <!-- Removed duplicate transition-curtain to fix Page Transition stuck issue -->
 
     <div class="global-grid-lines"></div>
     <div id="bg-canvas"></div>
@@ -682,14 +913,61 @@
         <div class="cursor-dot"></div>
     </div>
 
-    <div class="header-container">
+    <div class="header-container" data-transition-element>
         <header class="pill-header">
             <a href="index.html" class="brand-logo" data-cursor="hover">NUCLEAR LABS</a>
-            <a href="index.html" class="back-link" data-cursor="hover">/// BACK TO HOME</a>
+            <div class="header-actions">
+                <button class="btn btn-menu" id="openMenu" aria-label="Menu" data-cursor="hover">
+                    <div class="hamburger-icon"><span></span><span></span><span></span></div>
+                </button>
+                <a href="#contact" class="btn btn-contact" data-cursor="hover"><span>CONTACT</span></a>
+            </div>
         </header>
     </div>
 
-    <div class="tech-sidebar">
+    <!-- MENU OVERLAY -->
+    <div id="menuOverlay" class="menu-overlay">
+        <div class="menu-content">
+            <button id="closeMenu" class="close-menu-btn" aria-label="Close Menu">×</button>
+            <nav class="menu-nav">
+                <div class="menu-item">
+                    <span class="menu-number">01</span>
+                    <a href="index.html" class="menu-link" data-cursor="hover">HOME</a>
+                    <span class="menu-desc">Back to Main</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-number">02</span>
+                    <a href="work.html" class="menu-link active" data-cursor="hover">WORK</a>
+                    <span class="menu-desc">Case Studies</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-number">03</span>
+                    <a href="#about" class="menu-link" data-cursor="hover">ABOUT</a>
+                    <span class="menu-desc">Studio Profile</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-number">04</span>
+                    <a href="#services" class="menu-link" data-cursor="hover">SERVICES</a>
+                    <span class="menu-desc">Capabilities</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-number">05</span>
+                    <a href="#contact" class="menu-link" data-cursor="hover">CONTACT</a>
+                    <span class="menu-desc">Get in Touch</span>
+                </div>
+            </nav>
+            <div class="menu-footer">
+                <div class="menu-social">
+                    <a href="#" data-cursor="hover">Instagram</a>
+                    <a href="#" data-cursor="hover">Twitter</a>
+                    <a href="#" data-cursor="hover">LinkedIn</a>
+                </div>
+                <div class="menu-email">hello@nuclearlabs.com</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tech-sidebar" data-transition-element>
         <div class="tech-line">
             <div class="tech-progress" id="progressBar"></div>
         </div>
@@ -702,7 +980,7 @@
     <main id="main-content">
 
         <section class="work-header-section">
-            <div class="page-title-row">
+            <div class="page-title-row" data-transition-element>
                 <h1 class="big-title" data-speed="0.5">SELECTED<br><span>WORKS</span></h1>
                 <div class="filter-group">
                     <button class="filter-btn active" data-cursor="hover">ALL</button>
@@ -714,7 +992,7 @@
         </section>
 
         <!-- Circular Reveal Transition Section -->
-        <section class="circular-reveal-section">
+        <section class="circular-reveal-section" data-transition-element>
             <div class="circle-mask-wrapper">
                 <div class="circle-mask"></div>
             </div>
@@ -724,7 +1002,7 @@
         </section>
 
         <!-- 15 ITEMS IRREGULAR GRID (FLEX) -->
-        <section class="work-list-container">
+        <section class="work-list-container" data-transition-element>
             <div class="irregular-grid">
 
                 <!-- 01: Type A -->
@@ -990,8 +1268,9 @@
             </div>
         </section>
 
-        <footer class="list-footer">
-            <p style="font-family: var(--font-tech); color: var(--text-muted); margin-bottom: 20px;">READY TO START?</p>
+        <footer class="list-footer" data-transition-element>
+            <p style="font-family: var(--font-tech); color: var(--text-muted); margin-bottom: 20px;">READY TO
+                START?</p>
             <a href="#" class="next-project-link" data-cursor="hover">CONTACT US</a>
         </footer>
 
@@ -1015,69 +1294,128 @@
 
         gsap.registerPlugin(ScrollTrigger);
 
-        // --- PAGE TRANSITION LOGIC (ZOOM EFFECTS) ---
+        /* ========================================
+           PAGE TRANSITION MANAGER CLASS
+           ======================================== */
+        class PageTransitionManager {
+            constructor() {
+                this.overlay = document.querySelector('.page-transition-overlay');
+                this.logo = document.querySelector('.transition-logo');
+                this.isTransitioning = false;
+            }
 
-        // 1. Entrance Animation (Load)
-        window.addEventListener('load', () => {
-            const tl = gsap.timeline();
+            // 退場動畫 (Exit): UI 元素淡出 → 遮罩覆蓋 → 頁面跳轉
+            exitAnimation(callback) {
+                if (this.isTransitioning) return;
+                this.isTransitioning = true;
 
-            // Set Initial Scale for Entrance Zoom Out Effect
-            gsap.set('#main-content', { scale: 1.15 });
-
-            // Reveal logo
-            tl.to('.transition-logo', { opacity: 1, duration: 0.5, ease: "power2.out" })
-                // Curtain Up
-                .to('.transition-curtain', {
-                    clipPath: "inset(0 0 100% 0)",
-                    duration: 1.2,
-                    ease: "power4.inOut",
-                    delay: 0.2
-                })
-                // Scale Content Down (Zoom Out) SIMULTANEOUSLY with curtain
-                .to('#main-content', {
-                    scale: 1,
-                    duration: 1.5,
-                    ease: "power3.out"
-                }, "-=1.2") // Start overlap with curtain
-
-                .set('.transition-curtain', { display: 'none' });
-
-            gsap.from('.big-title', { y: 100, opacity: 0, duration: 1.2, delay: 0.8, ease: "power4.out" });
-        });
-
-        // 2. Exit Animation (Click)
-        const internalLinks = document.querySelectorAll('a:not([target="_blank"]):not([href^="#"])');
-
-        internalLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                const href = link.getAttribute('href');
-                if (!href || href === '#') return;
-
-                e.preventDefault();
-
-                gsap.set('.transition-curtain', { display: 'flex', clipPath: "inset(100% 0 0 0)" });
+                // 停止 Lenis 滾動
+                if (window.lenis) window.lenis.stop();
 
                 const tl = gsap.timeline({
                     onComplete: () => {
-                        window.location.href = href;
+                        if (callback) callback();
                     }
                 });
 
-                // Curtain Down
-                tl.to('.transition-curtain', {
-                    clipPath: "inset(0 0 0 0)",
+                // 1. UI 元素 stagger 向上滑出
+                tl.to('[data-transition-element]', {
+                    y: -50,
+                    opacity: 0,
+                    stagger: 0.03,
+                    duration: 0.5,
+                    ease: 'power2.in'
+                });
+
+                // 2. 黑色遮罩從下往上覆蓋
+                tl.to(this.overlay, {
+                    clipPath: 'inset(0 0 0% 0)',
                     duration: 0.8,
-                    ease: "power4.inOut"
-                })
-                    .to('.transition-logo', { opacity: 1, duration: 0.3 }, "-=0.3")
-                    // Add Subtle Zoom In & Fade Out for Content leaving
-                    .to('#main-content', {
-                        scale: 0.95,
-                        opacity: 0.5,
-                        duration: 0.8,
-                        ease: "power2.inOut"
-                    }, "-=0.8");
-            });
+                    ease: 'power4.inOut'
+                }, '-=0.3');
+
+                // 3. Logo 淡入
+                tl.to(this.logo, {
+                    opacity: 1,
+                    duration: 0.3
+                }, '-=0.4');
+
+                return tl;
+            }
+
+            // 進場動畫 (Entry): 遮罩揭開 → UI 元素淡入
+            entryAnimation() {
+                const tl = gsap.timeline({
+                    onComplete: () => {
+                        this.isTransitioning = false;
+                        // 恢復 Lenis 滾動
+                        if (window.lenis) window.lenis.start();
+                    }
+                });
+
+                // 1. Logo 淡出
+                tl.to(this.logo, {
+                    opacity: 0,
+                    duration: 0.3
+                });
+
+                // 2. 遮罩從上往下揭開
+                tl.to(this.overlay, {
+                    clipPath: 'inset(0 0 100% 0)',
+                    duration: 0.8,
+                    ease: 'power4.inOut'
+                }, '-=0.1');
+
+                // 3. UI 元素 stagger 向下滑入
+                tl.from('[data-transition-element]', {
+                    y: 50,
+                    opacity: 0,
+                    stagger: 0.03,
+                    duration: 0.6,
+                    ease: 'power2.out'
+                }, '-=0.5');
+
+                return tl;
+            }
+
+            // Link Interception: 攔截內部連結，先執行退場動畫再跳轉
+            interceptLinks() {
+                const links = document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"])');
+
+                links.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        const href = link.getAttribute('href');
+
+                        // 忽略外部連結、錨點、mailto 和 tel
+                        if (!href ||
+                            href.startsWith('http') ||
+                            href.startsWith('#') ||
+                            href.startsWith('mailto:') ||
+                            href.startsWith('tel:')) {
+                            return;
+                        }
+
+                        e.preventDefault();
+
+                        // 執行退場動畫後導航
+                        this.exitAnimation(() => {
+                            window.location.href = href;
+                        });
+                    });
+                });
+            }
+        }
+
+        // --- PAGE TRANSITION INITIALIZATION ---
+        window.addEventListener('load', () => {
+            // 初始化並執行進場
+            const transitionManager = new PageTransitionManager();
+
+            // 立即執行進場動畫 (因為 work.html 沒有 loading screen)
+            transitionManager.entryAnimation();
+
+            // 初始化連結攔截
+            transitionManager.interceptLinks();
         });
 
 
@@ -1122,13 +1460,15 @@
             }
         });
 
-        // Sidebar Progress
+        // Sidebar Progress - FIX: Prevent regression
         const progressBar = document.getElementById('progressBar');
         const scrollVal = document.getElementById('scrollVal');
+        let lastProgress = 0;
 
         lenis.on('scroll', (e) => {
-            const progress = e.progress * 100;
-            progressBar.style.height = `${progress}%`;
+            const currentProgress = Math.max(lastProgress, e.progress * 100);
+            lastProgress = currentProgress;
+            progressBar.style.height = `${currentProgress}%`;
             scrollVal.innerText = Math.floor(e.scroll).toString().padStart(4, '0');
         });
 
@@ -1142,41 +1482,45 @@
         const xToFollower = gsap.quickSetter(cursorFollower, "x", "px");
         const yToFollower = gsap.quickSetter(cursorFollower, "y", "px");
 
-        let mouseX = 0, mouseY = 0;
-        let followerPos = { x: 0, y: 0 };
+        // FIX: Only initialize cursor if elements exist
+        if (cursorDot && cursorFollower && cursorText) {
+            let mouseX = 0, mouseY = 0;
+            let followerPos = { x: 0, y: 0 };
 
-        gsap.set(cursorDot, { xPercent: -50, yPercent: -50 });
-        gsap.set(cursorFollower, { xPercent: -50, yPercent: -50 });
+            gsap.set(cursorDot, { xPercent: -50, yPercent: -50 });
+            gsap.set(cursorFollower, { xPercent: -50, yPercent: -50 });
 
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            xTo(mouseX);
-            yTo(mouseY);
-        });
-
-        gsap.ticker.add(() => {
-            const dt = 1.0 - Math.pow(1.0 - 0.1, gsap.ticker.deltaRatio());
-            followerPos.x += (mouseX - followerPos.x) * dt;
-            followerPos.y += (mouseY - followerPos.y) * dt;
-            xToFollower(followerPos.x);
-            yToFollower(followerPos.y);
-        });
-
-        document.querySelectorAll('[data-cursor]').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                document.body.classList.add('hovered');
-                cursorText.innerText = el.dataset.cursor === 'view' ? "VIEW CASE" : "";
-                if (el.dataset.cursor === 'view') {
-                    gsap.to(cursorFollower, { width: 100, height: 100, duration: 0.3 });
-                }
+            // FIX: Use document instead of window for better compatibility
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                xTo(mouseX);
+                yTo(mouseY);
             });
-            el.addEventListener('mouseleave', () => {
-                document.body.classList.remove('hovered');
-                cursorText.innerText = "";
-                gsap.to(cursorFollower, { width: 50, height: 50, duration: 0.3 });
+
+            gsap.ticker.add(() => {
+                const dt = 1.0 - Math.pow(1.0 - 0.1, gsap.ticker.deltaRatio());
+                followerPos.x += (mouseX - followerPos.x) * dt;
+                followerPos.y += (mouseY - followerPos.y) * dt;
+                xToFollower(followerPos.x);
+                yToFollower(followerPos.y);
             });
-        });
+
+            document.querySelectorAll('[data-cursor]').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    document.body.classList.add('hovered');
+                    cursorText.innerText = el.dataset.cursor === 'view' ? "VIEW CASE" : "";
+                    if (el.dataset.cursor === 'view') {
+                        gsap.to(cursorFollower, { width: 100, height: 100, duration: 0.3 });
+                    }
+                });
+                el.addEventListener('mouseleave', () => {
+                    document.body.classList.remove('hovered');
+                    cursorText.innerText = "";
+                    gsap.to(cursorFollower, { width: 50, height: 50, duration: 0.3 });
+                });
+            });
+        }
 
         // Background Particles
         const scene = new THREE.Scene();
@@ -1205,6 +1549,105 @@
         }
         animateBg();
 
+        // --- MENU FUNCTIONALITY ---
+        const menuOverlay = document.getElementById('menuOverlay');
+        const openMenuBtn = document.getElementById('openMenu');
+        const closeMenuBtn = document.getElementById('closeMenu');
+        const menuItems = document.querySelectorAll('.menu-item');
+        const menuFooter = document.querySelector('.menu-footer');
+
+        let menuOpen = false;
+
+        function openMenu() {
+            if (menuOpen) return;
+            menuOpen = true;
+
+            // Stop scrolling
+            if (window.lenis) window.lenis.stop();
+
+            const tl = gsap.timeline();
+
+            // Show overlay
+            tl.set(menuOverlay, { visibility: 'visible' });
+
+            // Animate overlay in
+            tl.to(menuOverlay, {
+                clipPath: 'inset(0 0 0% 0)',
+                opacity: 1,
+                duration: 0.8,
+                ease: 'power4.inOut'
+            });
+
+            // Stagger menu items
+            tl.to(menuItems, {
+                opacity: 1,
+                y: 0,
+                stagger: 0.08,
+                duration: 0.6,
+                ease: 'power3.out'
+            }, '-=0.4');
+
+            // Fade in footer
+            tl.to(menuFooter, {
+                opacity: 1,
+                duration: 0.5
+            }, '-=0.3');
+        }
+
+        function closeMenu() {
+            if (!menuOpen) return;
+            menuOpen = false;
+
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    // Restart scrolling
+                    if (window.lenis) window.lenis.start();
+                }
+            });
+
+            // Fade out footer
+            tl.to(menuFooter, {
+                opacity: 0,
+                duration: 0.3
+            });
+
+            // Stagger menu items out
+            tl.to(menuItems, {
+                opacity: 0,
+                y: -20,
+                stagger: 0.05,
+                duration: 0.4,
+                ease: 'power2.in'
+            }, '-=0.2');
+
+            // Animate overlay out
+            tl.to(menuOverlay, {
+                clipPath: 'inset(0 0 100% 0)',
+                opacity: 0,
+                duration: 0.7,
+                ease: 'power4.inOut'
+            }, '-=0.3');
+
+            // Hide overlay
+            tl.set(menuOverlay, { visibility: 'hidden' });
+        }
+
+        // Event listeners
+        if (openMenuBtn) {
+            openMenuBtn.addEventListener('click', openMenu);
+        }
+
+        if (closeMenuBtn) {
+            closeMenuBtn.addEventListener('click', closeMenu);
+        }
+
+        // Close menu when clicking menu links
+        document.querySelectorAll('.menu-link').forEach(link => {
+            link.addEventListener('click', () => {
+                closeMenu();
+            });
+        });
+
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
@@ -1212,8 +1655,10 @@
         });
 
     </script>
-    <!-- Page Transition System -->
-    <script src=" page-transitions.js\></script>
+
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </body>
 
 </html>
