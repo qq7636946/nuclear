@@ -67,12 +67,20 @@
     <link rel="dns-prefetch" href="https://unpkg.com">
     <link rel="dns-prefetch" href="https://prod.spline.design">
 
-    <!-- Google Fonts (Optimized with display=swap) -->
+    <!-- Google Fonts (Optimized: Preload + Async Swap) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Montserrat:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&family=Syncopate:wght@400;700&family=Share+Tech+Mono&display=swap"
+        as="style">
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Montserrat:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&family=Syncopate:wght@400;700&family=Share+Tech+Mono&display=swap"
-        rel="stylesheet">
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Montserrat:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&family=Syncopate:wght@400;700&family=Share+Tech+Mono&display=swap"
+            rel="stylesheet">
+    </noscript>
 
     <!-- FontAwesome (Deferred loading) -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style"
@@ -230,6 +238,14 @@
                 position: relative !important;
                 height: auto !important;
                 /* Allow height to adjust naturally */
+            }
+
+            /* Force visibility for pinned text on mobile */
+            #nu-wrapper .pinned-text-title,
+            #nu-wrapper .pinned-line {
+                opacity: 1 !important;
+                filter: none !important;
+                color: var(--text-main) !important;
             }
         }
 
@@ -5354,7 +5370,7 @@
                     this.mouseX = 0; this.mouseY = 0;
                     this.params = { scatter: 0 };
                     this.handFactor = 0; this.handScatterTarget = 0;
-                    this.particlesCount = 6000;
+                    this.particlesCount = 2500; // Performance Opt: Reduced from 6000
                     this.initialPosArray = new Float32Array(this.particlesCount * 3);
                     this.randomSpreadArray = new Float32Array(this.particlesCount * 3);
 
@@ -5416,7 +5432,7 @@
                     this.scene.add(this.particlesMesh);
 
                     // Core
-                    this.coreCount = 6000;
+                    this.coreCount = 2500; // Performance Opt: Reduced from 6000
                     const coreGeometry = new THREE.BufferGeometry();
                     const corePosArray = new Float32Array(this.coreCount * 3);
                     const coreColorArray = new Float32Array(this.coreCount * 3);
@@ -5548,7 +5564,7 @@
             const pinnedTextSection = document.querySelector('.section-pinned-text');
             const pinnedLines = gsap.utils.toArray('.pinned-line, .pinned-text-title');
 
-            if (window.ScrollTrigger && pinnedTextSection && pinnedLines.length > 0 && particleBg && particleBg.params) {
+            if (window.ScrollTrigger && pinnedTextSection && pinnedLines.length > 0 && particleBg && particleBg.params && window.innerWidth > 1120) {
                 const pinTl = gsap.timeline({
                     scrollTrigger: { trigger: ".section-pinned-text", start: "top top", end: "+=200%", pin: true, scrub: 0.5 }
                 });
