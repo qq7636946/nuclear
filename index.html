@@ -182,6 +182,58 @@
         }
 
         /* =========================================
+           HERO VISIBILITY (PC vs MOBILE)
+           ========================================= */
+        .spline_pc {
+            display: block;
+        }
+
+        .hero-mobile-video-container {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            /* Same as spline-wrapper (PC) */
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .hero-mobile-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Ensure it covers the screen */
+        }
+
+        @media (max-width: 1120px) {
+            .spline_pc {
+                display: none !important;
+            }
+
+            .hero-mobile-video-container {
+                display: block !important;
+            }
+
+            #bg-canvas {
+                display: none !important;
+            }
+
+            .section-crossed-marquee {
+                display: none !important;
+            }
+
+            /* Disable sticky pinning on mobile */
+            #nu-wrapper .pinned-content {
+                position: relative !important;
+                height: auto !important;
+                /* Allow height to adjust naturally */
+            }
+        }
+
+        /* =========================================
            LOADING SCREEN STYLES
            ========================================= */
         .loader-screen {
@@ -258,6 +310,9 @@
 
         body {
             visibility: visible;
+            padding: 0;
+            margin: 0;
+
         }
 
         /* =========================================
@@ -337,7 +392,7 @@
         /* === WEBGL NOISE CANVAS === */
         #bg-canvas {
             position: fixed;
-            top: -20px;
+            top: -50px;
             left: 0;
             width: 100vw;
             height: 100vh;
@@ -2738,12 +2793,12 @@
 
             #nu-wrapper .pinned-content {
                 position: relative !important;
-                height: 60vh !important;
+                height: 80vh !important;
             }
 
             #nu-wrapper .explosive-wrapper {
                 position: relative !important;
-                height: 60vh !important;
+                height: 80vh !important;
             }
 
             /* Optimize header for mobile */
@@ -3744,6 +3799,23 @@
                 z-index: -2;
             }
         }
+
+
+        @media (max-width: 600px) {
+
+            #nu-wrapper .pinned-content {
+                height: 580px !important;
+            }
+
+        }
+
+        @media (max-width: 468px) {
+
+            #nu-wrapper .pinned-content {
+                height: 480px !important;
+            }
+
+        }
     </style>
 
     <!-- ==========================================
@@ -3946,7 +4018,8 @@
                     <button class="btn btn-menu" id="openMenu" aria-label="Menu" data-cursor="hover">
                         <div class="hamburger-icon"><span></span><span></span><span></span></div>
                     </button>
-                    <a href="#contact" class="btn btn-contact" data-cursor="hover"><span>CONTACT</span></a>
+                    <a href="#contact" class="btn btn-contact" data-cursor="hover"><i
+                            class="fa-regular fa-envelope"></i></a>
                 </div>
             </header>
         </div>
@@ -3959,6 +4032,7 @@
             <div class="particle-pin-spacer" id="home">
                 <div class="pinned-content">
                     <!-- Spline Viewer (Single responsive instance) -->
+                    <!-- PC: Spline Viewer -->
                     <div class="spline-container spline_pc">
                         <div class="spline-wrapper">
                             <spline-viewer loading="lazy"
@@ -3966,10 +4040,12 @@
                         </div>
                     </div>
 
-
-                    <div class="spline_mobile">
-                        <spline-viewer
-                            url="https://prod.spline.design/rcBB4ZRQXel88K6R/scene.splinecode"></spline-viewer>
+                    <!-- MOBILE: Video Background -->
+                    <div class="hero-mobile-video-container">
+                        <video autoplay muted loop playsinline class="hero-mobile-video" id="mobileHeroVideo">
+                            <source src="https://clone.victorydesign.tw/wp-content/uploads/2026/01/n-rwd_3.mp4"
+                                type="video/mp4">
+                        </video>
                     </div>
 
 
@@ -4919,6 +4995,46 @@
             } else {
                 // 首次訪問：執行完整的假進度動畫
                 startLoadingSequence();
+
+                // 開始監聽資源載入狀態 (Hybird Check)
+                checkHeroResourceLoaded();
+            }
+
+            function checkHeroResourceLoaded() {
+                const isMobile = window.innerWidth <= 1120; // 簡單判斷
+
+                if (isMobile) {
+                    console.log("Mobile detected: Waiting for Video...");
+                    const mobileVideo = document.getElementById('mobileHeroVideo');
+
+                    if (mobileVideo) {
+                        if (mobileVideo.readyState >= 3) {
+                            console.log("Video already ready.");
+                            triggerFinish();
+                        } else {
+                            mobileVideo.addEventListener('canplay', triggerFinish);
+                            mobileVideo.addEventListener('loadeddata', triggerFinish);
+                            setTimeout(() => {
+                                console.log("Video load timeout - forcing entry");
+                                triggerFinish();
+                            }, 3000);
+                        }
+                    } else {
+                        triggerFinish();
+                    }
+                } else {
+                    console.log("Desktop detected: Waiting for Spline...");
+                    // PC: 使用原本的 Spline 監聽
+                    if (splineLoaded) {
+                        triggerFinish();
+                    }
+                }
+            }
+
+            function triggerFinish() {
+                if (typeof window.finishLoader === 'function') {
+                    window.finishLoader();
+                }
             }
 
             function startLoadingSequence() {
@@ -5217,6 +5333,9 @@
             class ParticleBackground {
                 constructor() {
                     this.container = document.getElementById('bg-canvas');
+                    // Mobile Optimization: Disable particles on mobile
+                    if (window.innerWidth <= 1120) return;
+
                     if (!this.container || typeof THREE === 'undefined') return;
 
                     this.scene = new THREE.Scene();
@@ -5407,8 +5526,14 @@
 
             if (window.ScrollTrigger && particleBg && particleBg.params) {
                 gsap.to(particleBg.params, {
-                    scatter: 1, ease: "power1.inOut",
-                    scrollTrigger: { trigger: ".particle-pin-spacer", start: "top top", end: "bottom top", scrub: true }
+                    scatter: 1,
+                    ease: "power4.out", // 更劇烈的缓动，一滾動就快速散開
+                    scrollTrigger: {
+                        trigger: ".particle-pin-spacer",
+                        start: "top top",
+                        end: "top+=30% top", // 縮短 scrub 區間，讓動畫在滾動前 30% 就完成散開
+                        scrub: true
+                    }
                 });
                 ScrollTrigger.create({
                     trigger: ".particle-pin-spacer", start: "top top", end: "bottom top", scrub: true,
