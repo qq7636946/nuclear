@@ -758,6 +758,131 @@
         }
 
         /* =========================================================
+           GLASSMORPHISM SCROLL NAV (NEW)
+           ========================================================= */
+        #nu-wrapper .glass-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(-100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        #nu-wrapper .glass-nav.visible {
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        #nu-wrapper .glass-nav-left {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        #nu-wrapper .glass-nav-center {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #nu-wrapper .glass-nav-right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        #nu-wrapper .glass-nav-logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            font-family: 'Syncopate', sans-serif;
+        }
+
+        #nu-wrapper .glass-nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px 24px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #nu-wrapper .glass-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        #nu-wrapper .glass-nav-menu-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #nu-wrapper .glass-nav-menu-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            #nu-wrapper .glass-nav {
+                padding: 0 20px;
+                height: 60px;
+            }
+
+            #nu-wrapper .glass-nav-logo {
+                font-size: 16px;
+            }
+
+            #nu-wrapper .glass-nav-btn {
+                padding: 8px 16px;
+                font-size: 0.75rem;
+            }
+
+            #nu-wrapper .glass-nav-menu-btn {
+                padding: 8px 16px;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* =========================================================
            TECH DASHBOARD UI (NEW ADDITIONS)
            ========================================================= */
 
@@ -915,11 +1040,7 @@
             margin-bottom: 15px;
         }
 
-        body.light-mode #tech-hud-left {
-            /* Since mix-blend-mode is difference, light background makes this color inverted. 
-               If neon-color is bright green, inverted on white it becomes purpleish. 
-               Let's keep it simple. */
-        }
+
 
         .hud-row {
             display: flex;
@@ -1811,25 +1932,58 @@
         /* ===================================== */
 
         @media (max-width: 768px) {
-            #nu-wrapper .horizontal-staggered-wrapper {
-                flex-direction: column;
-                height: auto;
-                padding: 0 20px;
-                gap: 40px;
-                transform: none !important;
+            #nu-wrapper .section-horizontal-staggered {
+                height: auto !important;
+                padding: 60px 0 !important;
+                overflow: visible !important;
             }
 
-            #nu-wrapper .section-horizontal-staggered {
-                height: auto;
-                overflow-y: visible;
-                padding: 100px 0;
+            #nu-wrapper .horizontal-staggered-wrapper {
+                flex-direction: column !important;
+                height: auto !important;
+                padding: 0 20px !important;
+                gap: 40px !important;
+                /* Increased gap to allow stacking visibility */
+                transform: none !important;
+                overflow: visible !important;
             }
 
             #nu-wrapper .staggered-card {
-                width: 100%;
+                width: 100% !important;
                 margin-top: 0 !important;
-                height: auto;
-                min-height: 300px;
+                height: 450px !important;
+                border-radius: 20px !important;
+                position: sticky !important;
+                top: 80px;
+                /* Sticky position for stacking */
+                overflow: visible !important;
+                background-color: var(--card-bg);
+                /* Ensure background is card-bg */
+            }
+
+            /* Refined Stacking Effect for Staggered Cards (Reduced "Yellow" tint) */
+            #nu-wrapper .staggered-card::before {
+                content: '';
+                position: absolute;
+                top: 6px;
+                left: 6px;
+                right: -6px;
+                bottom: -6px;
+                background: linear-gradient(135deg, rgba(204, 255, 0, 0.03), transparent);
+                border-radius: 20px;
+                z-index: -1;
+            }
+
+            #nu-wrapper .staggered-card::after {
+                content: '';
+                position: absolute;
+                top: 12px;
+                left: 12px;
+                right: -12px;
+                bottom: -12px;
+                background: linear-gradient(135deg, rgba(204, 255, 0, 0.015), transparent);
+                border-radius: 20px;
+                z-index: -2;
             }
         }
 
@@ -2303,11 +2457,320 @@
             #nu-wrapper .grid-card:nth-child(10) {
                 width: 350px;
             }
-        }
 
-        @media (max-width: 768px) {
+            /* --- Menu Overlay --- */
+            #nu-wrapper .overlay-menu {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background-color: var(--neon-color);
+                z-index: 200;
+                display: flex;
+                flex-direction: column;
+                padding: 60px 4vw;
+                box-sizing: border-box;
+                visibility: hidden;
+                clip-path: inset(0 0 100% 0);
+                overflow: hidden;
+            }
+
+            #nu-wrapper .overlay-header {
+                display: flex;
+                justify-content: flex-end;
+                padding: 30px 40px;
+                position: absolute;
+                top: 0;
+                right: 0;
+                z-index: 20;
+            }
+
+            #nu-wrapper .close-btn {
+                width: 80px;
+                height: 44px;
+                background-color: #000;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+
+            #nu-wrapper .close-icon {
+                width: 20px;
+                height: 20px;
+                position: relative;
+            }
+
+            #nu-wrapper .close-icon::before,
+            #nu-wrapper .close-icon::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background-color: var(--neon-color);
+                transform: rotate(45deg);
+            }
+
+            #nu-wrapper .close-icon::after {
+                transform: rotate(-45deg);
+            }
+
+            #nu-wrapper .menu-content {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding-top: 40px;
+            }
+
+            #nu-wrapper .nav-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                gap: 0;
+            }
+
+            #nu-wrapper .nav-list:hover .nav-item {
+                opacity: 0.25;
+                filter: blur(1px);
+            }
+
+            #nu-wrapper .nav-item {
+                position: relative;
+                overflow: hidden;
+                width: 100%;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                padding: 2.5vh 0;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                transition: opacity 0.4s ease, filter 0.4s ease, border-color 0.4s ease;
+                cursor: pointer;
+            }
+
+            #nu-wrapper .nav-item:first-child {
+                border-top: 1px solid rgba(0, 0, 0, 0.1);
+            }
+
+            #nu-wrapper .nav-item:hover {
+                opacity: 1 !important;
+                filter: blur(0) !important;
+                border-color: #000;
+            }
+
+            #nu-wrapper .nav-item-wrapper {
+                display: flex;
+                align-items: center;
+                position: relative;
+            }
+
+            #nu-wrapper .nav-link {
+                font-size: clamp(3rem, 6vw, 7rem);
+                font-family: 'Inter', sans-serif;
+                font-weight: 800;
+                color: #000;
+                text-decoration: none;
+                line-height: 0.95;
+                text-transform: uppercase;
+                display: block;
+                letter-spacing: -0.04em;
+                transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                will-change: transform;
+            }
+
+            #nu-wrapper .nav-item:hover .nav-link {
+                transform: translateX(30px);
+            }
+
+            #nu-wrapper .nav-meta-tag {
+                font-size: 0.85rem;
+                font-weight: 600;
+                color: rgba(0, 0, 0, 0.6);
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                font-family: 'Inter', sans-serif;
+            }
+
+            #nu-wrapper .nav-num {
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: rgba(0, 0, 0, 0.4);
+                margin-right: 30px;
+                font-family: 'Syncopate', sans-serif;
+            }
+
+            #nu-wrapper .menu-footer-info {
+                position: absolute;
+                bottom: 40px;
+                left: 4vw;
+                width: calc(100% - 8vw);
+                padding: 30px 0 0 0;
+                border-top: 1px solid rgba(0, 0, 0, 0.1);
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                align-items: flex-start;
+                font-size: 0.8rem;
+                font-weight: 600;
+                color: #000;
+                text-transform: uppercase;
+                font-family: 'Inter', sans-serif;
+                letter-spacing: 0.02em;
+            }
+
+            #nu-wrapper .menu-preview-float {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 350px;
+                height: 450px;
+                pointer-events: none;
+                z-index: 10;
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+                transition: opacity 0.3s, transform 0.1s linear;
+                mix-blend-mode: normal;
+            }
+
+            #nu-wrapper .preview-img-float {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 4px;
+                box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.2);
+                display: none;
+            }
+
+            #nu-wrapper .preview-img-float.active {
+                display: block;
+            }
+
+            .menu-social {
+                display: flex;
+                gap: 30px;
+            }
+
+            .menu-social a {
+                color: #000;
+                text-decoration: none;
+                position: relative;
+                display: inline-block;
+                width: fit-content;
+                transition: opacity 0.3s;
+            }
+
+            .menu-social a::after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 0%;
+                height: 1px;
+                background: #000;
+                transition: width 0.3s;
+            }
+
+            .menu-social a:hover::after {
+                width: 100%;
+            }
+
+            .menu-email {
+                text-align: right;
+            }
+
+            @media (max-width: 768px) {
+                .menu-link {
+                    font-size: 2rem;
+                }
+
+                .menu-desc {
+                    display: none;
+                }
+
+                .menu-footer {
+                    grid-template-columns: 1fr;
+                    gap: 20px;
+                }
+
+                .menu-email {
+                    text-align: left;
+                }
+
+                .close-menu-btn {
+                    width: 60px;
+                    height: 40px;
+                }
+
+                .overlay-header {
+                    padding: 20px;
+                }
+
+                .menu-overlay {
+                    padding: 60px 20px;
+                }
+            }
+
+            /* --- Horizontal Staggered Scroll Animation --- */
+
+            /* Hide desktop-only elements */
+            #tech-dashboard-nav,
+            #nu-wrapper .cursor-wrapper,
+            #nu-wrapper .global-grid-lines,
+            #nu-wrapper .scroll-indicator-2025 {
+                display: none !important;
+            }
+
+            /* Disable pinning sections on mobile */
+            #nu-wrapper .particle-pin-spacer {
+                height: auto !important;
+            }
+
+            #nu-wrapper .pinned-content {
+                position: relative !important;
+                height: 60vh !important;
+            }
+
+            #nu-wrapper .explosive-wrapper {
+                position: relative !important;
+                height: 60vh !important;
+            }
+
+            /* Optimize header for mobile */
+            #nu-wrapper .header-container {
+                top: 20px;
+                padding: 0 20px;
+            }
+
+            #nu-wrapper .pill-header {
+                max-width: 95%;
+                height: 60px;
+                padding: 0 20px;
+            }
+
+            #nu-wrapper .brand-logo {
+                font-size: 18px;
+            }
+
+            #nu-wrapper .btn-contact span {
+                display: none;
+            }
+
+            #nu-wrapper .btn-contact::after {
+                content: '\u2709';
+                font-size: 1.1rem;
+            }
+
+            /* Optimize legacy container with card stacking */
             #nu-wrapper .legacy-container {
-                padding: 80px 20px;
+                padding: 60px 20px;
                 min-height: auto;
             }
 
@@ -2315,14 +2778,75 @@
                 position: relative !important;
                 width: 100% !important;
                 transform: rotate(0deg) !important;
-                margin-bottom: 40px;
+                margin-bottom: 24px !important;
                 top: auto !important;
                 left: auto !important;
                 right: auto !important;
+                /* Card stacking effect */
+                border-radius: 12px;
+                overflow: visible;
             }
 
+            /* Card stacking shadow layers */
+            #nu-wrapper .grid-card::before {
+                content: '';
+                position: absolute;
+                top: 6px;
+                left: 6px;
+                right: -6px;
+                bottom: -6px;
+                background: linear-gradient(135deg, rgba(204, 255, 0, 0.08), rgba(204, 255, 0, 0.03));
+                border-radius: 12px;
+                z-index: -1;
+                opacity: 0.8;
+            }
+
+            #nu-wrapper .grid-card::after {
+                content: '';
+                position: absolute;
+                top: 12px;
+                left: 12px;
+                right: -12px;
+                bottom: -12px;
+                background: linear-gradient(135deg, rgba(204, 255, 0, 0.05), rgba(204, 255, 0, 0.01));
+                border-radius: 12px;
+                z-index: -2;
+                opacity: 0.5;
+            }
+
+            /* Reduce card height for mobile */
             #nu-wrapper .media {
                 aspect-ratio: 4 / 3 !important;
+                border-radius: 8px;
+                box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+                margin-bottom: 16px;
+            }
+
+            #nu-wrapper .info {
+                padding-top: 12px;
+            }
+
+            #nu-wrapper .title {
+                font-size: 1.1rem;
+            }
+
+            #nu-wrapper .meta {
+                font-size: 0.8rem;
+            }
+
+            /* Optimize footer for mobile */
+            #nu-wrapper .footer-marquee-item {
+                font-size: 2rem;
+            }
+
+            #nu-wrapper .footer-grid {
+                grid-template-columns: 1fr;
+                padding: 0 20px;
+                gap: 30px;
+            }
+
+            #nu-wrapper .giant-footer-text {
+                font-size: 12vw;
             }
         }
 
@@ -3121,27 +3645,100 @@
             border-radius: 12px;
         }
 
-        /* Mobile responsive adjustments */
+        /* Mobile responsive adjustments for Explosive Zoom */
         @media (max-width: 768px) {
             #nu-wrapper .section-explosive-zoom {
-                height: auto;
-                /* Normal scroll on mobile */
-                min-height: 100vh;
+                height: auto !important;
+                min-height: auto !important;
+                padding: 40px 0;
             }
 
             #nu-wrapper .explosive-wrapper {
-                position: relative;
-                /* Not pinned on mobile */
+                position: relative !important;
+                height: auto !important;
+                padding: 20px 0;
+                display: block !important;
             }
 
             #nu-wrapper .center-stage {
-                width: 90vw;
-                height: 60vw;
+                position: relative !important;
+                width: 90vw !important;
+                height: 55vw !important;
+                margin: 0 auto 30px;
+                top: auto !important;
+                left: auto !important;
+                transform: none !important;
             }
 
             #nu-wrapper .float-item {
-                display: none;
-                /* Hide floating items on mobile for cleaner look */
+                display: none !important;
+            }
+        }
+
+        /* Card Stack Mobile Adjustments */
+        @media (max-width: 768px) {
+            #nu-wrapper .section-stack-wrapper {
+                height: auto !important;
+                padding: 40px 0 !important;
+                overflow: visible !important;
+            }
+
+            #nu-wrapper .card-stack-container {
+                overflow: visible !important;
+            }
+
+            #nu-wrapper .project-card {
+                height: auto !important;
+                min-height: 450px !important;
+                width: calc(100% - 40px) !important;
+                margin: 0 20px 40px !important;
+                /* Bottom margin for stack clearance */
+                border-radius: 20px !important;
+                position: sticky !important;
+                top: 80px;
+                /* Sticky for stacking effect */
+                overflow: visible !important;
+                background-color: var(--btn-bg) !important;
+            }
+
+            #nu-wrapper .project-card .card-inner {
+                padding: 40px 24px !important;
+            }
+
+            #nu-wrapper .project-card .project-title {
+                font-size: 2.5rem !important;
+                letter-spacing: -1px !important;
+            }
+
+            #nu-wrapper .project-card .view-btn {
+                width: 70px !important;
+                height: 70px !important;
+                font-size: 0.7rem !important;
+            }
+
+            /* Refined Stacking Shadow Effect (Reduced "Yellow" tint) */
+            #nu-wrapper .project-card::before {
+                content: '';
+                position: absolute;
+                top: 6px;
+                left: 6px;
+                right: -6px;
+                bottom: -6px;
+                background: linear-gradient(135deg, rgba(204, 255, 0, 0.04), transparent);
+                border-radius: 20px;
+                z-index: -1;
+            }
+
+            #nu-wrapper .project-card::after {
+                content: '';
+                position: absolute;
+                top: 12px;
+                left: 12px;
+                right: -12px;
+                bottom: -12px;
+                background: linear-gradient(135deg, rgba(204, 255, 0, 0.02), transparent);
+                border-radius: 20px;
+                z-index: -2;
             }
         }
     </style>
@@ -3229,6 +3826,11 @@
         </div>
     </div>
 
+    <!-- PAGE TRANSITION OVERLAY -->
+    <div class="page-transition-overlay" style="clip-path: inset(0 0 0 0);">
+        <div class="transition-logo">NUCLEAR LABS</div>
+    </div>
+
 
 
     <!-- WRAPPER START -->
@@ -3248,7 +3850,7 @@
 
         <!-- NEW: TECH DASHBOARD SIDE NAV (RIGHT) -->
         <div id="tech-dashboard-nav" data-transition-element>
-            <div class="tech-nav-label-top">ALTITUDE_REF</div>
+            <!-- <div class="tech-nav-label-top">ALTITUDE_REF</div> -->
 
             <div class="tech-scale-container">
                 <!-- Dynamic Ticks Generated via JS or Static -->
@@ -3311,6 +3913,9 @@
             <div class="tech-nav-label-bottom">Z-INDEX: 05</div>
         </div>
 
+
+
+
         <!-- NEW: TECH HUD (LEFT CORNER) -->
         <div id="tech-hud-left">
             <div class="hud-row">
@@ -3328,29 +3933,17 @@
             </div>
         </div>
 
-        <!-- Glassmorphism Scroll Navigation -->
-        <div class="glass-nav" id="glassNav">
-            <div class="glass-nav-left">
-                <a href="#" class="glass-nav-btn" data-cursor="hover">START NOW</a>
-            </div>
-            <div class="glass-nav-center">
-                <a href="#" class="glass-nav-logo" data-cursor="hover">NUCLEAR LABS</a>
-            </div>
-            <div class="glass-nav-right">
-                <button class="glass-nav-menu-btn" id="glassMenuBtn" data-cursor="hover">MENU</button>
-            </div>
-        </div>
+
 
         <!-- Header -->
         <div class="header-container" data-transition-element>
             <header class="pill-header">
-                <a href="#" class="brand-logo" data-cursor="hover">NUCLEAR LABS</a>
+                <a href="index.html" class="brand-logo" data-cursor="hover">NUCLEAR LABS</a>
                 <div class="header-actions">
                     <button class="btn btn-menu" id="openMenu" aria-label="Menu" data-cursor="hover">
                         <div class="hamburger-icon"><span></span><span></span><span></span></div>
                     </button>
-
-                    <a href="#" class="btn btn-contact" data-cursor="hover"><span>CONTACT</span></a>
+                    <a href="#contact" class="btn btn-contact" data-cursor="hover"><span>CONTACT</span></a>
                 </div>
             </header>
         </div>
@@ -4042,27 +4635,27 @@
             <div class="menu-content">
                 <ul class="nav-list" id="navList">
                     <li class="nav-item">
-                        <div class="nav-item-wrapper"><span class="nav-num">01</span><a href="work.html"
+                        <div class="nav-item-wrapper"><span class="nav-num">01</span><a href="index.html"
+                                class="nav-link" data-cursor="hover">HOME</a></div>
+                        <div class="nav-meta-tag">Back to Main</div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-item-wrapper"><span class="nav-num">02</span><a href="work.html"
                                 class="nav-link" data-cursor="hover">WORK</a></div>
                         <div class="nav-meta-tag">Case Studies</div>
                     </li>
                     <li class="nav-item">
-                        <div class="nav-item-wrapper"><span class="nav-num">02</span><a href="#" class="nav-link"
+                        <div class="nav-item-wrapper"><span class="nav-num">03</span><a href="#about" class="nav-link"
                                 data-cursor="hover">ABOUT</a></div>
                         <div class="nav-meta-tag">Studio Profile</div>
                     </li>
                     <li class="nav-item">
-                        <div class="nav-item-wrapper"><span class="nav-num">03</span><a href="#" class="nav-link"
-                                data-cursor="hover">SERVICES</a></div>
+                        <div class="nav-item-wrapper"><span class="nav-num">04</span><a href="#services"
+                                class="nav-link" data-cursor="hover">SERVICES</a></div>
                         <div class="nav-meta-tag">Capabilities</div>
                     </li>
                     <li class="nav-item">
-                        <div class="nav-item-wrapper"><span class="nav-num">04</span><a href="#" class="nav-link"
-                                data-cursor="hover">INSIGHTS</a></div>
-                        <div class="nav-meta-tag">Latest News</div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="nav-item-wrapper"><span class="nav-num">05</span><a href="#" class="nav-link"
+                        <div class="nav-item-wrapper"><span class="nav-num">05</span><a href="#contact" class="nav-link"
                                 data-cursor="hover">CONTACT</a></div>
                         <div class="nav-meta-tag">Get in Touch</div>
                     </li>
@@ -4079,7 +4672,11 @@
                     </div>
                     <div class="footer-col">
                         <div class="footer-label">SOCIALS</div>
-                        <div class="social-links"><a href="#" class="social-link">IG</a></div>
+                        <div class="menu-social">
+                            <a href="#" data-cursor="hover">IG</a>
+                            <a href="#" data-cursor="hover">TW</a>
+                            <a href="#" data-cursor="hover">LN</a>
+                        </div>
                     </div>
                     <div class="footer-col">
                         <div class="footer-label">COPYRIGHT</div>
@@ -4095,6 +4692,9 @@
         /* ========================================
            PAGE TRANSITION MANAGER CLASS
            ======================================== */
+        /* ========================================
+             PAGE TRANSITION MANAGER CLASS
+             ======================================== */
         class PageTransitionManager {
             constructor() {
                 this.overlay = document.querySelector('.page-transition-overlay');
@@ -4195,6 +4795,11 @@
 
                         e.preventDefault();
 
+                        // Close menu if open (Check menu overlay visibility)
+                        if (typeof menuTl !== 'undefined' && document.getElementById('menuOverlay').style.visibility !== 'hidden') {
+                            menuTl.reverse();
+                        }
+
                         // 執行退場動畫後導航
                         this.exitAnimation(() => {
                             window.location.href = href;
@@ -4227,12 +4832,19 @@
                 touchMultiplier: 2
             });
 
-            // Tech Dashboard Logic (UPDATED)
+            // Tech Dashboard & Header Logic
             const techIndicator = document.getElementById('techIndicator');
             const hudScrollVal = document.getElementById('hudScrollVal');
+            const glassNav = document.querySelector('.glass-nav');
+            const pillHeader = document.querySelector('.header-container');
+            const scrollThreshold = 300;
 
             if (window.ScrollTrigger) {
-                window.lenis.on('scroll', ScrollTrigger.update);
+                window.lenis.on('scroll', (e) => {
+                    ScrollTrigger.update();
+                    // Pill Header Visibility (Always Visible - Auto-hide disabled)
+                });
+
                 gsap.ticker.add((time) => {
                     window.lenis.raf(time * 1000);
 
@@ -4264,7 +4876,7 @@
             });
 
             // 2. Loading Animation (結合 Spline 載入狀態)
-            window.lenis.stop();
+            // window.lenis.stop();
             const loaderCounter = document.querySelector(".loader-counter");
             const loaderBar = document.querySelector(".loader-progress-bar");
             const loaderScreen = document.querySelector(".loader-screen");
@@ -4415,13 +5027,11 @@
                             if (splineLoaded) {
                                 completeLoading();
                             } else {
-                                // 否則進入「呼吸等待」模式：90.0% ↔ 90.8%（避免顯示91）
+                                // 否則進入「緩步等待」模式：90% -> 99% (極慢)
                                 breatheAnimation = gsap.to(progressObj, {
-                                    val: 90.8,
-                                    duration: 1.2,
-                                    ease: "sine.inOut",
-                                    yoyo: true,
-                                    repeat: -1,
+                                    val: 99,
+                                    duration: 10,
+                                    ease: "power1.out",
                                     onUpdate: () => {
                                         loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
                                         loaderBar.style.width = `${progressObj.val}%`;
@@ -4487,7 +5097,9 @@
             // --- Horizontal Staggered Scroll Animation ---
             if (window.ScrollTrigger) {
                 const hSectionStaggered = document.querySelector('.section-horizontal-staggered');
-                if (hSectionStaggered) {
+                const isMobile = window.innerWidth <= 768;
+
+                if (hSectionStaggered && !isMobile) {
                     const wrapper = document.querySelector('.horizontal-staggered-wrapper');
                     const getScrollAmount = () => -(wrapper.scrollWidth - window.innerWidth);
 
@@ -4508,27 +5120,24 @@
             // --- Explosive Zoom Section ---
             if (window.ScrollTrigger) {
                 const exploSection = document.querySelector(".section-explosive-zoom");
-                if (exploSection) {
-                    // 只在桌面版啟用 pin 效果和動畫（手機版正常捲動）
-                    const isMobile = window.innerWidth <= 768;
+                const isMobile = window.innerWidth <= 768;
 
-                    if (!isMobile) {
-                        const exploTl = gsap.timeline({
-                            scrollTrigger: {
-                                trigger: ".section-explosive-zoom",
-                                start: "top top",
-                                end: "bottom bottom",
-                                scrub: 1,
-                                pin: ".explosive-wrapper"
-                            }
-                        });
-                        exploTl.fromTo(".center-stage", { scale: 0.8, borderRadius: "20px" }, { scale: 2.5, borderRadius: "0px", duration: 1, ease: "power2.inOut" }, 0);
-                        exploTl.to(".pos-1", { x: -300, y: -300, opacity: 0, scale: 1.5, duration: 0.8 }, 0);
-                        exploTl.to(".pos-2", { x: -400, y: 200, opacity: 0, scale: 1.2, duration: 0.9 }, 0);
-                        exploTl.to(".pos-3", { x: 400, y: -100, opacity: 0, scale: 1.5, duration: 0.7 }, 0);
-                        exploTl.to(".pos-4", { x: 300, y: 300, opacity: 0, scale: 1.2, duration: 0.8 }, 0);
-                        exploTl.to(".pos-5", { y: 200, opacity: 0, scale: 2, duration: 0.5 }, 0);
-                    }
+                if (exploSection && !isMobile) {
+                    const exploTl = gsap.timeline({
+                        scrollTrigger: {
+                            trigger: ".section-explosive-zoom",
+                            start: "top top",
+                            end: "bottom bottom",
+                            scrub: 1,
+                            pin: ".explosive-wrapper"
+                        }
+                    });
+                    exploTl.fromTo(".center-stage", { scale: 0.8, borderRadius: "20px" }, { scale: 2.5, borderRadius: "0px", duration: 1, ease: "power2.inOut" }, 0);
+                    exploTl.to(".pos-1", { x: -300, y: -300, opacity: 0, scale: 1.5, duration: 0.8 }, 0);
+                    exploTl.to(".pos-2", { x: -400, y: 200, opacity: 0, scale: 1.2, duration: 0.9 }, 0);
+                    exploTl.to(".pos-3", { x: 400, y: -100, opacity: 0, scale: 1.5, duration: 0.7 }, 0);
+                    exploTl.to(".pos-4", { x: 300, y: 300, opacity: 0, scale: 1.2, duration: 0.8 }, 0);
+                    exploTl.to(".pos-5", { y: 200, opacity: 0, scale: 2, duration: 0.5 }, 0);
                 }
             }
 
@@ -4537,12 +5146,10 @@
                 const cards = gsap.utils.toArray(".project-card");
                 const isMobile = window.innerWidth <= 768;
 
-                // 只在桌面版啟用內縮效果
-                if (!isMobile) {
-                    cards.forEach((card, i) => {
-                        // 只有前面的卡片需要 pin（第3張不 pin）
+                cards.forEach((card, i) => {
+                    if (!isMobile) {
+                        // Desktop: Pinning stack effect
                         const shouldPin = i < cards.length - 1;
-
                         if (shouldPin) {
                             ScrollTrigger.create({
                                 trigger: card,
@@ -4552,11 +5159,9 @@
                                 endTrigger: cards[i + 1],
                                 end: "top top",
                                 onUpdate: (self) => {
-                                    // 當卡片被固定時，添加內縮效果
                                     const progress = self.progress;
-                                    const scale = 1 - (progress * 0.15); // 縮小到 0.85（更強烈）
-                                    const yOffset = progress * 40; // 向上移動 40px（更明顯）
-
+                                    const scale = 1 - (progress * 0.15);
+                                    const yOffset = progress * 40;
                                     gsap.to(card, {
                                         scale: scale,
                                         y: -yOffset,
@@ -4566,9 +5171,26 @@
                                 }
                             });
                         }
-                    });
-                }
+                        // Mobile: Scroll-based scale effect (Compliments Sticky)
+                        gsap.set(card, { transformOrigin: "top center" });
+                        gsap.fromTo(card,
+                            { scale: 1, filter: "brightness(1)" },
+                            {
+                                scale: 0.95,
+                                filter: "brightness(0.8)",
+                                ease: "none",
+                                scrollTrigger: {
+                                    trigger: card,
+                                    start: "top 5%",
+                                    end: "bottom 5%",
+                                    scrub: true
+                                }
+                            }
+                        );
+                    }
+                });
             }
+
 
             // --- Menu Logic ---
             const menuTl = gsap.timeline({ paused: true });
@@ -4956,34 +5578,6 @@
                 }
             } else {
                 console.warn('MediaPipe Hands 或 Camera 沒有載入，手勢控制停用。');
-            }
-
-            // =========================================================
-            // GLASSMORPHISM NAV SCROLL CONTROL
-            // =========================================================
-            const glassNav = document.getElementById('glassNav');
-            const glassMenuBtn = document.getElementById('glassMenuBtn');
-            const openMenuBtn = document.getElementById('openMenu');
-            let lastScrollTop = 0;
-            let scrollThreshold = 100; // Show nav after scrolling 100px
-
-            window.addEventListener('scroll', () => {
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-                if (scrollTop > scrollThreshold) {
-                    glassNav.classList.add('visible');
-                } else {
-                    glassNav.classList.remove('visible');
-                }
-
-                lastScrollTop = scrollTop;
-            });
-
-            // Connect glass nav menu button to existing menu
-            if (glassMenuBtn && openMenuBtn) {
-                glassMenuBtn.addEventListener('click', () => {
-                    openMenuBtn.click(); // Trigger existing menu
-                });
             }
 
         });
