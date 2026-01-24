@@ -47,10 +47,8 @@
     <!-- ==========================================
          Favicon 和 App Icons
          ========================================== -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <!-- Favicon (Placeholder to prevent 404 errors) -->
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <meta name="theme-color" content="#ccff00">
 
     <!-- ==========================================
@@ -98,6 +96,14 @@
     <script defer src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
     <!-- WebGL Dependencies (Three.js) -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- MediaPipe Dependencies (Restored for Hand Tracking) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"
+        crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
+        crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+        crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
     <!-- Spline Viewer -->
     <script defer type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"></script>
     <!-- lottie -->
@@ -5466,6 +5472,7 @@
                         this.mouseY = event.clientY / window.innerHeight - 0.5;
                     });
                     window.addEventListener('resize', () => {
+                        if (window.innerWidth === 0 || window.innerHeight === 0) return;
                         this.camera.aspect = window.innerWidth / window.innerHeight;
                         this.camera.updateProjectionMatrix();
                         this.renderer.setSize(window.innerWidth, window.innerHeight);
