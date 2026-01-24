@@ -96,14 +96,6 @@
     <script defer src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
     <!-- WebGL Dependencies (Three.js) -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- MediaPipe Dependencies (Restored for Hand Tracking) -->
-    <script defer src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"
-        crossorigin="anonymous"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
-        crossorigin="anonymous"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
-        crossorigin="anonymous"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
     <!-- Spline Viewer -->
     <script defer type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"></script>
     <!-- lottie -->
@@ -5376,7 +5368,8 @@
                     this.mouseX = 0; this.mouseY = 0;
                     this.params = { scatter: 0 };
                     this.handFactor = 0; this.handScatterTarget = 0;
-                    this.particlesCount = 2500; // Performance Opt: Reduced from 6000
+                    this.handFactor = 0; this.handScatterTarget = 0;
+                    this.particlesCount = 3500; // Performance Opt: Adjusted to 3000 (Outer Sphere)
                     this.initialPosArray = new Float32Array(this.particlesCount * 3);
                     this.randomSpreadArray = new Float32Array(this.particlesCount * 3);
 
@@ -5438,7 +5431,7 @@
                     this.scene.add(this.particlesMesh);
 
                     // Core
-                    this.coreCount = 2500; // Performance Opt: Reduced from 6000
+                    this.coreCount = 2750; // Performance Opt: Adjusted to 2750
                     const coreGeometry = new THREE.BufferGeometry();
                     const corePosArray = new Float32Array(this.coreCount * 3);
                     const coreColorArray = new Float32Array(this.coreCount * 3);
@@ -5490,7 +5483,8 @@
                     if (!this.renderer) return;
                     const elapsedTime = this.clock.getElapsedTime();
                     const scrollScatter = this.params.scatter;
-                    const scatterVal = THREE.MathUtils.lerp(scrollScatter, this.handScatterTarget, this.handFactor);
+                    // Simplify: Remove Hand Factor logic
+                    const scatterVal = scrollScatter;
                     const breatheStrength = 0.02 * (1 - scatterVal * 0.5);
                     const breathe = 0.8 + Math.sin(elapsedTime * 0.5) * breatheStrength;
                     const easeProgress = Math.pow(scatterVal, 2.5);
@@ -5511,9 +5505,9 @@
                             const rx = randomSpreads[i3]; const ry = randomSpreads[i3 + 1]; const rz = randomSpreads[i3 + 2];
                             const explosionFactor = easeProgress * scatterIntensity;
                             const noiseFactor = easeProgress * 3.0;
-                            const riseFactor = easeProgress * 2.0;
+                            // const riseFactor = easeProgress * 2.0; 
                             positions[i3] = (ix * breathe) + (ix * explosionFactor) + (rx * noiseFactor);
-                            positions[i3 + 1] = (iy * breathe) + (iy * explosionFactor) + (ry * noiseFactor) + (Math.abs(ry) * riseFactor);
+                            positions[i3 + 1] = (iy * breathe) + (iy * explosionFactor) + (ry * noiseFactor) /* + (Math.abs(ry) * riseFactor) */;
                             positions[i3 + 2] = (iz * breathe) + (iz * explosionFactor) + (rz * noiseFactor);
                         }
                         this.particlesMesh.geometry.attributes.position.needsUpdate = true;
@@ -5534,9 +5528,9 @@
                             const rx = coreSpread[i3]; const ry = coreSpread[i3 + 1]; const rz = coreSpread[i3 + 2];
                             const explosionFactor = easeProgress * coreScatterIntensity;
                             const noiseFactor = easeProgress * 2.0;
-                            const riseFactor = easeProgress * 1.5;
+                            // const riseFactor = easeProgress * 1.5;
                             corePositions[i3] = (ix * breathe) + (ix * explosionFactor) + (rx * noiseFactor);
-                            corePositions[i3 + 1] = (iy * breathe) + (iy * explosionFactor) + (ry * noiseFactor) + (Math.abs(ry) * riseFactor);
+                            corePositions[i3 + 1] = (iy * breathe) + (iy * explosionFactor) + (ry * noiseFactor) /* + (Math.abs(ry) * riseFactor) */;
                             corePositions[i3 + 2] = (iz * breathe) + (iz * explosionFactor) + (rz * noiseFactor);
                         }
                         this.coreParticlesMesh.geometry.attributes.position.needsUpdate = true;
@@ -5545,116 +5539,70 @@
                 }
             }
 
-            const particleBg = new ParticleBackground();
+            // Defer Particle Initialization for TBT Optimization
+            let particleBg;
+            const initParticles = () => {
+                setTimeout(() => {
+                    if (particleBg) return; // Prevent double init
+                    particleBg = new ParticleBackground();
 
-            if (window.ScrollTrigger && particleBg && particleBg.params) {
-                gsap.to(particleBg.params, {
-                    scatter: 1,
-                    ease: "power4.out", // 更劇烈的缓动，一滾動就快速散開
-                    scrollTrigger: {
-                        trigger: ".particle-pin-spacer",
-                        start: "top top",
-                        end: "top+=30% top", // 縮短 scrub 區間，讓動畫在滾動前 30% 就完成散開
-                        scrub: true
+                    if (window.ScrollTrigger && particleBg && particleBg.params) {
+                        gsap.to(particleBg.params, {
+                            scatter: 1,
+                            ease: "power4.out",
+                            scrollTrigger: {
+                                trigger: ".particle-pin-spacer",
+                                start: "top top",
+                                end: "top+=30% top",
+                                scrub: true
+                            }
+                        });
+                        ScrollTrigger.create({
+                            trigger: ".particle-pin-spacer", start: "top top", end: "bottom top", scrub: true,
+                            onUpdate: (self) => {
+                                const text = document.querySelector('.intro-overlay-text');
+                                if (text) text.style.opacity = 1 - self.progress * 3;
+                            }
+                        });
                     }
-                });
-                ScrollTrigger.create({
-                    trigger: ".particle-pin-spacer", start: "top top", end: "bottom top", scrub: true,
-                    onUpdate: (self) => {
-                        const text = document.querySelector('.intro-overlay-text');
-                        if (text) text.style.opacity = 1 - self.progress * 3;
+
+                    const pinnedTextSection = document.querySelector('.section-pinned-text');
+                    const pinnedLines = gsap.utils.toArray('.pinned-line, .pinned-text-title');
+
+                    if (window.ScrollTrigger && pinnedTextSection && pinnedLines.length > 0 && particleBg && particleBg.params && window.innerWidth > 1120) {
+                        const pinTl = gsap.timeline({
+                            scrollTrigger: { trigger: ".section-pinned-text", start: "top top", end: "+=200%", pin: true, scrub: 0.5 }
+                        });
+                        pinTl.to(particleBg.params, { scatter: 0, duration: 2, ease: "power2.inOut" }, 0);
+                        pinnedLines.forEach((line, i) => {
+                            pinTl.to(line, { color: getComputedStyle(document.body).getPropertyValue('--text-main').trim(), opacity: 1, filter: "blur(0px)", duration: 1, ease: "power2.out" }, i === 0 ? 0.5 : "-=0.8");
+                            if (line.classList.contains('special') && line.style.color) {
+                                pinTl.to(line, { color: "#ccff00", opacity: 1, filter: "blur(0px)", duration: 1 }, "<");
+                            }
+                        });
+                        pinTl.to(particleBg.params, { scatter: 1, duration: 2, ease: "power2.inOut" }, ">+0.5");
                     }
-                });
-            }
 
-
-            const pinnedTextSection = document.querySelector('.section-pinned-text');
-            const pinnedLines = gsap.utils.toArray('.pinned-line, .pinned-text-title');
-
-            if (window.ScrollTrigger && pinnedTextSection && pinnedLines.length > 0 && particleBg && particleBg.params && window.innerWidth > 1120) {
-                const pinTl = gsap.timeline({
-                    scrollTrigger: { trigger: ".section-pinned-text", start: "top top", end: "+=200%", pin: true, scrub: 0.5 }
-                });
-                pinTl.to(particleBg.params, { scatter: 0, duration: 2, ease: "power2.inOut" }, 0);
-                pinnedLines.forEach((line, i) => {
-                    pinTl.to(line, { color: getComputedStyle(document.body).getPropertyValue('--text-main').trim(), opacity: 1, filter: "blur(0px)", duration: 1, ease: "power2.out" }, i === 0 ? 0.5 : "-=0.8");
-                    if (line.classList.contains('special') && line.style.color) {
-                        pinTl.to(line, { color: "#ccff00", opacity: 1, filter: "blur(0px)", duration: 1 }, "<");
-                    }
-                });
-                pinTl.to(particleBg.params, { scatter: 1, duration: 2, ease: "power2.inOut" }, ">+0.5");
-            }
-
-            function raf(time) {
-                if (particleBg && typeof particleBg.render === 'function') {
-                    particleBg.render();
-                }
-                requestAnimationFrame(raf);
-            }
-            requestAnimationFrame(raf);
-
-
-            /* --- MediaPipe Hands --- */
-            const videoElement = document.querySelector('.input_video');
-            const toggleCameraBtn = document.getElementById('toggleCamera');
-            let isCameraActive = false;
-            let camera = null;
-
-            function onResults(results) {
-                if (!isCameraActive || !particleBg) return;
-                if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
-                    const landmarks = results.multiHandLandmarks[0];
-                    const wrist = landmarks[0];
-                    const tips = [4, 8, 12, 16, 20];
-                    let totalDist = 0;
-                    tips.forEach(idx => {
-                        const tip = landmarks[idx];
-                        const dx = tip.x - wrist.x;
-                        const dy = tip.y - wrist.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        totalDist += dist;
-                    });
-                    const avgDist = totalDist / 5;
-                    let isOpen = false;
-                    if (avgDist > 0.35) isOpen = true;
-                    particleBg.updateHandState(true, isOpen);
-                } else {
-                    particleBg.updateHandState(false, false);
-                }
-            }
-
-            if (window.Hands && window.Camera) {
-                const hands = new Hands({
-                    locateFile: (file) => {
-                        return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
-                    }
-                });
-                hands.setOptions({ maxNumHands: 1, modelComplexity: 0, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
-                hands.onResults(onResults);
-                camera = new Camera(videoElement, {
-                    onFrame: async () => { if (isCameraActive) await hands.send({ image: videoElement }); },
-                    width: 640, height: 480
-                });
-                if (toggleCameraBtn) {
-                    toggleCameraBtn.addEventListener('click', () => {
-                        if (!isCameraActive) {
-                            camera.start().then(() => {
-                                isCameraActive = true;
-                                toggleCameraBtn.classList.add('active');
-                                toggleCameraBtn.innerHTML = '<i class="fas fa-video"></i>';
-                            });
-                        } else {
-                            camera.stop();
-                            isCameraActive = false;
-                            toggleCameraBtn.classList.remove('active');
-                            toggleCameraBtn.innerHTML = '<i class="fas fa-video-slash"></i>';
-                            particleBg.updateHandState(false, false);
+                    // Start Loop
+                    function raf(time) {
+                        if (particleBg && typeof particleBg.render === 'function') {
+                            particleBg.render();
                         }
-                    });
-                }
+                        requestAnimationFrame(raf);
+                    }
+                    requestAnimationFrame(raf);
+
+                }, 200); // 200ms delay after load
+            };
+
+            // Robust check: Run immediately if loaded, otherwise wait
+            if (document.readyState === 'complete') {
+                initParticles();
             } else {
-                console.warn('MediaPipe Hands 或 Camera 沒有載入，手勢控制停用。');
+                window.addEventListener('load', initParticles);
             }
+
+            /* --- MediaPipe Removed --- */
 
         });
     </script>
