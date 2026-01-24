@@ -191,7 +191,7 @@
             width: 100%;
             height: 100vh;
             background-color: #000;
-            z-index: 10000;
+            z-index: 100000;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -230,6 +230,7 @@
             letter-spacing: 5px;
             position: absolute;
             bottom: 200px;
+
         }
 
         .loader-text {
@@ -299,16 +300,18 @@
             justify-content: center;
             align-items: center;
             pointer-events: none;
+            clip-path: inset(0 0 0 0);
+            /* 預設為覆蓋狀態 */
         }
 
         .transition-logo {
             font-family: var(--font-display);
-            font-size: 2rem;
             font-weight: 700;
             color: var(--neon-color);
+            font-size: 2rem;
             letter-spacing: 2px;
-            opacity: 0;
             text-transform: uppercase;
+            /* opacity 由 JS 控制 */
         }
 
         #nu-wrapper {
@@ -4692,123 +4695,55 @@
         /* ========================================
            PAGE TRANSITION MANAGER CLASS
            ======================================== */
-        /* ========================================
-             PAGE TRANSITION MANAGER CLASS
-             ======================================== */
         class PageTransitionManager {
             constructor() {
                 this.overlay = document.querySelector('.page-transition-overlay');
                 this.logo = document.querySelector('.transition-logo');
                 this.isTransitioning = false;
             }
-
-            // 退場動畫 (Exit): UI 元素淡出 → 遮罩覆蓋 → 頁面跳轉
+            // 退場動畫 (點擊連結時)
             exitAnimation(callback) {
                 if (this.isTransitioning) return;
                 this.isTransitioning = true;
-
-                // 停止 Lenis 滾動
                 if (window.lenis) window.lenis.stop();
-
-                const tl = gsap.timeline({
-                    onComplete: () => {
-                        if (callback) callback();
-                    }
-                });
-
-                // 1. UI 元素 stagger 向上滑出
-                tl.to('[data-transition-element]', {
-                    y: -50,
-                    opacity: 0,
-                    stagger: 0.03,
-                    duration: 0.5,
-                    ease: 'power2.in'
-                });
-
-                // 2. 黑色遮罩從下往上覆蓋
-                tl.to(this.overlay, {
-                    clipPath: 'inset(0 0 0% 0)',
-                    duration: 0.8,
-                    ease: 'power4.inOut'
-                }, '-=0.3');
-
-                // 3. Logo 淡入
-                tl.to(this.logo, {
-                    opacity: 1,
-                    duration: 0.3
-                }, '-=0.4');
-
+                const tl = gsap.timeline({ onComplete: () => { if (callback) callback(); } });
+                tl.to('[data-transition-element]', { y: -50, opacity: 0, stagger: 0.03, duration: 0.5, ease: 'power2.in' });
+                tl.to(this.overlay, { clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: 'power4.inOut' }, '-=0.3');
+                tl.to(this.logo, { opacity: 1, duration: 0.3 }, '-=0.4');
                 return tl;
             }
-
-            // 進場動畫 (Entry): 遮罩揭開 → UI 元素淡入
+            // 進場動畫 (頁面載入時)
             entryAnimation() {
                 const tl = gsap.timeline({
                     onComplete: () => {
                         this.isTransitioning = false;
-                        // 恢復 Lenis 滾動
                         if (window.lenis) window.lenis.start();
                     }
                 });
-
-                // 1. Logo 淡出
-                tl.to(this.logo, {
-                    opacity: 0,
-                    duration: 0.3
-                });
-
-                // 2. 遮罩從上往下揭開
-                tl.to(this.overlay, {
-                    clipPath: 'inset(0 0 100% 0)',
-                    duration: 0.8,
-                    ease: 'power4.inOut'
-                }, '-=0.1');
-
-                // 3. UI 元素 stagger 向下滑入
-                tl.from('[data-transition-element]', {
-                    y: 50,
-                    opacity: 0,
-                    stagger: 0.03,
-                    duration: 0.6,
-                    ease: 'power2.out'
-                }, '-=0.5');
-
+                tl.to(this.logo, { opacity: 0, duration: 0.3 });
+                tl.to(this.overlay, { clipPath: 'inset(0 0 100% 0)', duration: 0.8, ease: 'power4.inOut' }, '-=0.1');
+                tl.from('[data-transition-element]', { y: 50, opacity: 0, stagger: 0.03, duration: 0.6, ease: 'power2.out' }, '-=0.5');
                 return tl;
             }
-
-            // Link Interception: 攔截內部連結，先執行退場動畫再跳轉
+            // 連結攔截器
             interceptLinks() {
                 const links = document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"])');
-
                 links.forEach(link => {
                     link.addEventListener('click', (e) => {
                         const href = link.getAttribute('href');
-
-                        // 忽略外部連結、錨點、mailto 和 tel
-                        if (!href ||
-                            href.startsWith('http') ||
-                            href.startsWith('#') ||
-                            href.startsWith('mailto:') ||
-                            href.startsWith('tel:')) {
-                            return;
-                        }
-
+                        if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
                         e.preventDefault();
 
-                        // Close menu if open (Check menu overlay visibility)
+                        // 如果選單是開著的，先執行關閉動畫
                         if (typeof menuTl !== 'undefined' && document.getElementById('menuOverlay').style.visibility !== 'hidden') {
                             menuTl.reverse();
                         }
 
-                        // 執行退場動畫後導航
-                        this.exitAnimation(() => {
-                            window.location.href = href;
-                        });
+                        this.exitAnimation(() => { window.location.href = href; });
                     });
                 });
             }
         }
-
         /* ========================================
            MAIN INITIALIZATION
            ======================================== */
@@ -4893,36 +4828,34 @@
 
             function onSplineLoad() {
                 loadedCount++;
-                // 當所有 spline-viewer 載入完成（或至少有一個載入）
-                if (!splineLoaded && loadedCount >= 1) {
+                console.log(`Spline loaded: ${loadedCount}/${totalSplineViewers}`);
+
+                if (!splineLoaded && loadedCount >= 1) { // 至少有一個載入就好 (因為只有一個 main viewer)
                     splineLoaded = true;
-                    console.log('Spline loaded:', loadedCount, '/', totalSplineViewers);
-                    // 如果假進度已完成，立即跑到 100%
-                    if (trickleComplete) {
-                        completeLoading();
+                    // 如果正在執行 loading sequence，呼叫 finish
+                    if (typeof window.finishLoader === 'function') {
+                        window.finishLoader();
                     }
                 }
             }
 
             // 為每個 spline-viewer 註冊事件監聽
             splineViewers.forEach((viewer, index) => {
-                // 嘗試監聽多種可能的事件
                 viewer.addEventListener('load', onSplineLoad);
-                viewer.addEventListener('ready', onSplineLoad);
-
-                console.log(`Spline viewer ${index + 1} event listeners registered`);
+                // 有時候 load 不觸發，用 web components 屬性檢查
+                if (viewer.shadowRoot) onSplineLoad();
             });
 
-            // 超時保護：4 秒後強制完成（縮短等待時間）
+            // 超時保護：2.5 秒後強制完成 (以免 CDN 掛掉導致卡死)
             setTimeout(() => {
                 if (!splineLoaded) {
-                    console.log('Spline load timeout - proceeding anyway');
+                    console.log('Spline load timeout - forcing entry');
                     splineLoaded = true;
-                    if (trickleComplete) {
-                        completeLoading();
+                    if (typeof window.finishLoader === 'function') {
+                        window.finishLoader();
                     }
                 }
-            }, 4000);
+            }, 2500);
 
             // 完成載入的函數
             function completeLoading() {
@@ -4965,8 +4898,8 @@
                 });
             }
 
-            // SessionStorage 檢查：如果是回訪用戶，直接跳過 loading
-            if (sessionStorage.getItem('visited')) {
+            // SessionStorage 檢查：如果是回訪用戶，本應跳過，但為了測試，我們總是顯示 loading
+            if (false && sessionStorage.getItem('visited')) {
                 // 隱藏 loading
                 loaderScreen.style.display = 'none';
 
@@ -4989,60 +4922,55 @@
             }
 
             function startLoadingSequence() {
-                // 優化的多階段假進度（更自然的載入感受）
-                const trickleTimeline = gsap.timeline();
+                // OPTIMIZED LOADER V3: "The Smart Race"
+                // 邏輯優化：確保 "體感流暢度" 最優先。
+                // 1. 動畫會穩定的在 2.5 秒內跑完 0-100%。
+                // 2. 如果 Spline 提早載入，我們不會突然加速跳過，而是讓動畫跑完（保持優雅）。
+                // 3. 如果 Spline 載入太慢，我們不等了，直接進場（避免卡住）。
 
-                // 階段 1: 快速啟動 0 → 60%（模擬快速初始化）
-                trickleTimeline.to(progressObj, {
-                    val: 60,
+                const masterTl = gsap.timeline({
+                    onComplete: completeLoading
+                });
+
+                // 階段 1: 0 -> 40% (快速啟動)
+                masterTl.to(progressObj, {
+                    val: 40,
                     duration: 0.8,
                     ease: "power2.out",
-                    onUpdate: () => {
-                        loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
-                        loaderBar.style.width = `${progressObj.val}%`;
-                    }
+                    onUpdate: updateLoaderUI
                 })
-                    // 階段 2: 減速 60% → 85%（模擬資源載入）
+                    // 階段 2: 40 -> 80% (穩定加載)
                     .to(progressObj, {
-                        val: 85,
-                        duration: 0.6,
+                        val: 80,
+                        duration: 1.0,
                         ease: "power1.inOut",
-                        onUpdate: () => {
-                            loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
-                            loaderBar.style.width = `${progressObj.val}%`;
-                        }
+                        onUpdate: updateLoaderUI
                     })
-                    // 階段 3: 緩慢接近 85% → 90%（模擬最後處理）
+                    // 階段 3: 80 -> 100% (最後衝刺，確保一定會跑完)
                     .to(progressObj, {
-                        val: 90,
-                        duration: 0.4,
-                        ease: "power1.in",
-                        onUpdate: () => {
-                            loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
-                            loaderBar.style.width = `${progressObj.val}%`;
-                        },
-                        onComplete: () => {
-                            trickleComplete = true;
-                            // 如果 Spline 已經載入完成，立即執行 100%
-                            if (splineLoaded) {
-                                completeLoading();
-                            } else {
-                                // 否則進入「緩步等待」模式：90% -> 99% (極慢)
-                                breatheAnimation = gsap.to(progressObj, {
-                                    val: 99,
-                                    duration: 10,
-                                    ease: "power1.out",
-                                    onUpdate: () => {
-                                        loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
-                                        loaderBar.style.width = `${progressObj.val}%`;
-                                    }
-                                });
-                            }
-                        }
+                        val: 100,
+                        duration: 0.8,
+                        ease: "power2.inOut",
+                        onUpdate: updateLoaderUI
                     });
 
-
+                // 額外邏輯：如果 Spline 真的很快載入完了，我們可以稍微把時間軸加速一點點，但不用太誇張
+                window.finishLoader = function () {
+                    console.log("Spline loaded early/on-time. Smoothly accelerating finish.");
+                    if (masterTl.isActive()) {
+                        masterTl.timeScale(1.5); // 稍微加速完成，而不是直接跳轉
+                    }
+                };
             }
+
+            // 更新 UI 的輔助函數
+            function updateLoaderUI() {
+                if (loaderCounter) loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
+                if (loaderBar) loaderBar.style.width = `${progressObj.val}%`;
+            }
+
+
+
 
             // --- Cursor Logic ---
             const cursorDot = document.querySelector('#nu-wrapper .cursor-dot');
