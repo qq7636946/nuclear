@@ -47,10 +47,7 @@
     <!-- ==========================================
          Favicon 和 App Icons
          ========================================== -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
     <meta name="theme-color" content="#ccff00">
 
     <!-- ==========================================
@@ -2726,8 +2723,9 @@
             /* --- Horizontal Staggered Scroll Animation --- */
 
             /* Hide desktop-only elements */
+            /* Hide desktop-only elements */
             #tech-dashboard-nav,
-            #nu-wrapper .cursor-wrapper,
+            /* #nu-wrapper .cursor-wrapper, Removed to keep cursor visible */
             #nu-wrapper .global-grid-lines,
             #nu-wrapper .scroll-indicator-2025 {
                 display: none !important;
@@ -2740,7 +2738,7 @@
 
             #nu-wrapper .pinned-content {
                 position: relative !important;
-                height: auto !important;
+                /* height: auto !important; */
             }
 
             #nu-wrapper .explosive-wrapper {
@@ -3425,6 +3423,8 @@
             }
 
             /* --- MODIFYING CURSOR VISIBILITY HERE FOR TOUCH DEVICES --- */
+            /* Removed cursor hiding logic to allow custom cursor on smaller screens */
+            /*
             #nu-wrapper .cursor-wrapper {
                 display: none !important;
             }
@@ -3432,6 +3432,7 @@
             #nu-wrapper {
                 cursor: auto !important;
             }
+            */
         }
 
         @media (max-width: 768px) {
@@ -3441,6 +3442,15 @@
 
             #nu-wrapper .menu-footer-info {
                 grid-template-columns: 1fr;
+            }
+
+            /* HIDE CUSTOM CURSOR ON MOBILE, RESTORE SYSTEM CURSOR */
+            #nu-wrapper .cursor-wrapper {
+                display: none !important;
+            }
+
+            #nu-wrapper {
+                cursor: auto !important;
             }
         }
 
@@ -3978,6 +3988,9 @@
                         <spline-viewer
                             url="https://prod.spline.design/rcBB4ZRQXel88K6R/scene.splinecode"></spline-viewer>
                     </div>
+
+                    <!-- Optimized Spline Loading -->
+
 
 
                     <!-- Text Overlay -->
@@ -5226,6 +5239,14 @@
                     this.container = document.getElementById('bg-canvas');
                     if (!this.container || typeof THREE === 'undefined') return;
 
+                    // Mobile Optimization: Disable on small screens
+                    if (window.innerWidth <= 1120) return;
+
+
+                    const width = window.innerWidth;
+                    const height = window.innerHeight;
+                    if (width === 0 || height === 0) return;
+
                     this.scene = new THREE.Scene();
                     this.scene.fog = new THREE.FogExp2(0x050505, 0.05);
                     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -5345,6 +5366,7 @@
                         this.mouseY = event.clientY / window.innerHeight - 0.5;
                     });
                     window.addEventListener('resize', () => {
+                        if (window.innerWidth === 0 || window.innerHeight === 0) return;
                         this.camera.aspect = window.innerWidth / window.innerHeight;
                         this.camera.updateProjectionMatrix();
                         this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -5355,6 +5377,7 @@
 
                 render() {
                     if (!this.renderer) return;
+                    if (window.innerWidth <= 1120) return; // Mobile Optimization: Stop rendering on small screens
                     const elapsedTime = this.clock.getElapsedTime();
                     const scrollScatter = this.params.scatter;
                     const scatterVal = scrollScatter;
@@ -5417,7 +5440,7 @@
             if (window.ScrollTrigger && particleBg && particleBg.params) {
                 gsap.to(particleBg.params, {
                     scatter: 1, ease: "power1.inOut",
-                    scrollTrigger: { trigger: ".particle-pin-spacer", start: "top top", end: "bottom top", scrub: true }
+                    scrollTrigger: { trigger: ".particle-pin-spacer", start: "top top", end: "top+=100", scrub: true }
                 });
                 ScrollTrigger.create({
                     trigger: ".particle-pin-spacer", start: "top top", end: "bottom top", scrub: true,
