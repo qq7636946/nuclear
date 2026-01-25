@@ -354,6 +354,8 @@
             pointer-events: none;
             z-index: 9999;
             mix-blend-mode: difference;
+            /* 關鍵修改：預設隱藏游標，等待 JS 偵測到滑鼠移動後開啟 */
+            opacity: 0;
         }
 
         .cursor-dot {
@@ -1552,34 +1554,55 @@
         let lastProgress = 0;
 
         lenis.on('scroll', (e) => {
-            const currentProgress = Math.max(lastProgress, e.progress * 100);
-            lastProgress = currentProgress;
+            const currentProgress = e.progress * 100;
             if (progressBar) progressBar.style.height = `${currentProgress}%`;
             if (scrollVal) scrollVal.innerText = Math.floor(e.scroll).toString().padStart(4, '0');
         });
 
-        // Cursor Logic
+        /* =========================================
+           FIXED CURSOR LOGIC (Prevent Jump)
+           ========================================= */
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorFollower = document.querySelector('.cursor-follower');
         const cursorText = document.querySelector('.cursor-text');
+        const cursorWrapper = document.querySelector('.cursor-wrapper');
+
         const xTo = gsap.quickSetter(cursorDot, "x", "px"), yTo = gsap.quickSetter(cursorDot, "y", "px");
         const xToFollower = gsap.quickSetter(cursorFollower, "x", "px"), yToFollower = gsap.quickSetter(cursorFollower, "y", "px");
+
         let mouseX = 0, mouseY = 0, followerPos = { x: 0, y: 0 };
+        let isCursorVisible = false; // 用來追蹤游標是否已顯示
 
         gsap.set(cursorDot, { xPercent: -50, yPercent: -50 });
         gsap.set(cursorFollower, { xPercent: -50, yPercent: -50 });
 
         document.addEventListener('mousemove', e => {
-            mouseX = e.clientX; mouseY = e.clientY; xTo(mouseX); yTo(mouseY);
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            xTo(mouseX);
+            yTo(mouseY);
+
+            // 當滑鼠第一次移動時，淡入顯示游標
+            if (!isCursorVisible) {
+                isCursorVisible = true;
+                gsap.to(cursorWrapper, { opacity: 1, duration: 0.5 });
+            }
         });
 
         const lerp = (start, end, factor) => start + (end - start) * factor;
 
         gsap.ticker.add(() => {
-            followerPos.x = lerp(followerPos.x, mouseX, 0.12);
-            followerPos.y = lerp(followerPos.y, mouseY, 0.12);
-            xToFollower(followerPos.x);
-            yToFollower(followerPos.y);
+            // 只有當游標可見時，Follower 才需要追蹤，避免在後台浪費計算資源
+            if (isCursorVisible) {
+                followerPos.x = lerp(followerPos.x, mouseX, 0.12);
+                followerPos.y = lerp(followerPos.y, mouseY, 0.12);
+                xToFollower(followerPos.x);
+                yToFollower(followerPos.y);
+            } else {
+                // 初始化狀態，確保它跟隨 (0,0) 或初始位置，雖然不可見但避免突然閃現
+                followerPos.x = mouseX;
+                followerPos.y = mouseY;
+            }
         });
 
         document.querySelectorAll('[data-cursor]').forEach(el => {
