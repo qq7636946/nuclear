@@ -220,7 +220,7 @@
             }
 
             .hero-mobile-video-container {
-                display: block !important;
+                display: none !important;
             }
 
             #bg-canvas {
@@ -3516,9 +3516,7 @@
         }
 
         @media (max-width: 1120px) {
-            .spline_pc {
-                display: none;
-            }
+
 
             .spline_mobile {
                 display: block;
@@ -4049,14 +4047,44 @@
                     <!-- PC: Spline Viewer -->
                     <div class="spline-container spline_pc">
                         <div class="spline-wrapper">
-                            <spline-viewer loading="lazy"
-                                url="https://prod.spline.design/P9GeC1WeLuHJmIu9/scene.splinecode"></spline-viewer>
+                            <!-- URL removed for conditional loading script below -->
+                            <spline-viewer loading="lazy" id="spline-viewer-pc"></spline-viewer>
                         </div>
                     </div>
 
+                    <div class="spline-container spline_mobile">
+                        <div class="spline-wrapper">
+                            <!-- URL removed for conditional loading script below -->
+                            <spline-viewer loading="lazy" id="spline-viewer-mobile"></spline-viewer>
+                        </div>
+                    </div>
+
+                    <!-- CONDITIONAL JS FOR SPLINE & PERFORMANCE -->
+                    <script>
+                        (function () {
+                            const width = window.innerWidth;
+                            const mobileBreak = 1120;
+                            const pcUrl = 'https://prod.spline.design/P9GeC1WeLuHJmIu9/scene.splinecode';
+                            const mobileUrl = 'https://prod.spline.design/rcBB4ZRQXel88K6R/scene.splinecode';
+
+                            const pcViewer = document.getElementById('spline-viewer-pc');
+                            const mobileViewer = document.getElementById('spline-viewer-mobile');
+
+                            if (width > mobileBreak) {
+                                if (pcViewer) pcViewer.setAttribute('url', pcUrl);
+                                // Optional: Ensure mobile viewer doesn't load anything or remove it
+                                if (mobileViewer) mobileViewer.remove();
+                            } else {
+                                if (mobileViewer) mobileViewer.setAttribute('url', mobileUrl);
+                                // Optional: Remove PC viewer DOM to save memory
+                                if (pcViewer) pcViewer.remove();
+                            }
+                        })();
+                    </script>
+
                     <!-- MOBILE: Video Background -->
                     <div class="hero-mobile-video-container">
-                        <video autoplay muted loop playsinline class="hero-mobile-video" id="mobileHeroVideo">
+                        <video muted loop playsinline preload="none" class="hero-mobile-video" id="mobileHeroVideo">
                             <source src="https://clone.victorydesign.tw/wp-content/uploads/2026/01/n-rwd_3.mp4"
                                 type="video/mp4">
                         </video>
@@ -4096,45 +4124,55 @@
                         <div class="marquee-group">
                             <span class="marquee-text-solid">CREATIVE SYSTEM</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/4.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/4.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-outline">DESIGN PHILOSOPHY</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/3.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/3.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-solid">FUSION THINKING</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/2.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/2.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-outline">STRUCTURED CREATIVITY</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/0.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/0.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-solid">DESIGN WITH PURPOSE</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/1.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/1.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                         </div>
                         <div class="marquee-group">
                             <span class="marquee-text-solid">CREATIVE SYSTEM</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/4.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/4.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-outline">DESIGN PHILOSOPHY</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/3.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/3.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-solid">FUSION THINKING</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/2.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/2.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-outline">STRUCTURED CREATIVITY</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/0.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/0.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-solid">DESIGN WITH PURPOSE</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/1.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/1.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                         </div>
                     </div>
@@ -4146,45 +4184,55 @@
                         <div class="marquee-group">
                             <span class="marquee-text-solid">CREATIVE SYSTEM</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/4.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/4.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-outline">DESIGN PHILOSOPHY</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/3.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/3.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-solid">FUSION THINKING</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/2.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/2.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-outline">STRUCTURED CREATIVITY</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/0.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/0.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-solid">DESIGN WITH PURPOSE</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/1.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/1.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                         </div>
                         <div class="marquee-group">
                             <span class="marquee-text-solid">CREATIVE SYSTEM</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/4.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/4.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-outline">DESIGN PHILOSOPHY</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/3.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/3.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-solid">FUSION THINKING</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/2.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/2.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-outline">STRUCTURED CREATIVITY</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/0.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/0.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                             <span class="marquee-text-solid">DESIGN WITH PURPOSE</span>
                             <div class="marquee-item-logo"><img
-                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/1.svg" alt="Icon">
+                                    src="https://clone.victorydesign.tw/wp-content/uploads/2025/12/1.svg" alt="Icon"
+                                    width="50" height="50" loading="lazy">
                             </div>
                         </div>
                     </div>
@@ -4292,19 +4340,20 @@
                     </div>
                     <div class="float-item pos-1"><img
                             src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/2.png" class="float-img"
-                            alt="Nature"></div>
+                            alt="Nature" width="180" height="140" loading="lazy"></div>
                     <div class="float-item pos-2"><img
                             src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/4.png" class="float-img3"
-                            alt="Nature"></div>
+                            alt="Nature" width="150" height="150" loading="lazy"></div>
                     <div class="float-item pos-3" style="text-align:right;"><img
                             src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/3-1.png" class="float-img2"
-                            alt="Nature"></div>
+                            alt="Nature" width="240" height="240" loading="lazy"></div>
                     <div class="float-item pos-4">
                         <div class="float-pill">VEEPS</div>
                     </div>
                     <div class="float-item pos-5"><img
                             src="https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?q=80&w=300"
-                            class="float-img" style="width:120px; height:120px;"></div>
+                            class="float-img" style="width:120px; height:120px;" alt="Nature" width="120" height="120"
+                            loading="lazy"></div>
                 </div>
             </section>
 
@@ -4958,6 +5007,19 @@
                 const transitionManager = new PageTransitionManager();
                 const overlay = document.querySelector('.page-transition-overlay');
 
+                // NEW: Mobile check to skip the final dash animation
+                const isMobile = window.innerWidth <= 1120;
+                if (isMobile) {
+                    sessionStorage.setItem('visited', 'true');
+                    gsap.set(overlay, { clipPath: 'inset(0 0 0 0)' });
+                    gsap.set('.transition-logo', { opacity: 1 });
+                    loaderScreen.style.display = 'none';
+
+                    transitionManager.entryAnimation();
+                    transitionManager.interceptLinks();
+                    return;
+                }
+
                 // 從當前位置快速跑到 100%
                 gsap.to(progressObj, {
                     val: 100,
@@ -5057,6 +5119,15 @@
                 // 1. 動畫會穩定的在 2.5 秒內跑完 0-100%。
                 // 2. 如果 Spline 提早載入，我們不會突然加速跳過，而是讓動畫跑完（保持優雅）。
                 // 3. 如果 Spline 載入太慢，我們不等了，直接進場（避免卡住）。
+
+                const isMobile = window.innerWidth <= 1120;
+                if (isMobile) {
+                    const loaderContent = document.querySelector('.loader-content');
+                    if (loaderContent) loaderContent.style.visibility = 'hidden';
+
+                    window.finishLoader = completeLoading;
+                    return;
+                }
 
                 const masterTl = gsap.timeline({
                     onComplete: completeLoading
