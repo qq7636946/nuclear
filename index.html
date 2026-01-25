@@ -87,8 +87,8 @@
     <script defer src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
     <!-- WebGL Dependencies (Three.js) -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Spline Viewer -->
-    <script defer type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"></script>
+    <!-- Spline Viewer (Lazy Loaded) -->
+    <!-- <script defer type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"></script> -->
     <!-- lottie -->
     <script type="module" src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"></script>
 
@@ -133,7 +133,10 @@
     }
     </script>
 
-    <link rel="stylesheet" href="css/home-inline.css">
+    <link rel="stylesheet" href="css/home-inline.css" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="css/home-inline.css">
+    </noscript>
 
     <!-- ==========================================
          結構化資料 (JSON-LD)
@@ -1805,6 +1808,12 @@
             let particleBg;
             const initParticles = () => {
                 setTimeout(() => {
+                    // Lazy Load Spline Viewer
+                    const splineScript = document.createElement('script');
+                    splineScript.type = 'module';
+                    splineScript.src = 'https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js';
+                    document.body.appendChild(splineScript);
+
                     if (particleBg) return; // Prevent double init
                     particleBg = new ParticleBackground();
 
@@ -1854,7 +1863,7 @@
                     }
                     requestAnimationFrame(raf);
 
-                }, 200); // 200ms delay after load
+                }, 2500); // 2500ms delay for TBT optimization
             };
 
             // Robust check: Run immediately if loaded, otherwise wait
