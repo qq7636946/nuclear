@@ -89,8 +89,6 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Spline Viewer (Lazy Loaded) -->
     <!-- <script defer type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"></script> -->
-    <!-- lottie -->
-    <script type="module" src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"></script>
 
     <!-- ==========================================
          GSAP Animation Library (Deferred)
@@ -353,15 +351,23 @@
                     <!-- Spline Viewer (Single responsive instance) -->
                     <div class="spline-container spline_pc">
                         <div class="spline-wrapper">
-                            <spline-viewer loading="lazy"
+                            <div class="spline-loading">
+                                <div class="spinner"></div>
+                            </div>
+                            <spline-viewer loading="eager"
                                 url="https://prod.spline.design/P9GeC1WeLuHJmIu9/scene.splinecode"></spline-viewer>
                         </div>
                     </div>
 
 
                     <div class="spline_mobile">
-                        <spline-viewer
-                            url="https://prod.spline.design/rcBB4ZRQXel88K6R/scene.splinecode"></spline-viewer>
+                        <div class="spline-wrapper">
+                            <div class="spline-loading">
+                                <div class="spinner"></div>
+                            </div>
+                            <spline-viewer loading="eager"
+                                url="https://prod.spline.design/rcBB4ZRQXel88K6R/scene.splinecode"></spline-viewer>
+                        </div>
                     </div>
 
                     <!-- Optimized Spline Loading -->
@@ -836,6 +842,440 @@
                 </div>
             </section>
 
+            <!-- COMPONENT CREATOR UI SECTION -->
+            <style>
+                .section-component-creator {
+                    background-color: #111;
+                    padding: 4rem 1rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    min-height: 100vh;
+                    font-family: 'Inter', sans-serif;
+                }
+
+                .cc-card {
+                    width: 100%;
+                    max-width: 64rem;
+                    /* max-w-5xl */
+                    background-color: #1c1c1e;
+                    border-radius: 1.5rem;
+                    /* rounded-3xl */
+                    overflow: hidden;
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                    /* shadow-2xl */
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    min-height: 500px;
+                }
+
+                @media (min-width: 768px) {
+                    .cc-card {
+                        flex-direction: row;
+                    }
+                }
+
+                .bg-grid-dashed {
+                    background-image:
+                        linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+                    background-size: 40px 40px;
+                    pointer-events: none;
+                    opacity: 0.5;
+                    position: absolute;
+                    inset: 0;
+                }
+
+                .cc-left-col {
+                    position: relative;
+                    z-index: 10;
+                    width: 100%;
+                    padding: 2.5rem;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                }
+
+                @media (min-width: 768px) {
+                    .cc-left-col {
+                        width: 50%;
+                        padding: 4rem;
+                        /* p-16 */
+                    }
+                }
+
+                .glow-icon {
+                    background: linear-gradient(135deg, #fca5a5 0%, #ef4444 50%, #a855f7 100%);
+                    box-shadow: 0 0 20px rgba(239, 68, 68, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2);
+                    width: 4rem;
+                    height: 4rem;
+                    border-radius: 1rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: relative;
+                    z-index: 10;
+                }
+
+                .cc-title {
+                    font-size: 2.25rem;
+                    line-height: 1.1;
+                    font-weight: 900;
+                    letter-spacing: -0.025em;
+                    margin-bottom: 1.5rem;
+                    color: white;
+                }
+
+                @media (min-width: 768px) {
+                    .cc-title {
+                        font-size: 3rem;
+                        /* text-5xl */
+                    }
+                }
+
+                .cc-desc {
+                    color: #6b7280;
+                    /* text-gray-500 */
+                    font-size: 0.875rem;
+                    line-height: 1.625;
+                    max-width: 24rem;
+                }
+
+                @media (min-width: 768px) {
+                    .cc-desc {
+                        font-size: 1rem;
+                    }
+                }
+
+                .cc-right-col {
+                    position: relative;
+                    z-index: 10;
+                    width: 100%;
+                    background-color: rgba(28, 28, 30, 0.5);
+                    backdrop-filter: blur(4px);
+                    border-top: 1px solid rgba(255, 255, 255, 0.05);
+                    padding: 2rem;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                }
+
+                @media (min-width: 768px) {
+                    .cc-right-col {
+                        width: 50%;
+                        border-top: 0;
+                        border-left: 1px solid rgba(255, 255, 255, 0.05);
+                        padding: 3rem;
+                        /* p-12 */
+                    }
+                }
+
+                .custom-checkbox {
+                    appearance: none;
+                    background-color: white;
+                    border-radius: 4px;
+                    display: grid;
+                    place-content: center;
+                    transition: all 0.2s;
+                    width: 1.5rem;
+                    height: 1.5rem;
+                    cursor: pointer;
+                    border: none;
+                }
+
+                .custom-checkbox::before {
+                    content: "";
+                    width: 10px;
+                    height: 10px;
+                    transform: scale(0);
+                    transition: 0.1s transform ease-in-out;
+                    box-shadow: inset 1em 1em white;
+                    transform-origin: center;
+                    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+                }
+
+                .custom-checkbox:checked {
+                    background-color: #3b82f6;
+                    border-color: #3b82f6;
+                }
+
+                .custom-checkbox:checked::before {
+                    transform: scale(1);
+                }
+
+                .toggle-switch {
+                    position: relative;
+                    display: inline-flex;
+                    align-items: center;
+                    cursor: pointer;
+                }
+
+                .toggle-switch input {
+                    appearance: none;
+                    position: absolute;
+                    width: 1px;
+                    height: 1px;
+                    padding: 0;
+                    margin: -1px;
+                    overflow: hidden;
+                    clip: rect(0, 0, 0, 0);
+                    white-space: nowrap;
+                    border-width: 0;
+                }
+
+                .toggle-track {
+                    width: 2.75rem;
+                    height: 1.5rem;
+                    background-color: #4b5563;
+                    border-radius: 9999px;
+                    transition: all 0.2s;
+                    position: relative;
+                }
+
+                .toggle-switch input:checked+.toggle-track {
+                    background-color: rgba(20, 184, 166, 0.8);
+                    /* teal-500/80 */
+                }
+
+                .toggle-thumb {
+                    position: absolute;
+                    top: 2px;
+                    left: 2px;
+                    background-color: white;
+                    border: 1px solid #d1d5db;
+                    border-radius: 9999px;
+                    height: 1.25rem;
+                    width: 1.25rem;
+                    transition: all 0.2s;
+                }
+
+                .toggle-switch input:checked+.toggle-track .toggle-thumb {
+                    transform: translateX(100%);
+                    border-color: white;
+                }
+
+                .list-item-selected {
+                    border: 1px solid #3b82f6;
+                    background-color: rgba(59, 130, 246, 0.1);
+                }
+
+                .cc-item-row {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    padding: 0.5rem;
+                    border-radius: 0.25rem;
+                    border: 1px solid transparent;
+                    transition: border-color 0.2s;
+                    cursor: pointer;
+                    position: relative;
+                }
+
+                .cc-item-row:hover {
+                    border-color: #4b5563;
+                }
+
+                /* Utility helper for text colors in this block */
+                .text-gray-200 {
+                    color: #e5e7eb;
+                }
+
+                .text-gray-300 {
+                    color: #d1d5db;
+                }
+
+                .text-gray-400 {
+                    color: #9ca3af;
+                }
+
+                .text-gray-600 {
+                    color: #4b5563;
+                }
+
+                .text-white {
+                    color: white;
+                }
+
+                .text-blue-500 {
+                    color: #3b82f6;
+                }
+
+                /* Fallback */
+
+                /* Icon detail (diamonds) */
+                .icon-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 0.25rem;
+                    opacity: 0.8;
+                }
+
+                .icon-dot {
+                    width: 0.75rem;
+                    height: 0.75rem;
+                    background-color: rgba(255, 255, 255, 0.8);
+                    transform: rotate(45deg);
+                }
+
+                .glow-blur {
+                    position: absolute;
+                    inset: 0;
+                    background-color: #ef4444;
+                    filter: blur(40px);
+                    opacity: 0.4;
+                    transition: opacity 0.5s;
+                }
+
+                .glow-icon-container:hover .glow-blur {
+                    opacity: 0.6;
+                }
+            </style>
+
+            <section class="section-component-creator">
+                <!-- Main Container Card -->
+                <div class="cc-card">
+
+                    <!-- Background Grid Lines Overlay -->
+                    <div class="bg-grid-dashed"></div>
+
+                    <!-- Left Column: Branding & Info -->
+                    <div class="cc-left-col">
+
+                        <!-- Glowing Icon -->
+                        <div class="glow-icon-container" style="margin-bottom: 2rem; position: relative;">
+                            <div class="glow-icon">
+                                <div class="icon-grid">
+                                    <div class="icon-dot"></div>
+                                    <div class="icon-dot"></div>
+                                    <div class="icon-dot"></div>
+                                    <div class="icon-dot"></div>
+                                </div>
+                            </div>
+                            <!-- Back glow blur -->
+                            <div class="glow-blur"></div>
+                        </div>
+
+                        <!-- Title -->
+                        <h1 class="cc-title">
+                            CONTROL TO CREATE <br>
+                            AS <span class="text-white">COMPONENT</span> <span class="text-gray-600">OR</span> <br>
+                            PLAIN LAYERS
+                        </h1>
+
+                        <!-- Description -->
+                        <p class="cc-desc">
+                            Each UI element can be pasted as plain layers if you're just experimenting or as component
+                            if you're ready to commit
+                        </p>
+                    </div>
+
+                    <!-- Right Column: Interactive UI -->
+                    <div class="cc-right-col">
+
+                        <!-- Toggle Switch Header -->
+                        <div
+                            style="display: flex; align-items: center; justify-content: flex-end; margin-bottom: 2rem; gap: 0.75rem;">
+                            <!-- Toggle -->
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <div class="toggle-track">
+                                    <div class="toggle-thumb"></div>
+                                </div>
+                            </label>
+                            <span
+                                style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; color: #d1d5db; text-transform: uppercase;">Create
+                                as component</span>
+                        </div>
+
+                        <!-- Selection List Box -->
+                        <div
+                            style="border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 0.5rem; padding: 0.25rem; position: relative;">
+                            <!-- Decorative corner markers -->
+                            <div
+                                style="position: absolute; top: -4px; left: -4px; width: 8px; height: 8px; border-top: 1px solid #3b82f6; border-left: 1px solid #3b82f6;">
+                            </div>
+                            <div
+                                style="position: absolute; top: -4px; right: -4px; width: 8px; height: 8px; border-top: 1px solid #3b82f6; border-right: 1px solid #3b82f6;">
+                            </div>
+                            <div
+                                style="position: absolute; bottom: -4px; left: -4px; width: 8px; height: 8px; border-bottom: 1px solid #3b82f6; border-left: 1px solid #3b82f6;">
+                            </div>
+                            <div
+                                style="position: absolute; bottom: -4px; right: -4px; width: 8px; height: 8px; border-bottom: 1px solid #3b82f6; border-right: 1px solid #3b82f6;">
+                            </div>
+
+                            <!-- List Items -->
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem; padding: 0.5rem;">
+
+                                <!-- Item 1 -->
+                                <div class="group" style="position: relative;">
+                                    <div
+                                        style="font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 0.25rem; letter-spacing: 0.05em; margin-left: 0.25rem;">
+                                        Frame</div>
+                                    <div class="cc-item-row">
+                                        <input type="checkbox" class="custom-checkbox">
+                                        <span class="text-gray-200" style="font-size: 1.125rem;">Oranges</span>
+                                    </div>
+                                </div>
+
+                                <!-- Item 2 (Active/Selected) -->
+                                <div class="group" style="position: relative;">
+                                    <div
+                                        style="font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 0.25rem; letter-spacing: 0.05em; margin-left: 0.25rem;">
+                                        Frame</div>
+                                    <div class="cc-item-row list-item-selected"
+                                        style="position: relative; z-index: 10;">
+                                        <input type="checkbox" class="custom-checkbox" checked>
+                                        <span class="text-white" style="font-size: 1.125rem;">Mangos</span>
+                                    </div>
+                                    <!-- Blue outline simulation & handles -->
+                                    <div
+                                        style="position: absolute; inset: 0; border: 1px solid #3b82f6; pointer-events: none; border-radius: 0.25rem; transform: translateY(1rem); display: none;">
+                                    </div>
+                                </div>
+
+                                <!-- Item 3 -->
+                                <div class="group" style="position: relative; margin-top: 0.5rem;">
+                                    <div
+                                        style="font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 0.25rem; letter-spacing: 0.05em; margin-left: 0.25rem;">
+                                        Frame</div>
+                                    <div class="cc-item-row">
+                                        <input type="checkbox" class="custom-checkbox">
+                                        <span class="text-gray-200" style="font-size: 1.125rem;">Apples</span>
+                                    </div>
+                                </div>
+
+                                <!-- Item 4 -->
+                                <div class="group" style="position: relative;">
+                                    <div
+                                        style="font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 0.25rem; letter-spacing: 0.05em; margin-left: 0.25rem;">
+                                        Frame</div>
+                                    <div class="cc-item-row">
+                                        <input type="checkbox" class="custom-checkbox">
+                                        <span class="text-gray-200" style="font-size: 1.125rem;">Bananas</span>
+                                    </div>
+                                </div>
+
+                                <!-- Item 5 -->
+                                <div class="group" style="position: relative;">
+                                    <div
+                                        style="font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 0.25rem; letter-spacing: 0.05em; margin-left: 0.25rem;">
+                                        Frame</div>
+                                    <div class="cc-item-row">
+                                        <input type="checkbox" class="custom-checkbox">
+                                        <span class="text-gray-200" style="font-size: 1.125rem;">Kiwis</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
             <!-- PINNED TEXT REVEAL -->
             <section class="section-pinned-text">
                 <div class="pinned-text-container">
@@ -1113,6 +1553,10 @@
                     onComplete: () => {
                         this.isTransitioning = false;
                         if (window.lenis) window.lenis.start();
+                        // 進場動畫完成後更新錨點位置
+                        if (typeof updateAnchorPositions === 'function') {
+                            setTimeout(() => updateAnchorPositions(), 100);
+                        }
                     }
                 });
                 tl.to(this.logo, { opacity: 0, duration: 0.3 });
@@ -1169,6 +1613,24 @@
             const pillHeader = document.querySelector('.header-container');
             const scrollThreshold = 300;
 
+            // 動態計算並更新錨點位置
+            function updateAnchorPositions() {
+                const anchors = document.querySelectorAll('.tech-anchor-item');
+                const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+                anchors.forEach(anchor => {
+                    const targetId = anchor.getAttribute('data-target');
+                    const targetEl = document.querySelector(targetId);
+
+                    if (targetEl && scrollHeight > 0) {
+                        // 計算目標元素在頁面中的實際位置百分比
+                        const elementTop = targetEl.offsetTop;
+                        const percent = (elementTop / scrollHeight) * 100;
+                        anchor.style.top = `${Math.min(Math.max(percent, 0), 100)}%`;
+                    }
+                });
+            }
+
             if (window.ScrollTrigger) {
                 window.lenis.on('scroll', (e) => {
                     ScrollTrigger.update();
@@ -1194,6 +1656,14 @@
                 gsap.ticker.lagSmoothing(0);
             }
 
+            // 初始化錨點位置
+            updateAnchorPositions();
+
+            // 當窗口大小改變時重新計算
+            window.addEventListener('resize', () => {
+                setTimeout(updateAnchorPositions, 100);
+            });
+
             // Tech Anchors Click Event
             document.querySelectorAll('.tech-anchor-item').forEach(item => {
                 item.addEventListener('click', (e) => {
@@ -1205,158 +1675,140 @@
                 });
             });
 
-            // 2. Loading Animation (結合 Spline 載入狀態)
-            // window.lenis.stop();
+            // 2. Loading Animation (Wait for ALL Spline instances)
             const loaderCounter = document.querySelector(".loader-counter");
             const loaderBar = document.querySelector(".loader-progress-bar");
             const loaderScreen = document.querySelector(".loader-screen");
 
             let progressObj = { val: 0 };
             let splineLoaded = false;
-            let trickleComplete = false;
             let breatheAnimation = null;
 
             // 監聽所有 spline-viewer 的 load 事件
-            const splineViewers = document.querySelectorAll('spline-viewer');
+            const allSplineViewers = document.querySelectorAll('spline-viewer');
+
+            // Filter to only wait for VISIBLE viewers (avoids waiting for hidden PC version on Mobile and vice versa)
+            // Using offsetParent check is a reliable way to detect if an element or its ancestor is display: none
+            const splineViewers = Array.from(allSplineViewers).filter(el => el.offsetParent !== null);
+
             let loadedCount = 0;
             const totalSplineViewers = splineViewers.length;
+
+            console.log(`Visible Spline Viewers to wait for: ${totalSplineViewers}`);
 
             function onSplineLoad() {
                 loadedCount++;
                 console.log(`Spline loaded: ${loadedCount}/${totalSplineViewers}`);
 
-                if (!splineLoaded && loadedCount >= 1) { // 至少有一個載入就好 (因為只有一個 main viewer)
+                // Check if ALL VISIBLE are loaded (or if none are visible, proceed)
+                if (!splineLoaded && (totalSplineViewers === 0 || loadedCount >= totalSplineViewers)) {
                     splineLoaded = true;
-                    // 如果正在執行 loading sequence，呼叫 finish
-                    if (typeof window.finishLoader === 'function') {
-                        window.finishLoader();
+                    // Trigger finish
+                    if (typeof window.triggerLoadFinish === 'function') {
+                        window.triggerLoadFinish();
                     }
                 }
             }
 
-            // 為每個 spline-viewer 註冊事件監聽
-            splineViewers.forEach((viewer, index) => {
+            // If no viewers are visible (e.g. strict text mode or error), treat as loaded
+            if (totalSplineViewers === 0) {
+                console.log("No visible Spline viewers found. Skipping wait.");
+                // We'll let the initial timeout/interval handle this or trigger immediately
+                setTimeout(() => {
+                    splineLoaded = true;
+                    if (typeof window.triggerLoadFinish === 'function') {
+                        window.triggerLoadFinish();
+                    }
+                }, 100);
+            }
+
+            // 為每個 **visible** spline-viewer 註冊事件監聽
+            // Note: We still listen to all just in case visibility changes, but we only COUNT visible ones for the trigger.
+            // Actually, best to only listen to the ones we decided to wait for.
+            splineViewers.forEach((viewer) => {
                 viewer.addEventListener('load', onSplineLoad);
                 // 有時候 load 不觸發，用 web components 屬性檢查
                 if (viewer.shadowRoot) onSplineLoad();
             });
 
-            // 超時保護：2.5 秒後強制完成 (以免 CDN 掛掉導致卡死)
+            // Fallback Timeout (4s max wait)
             setTimeout(() => {
                 if (!splineLoaded) {
-                    console.log('Spline load timeout - forcing entry');
+                    console.warn('Spline load timeout (4s) - forcing entry.');
                     splineLoaded = true;
-                    if (typeof window.finishLoader === 'function') {
-                        window.finishLoader();
+                    if (typeof window.triggerLoadFinish === 'function') {
+                        window.triggerLoadFinish();
                     }
                 }
-            }, 2500);
+            }, 4000);
 
-            // 完成載入的函數
-            function completeLoading() {
+            // 完成載入並進場
+            function enterSite() {
                 // 停止呼吸動畫
                 if (breatheAnimation) {
                     breatheAnimation.kill();
                 }
 
-                // 初始化轉場管理器
+                // Initialize Transition Manager
                 const transitionManager = new PageTransitionManager();
                 const overlay = document.querySelector('.page-transition-overlay');
 
-                // 從當前位置快速跑到 100%
+                // Finish Progress Bar
                 gsap.to(progressObj, {
                     val: 100,
-                    duration: 0.4,
+                    duration: 0.5,
                     ease: "power2.out",
-                    onUpdate: () => {
-                        loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
-                        loaderBar.style.width = `${progressObj.val}%`;
-                    },
+                    onUpdate: updateLoaderUI,
                     onComplete: () => {
-                        // 標記已訪問
                         sessionStorage.setItem('visited', 'true');
 
-                        // 核心轉場邏輯：
-                        // 1. 確保轉場遮罩覆蓋全屏
                         gsap.set(overlay, { clipPath: 'inset(0 0 0 0)' });
-                        gsap.set('.transition-logo', { opacity: 1 }); // 確保 Logo 可見
+                        gsap.set('.transition-logo', { opacity: 1 });
 
-                        // 2. 隱藏原有的 Loading Screen
                         loaderScreen.style.display = 'none';
 
-                        // 3. 執行進場動畫 (Reveal)
                         transitionManager.entryAnimation();
-
-                        // 4. 初始化連結攔截 (確保導航時有退場動畫)
                         transitionManager.interceptLinks();
                     }
                 });
             }
 
-            // SessionStorage 檢查：如果是回訪用戶，本應跳過，但為了測試，我們總是顯示 loading
-            if (false && sessionStorage.getItem('visited')) {
-                // 隱藏 loading
-                loaderScreen.style.display = 'none';
-
-                // 立即初始化並執行進場
-                const transitionManager = new PageTransitionManager();
-                gsap.set('.page-transition-overlay', { clipPath: 'inset(0 0 0 0)' });
-                gsap.set('.transition-logo', { opacity: 1 });
-                transitionManager.entryAnimation();
-                transitionManager.interceptLinks();
-
-                // 標記 Spline 為已加載以免觸發超時邏輯
-                splineLoaded = true;
-                trickleComplete = true;
-
-                // 啟動 Lenis (entryAnimation 會做，但在這裡確保)
-                // window.lenis.start(); // entryAnimation onComplete 會呼叫
-            } else {
-                // 首次訪問：執行完整的假進度動畫
-                startLoadingSequence();
-            }
-
+            // Start Loading Sequence
             function startLoadingSequence() {
-                // OPTIMIZED LOADER V3: "The Smart Race"
-                // 邏輯優化：確保 "體感流暢度" 最優先。
-                // 1. 動畫會穩定的在 2.5 秒內跑完 0-100%。
-                // 2. 如果 Spline 提早載入，我們不會突然加速跳過，而是讓動畫跑完（保持優雅）。
-                // 3. 如果 Spline 載入太慢，我們不等了，直接進場（避免卡住）。
+                // Animate to 90% then WAIT
+                const tl = gsap.timeline();
 
-                const masterTl = gsap.timeline({
-                    onComplete: completeLoading
-                });
-
-                // 階段 1: 0 -> 40% (快速啟動)
-                masterTl.to(progressObj, {
+                tl.to(progressObj, {
                     val: 40,
-                    duration: 0.8,
+                    duration: 1,
                     ease: "power2.out",
                     onUpdate: updateLoaderUI
                 })
-                    // 階段 2: 40 -> 80% (穩定加載)
                     .to(progressObj, {
-                        val: 80,
-                        duration: 1.0,
+                        val: 90,
+                        duration: 2, // Slow down as we approach the "wait" zone
                         ease: "power1.inOut",
-                        onUpdate: updateLoaderUI
-                    })
-                    // 階段 3: 80 -> 100% (最後衝刺，確保一定會跑完)
-                    .to(progressObj, {
-                        val: 100,
-                        duration: 0.8,
-                        ease: "power2.inOut",
                         onUpdate: updateLoaderUI
                     });
 
-                // 額外邏輯：如果 Spline 真的很快載入完了，我們可以稍微把時間軸加速一點點，但不用太誇張
-                window.finishLoader = function () {
-                    console.log("Spline loaded early/on-time. Smoothly accelerating finish.");
-                    if (masterTl.isActive()) {
-                        masterTl.timeScale(1.5); // 稍微加速完成，而不是直接跳轉
-                    }
+                // Define the trigger function exposed to global scope
+                window.triggerLoadFinish = function () {
+                    console.log("Assets loaded. Finishing sequence.");
+                    // Kill the fake progress timeline
+                    tl.kill();
+                    // Execute entry
+                    enterSite();
                 };
+
+                // If already loaded by the time we invoke this (rare but possible with cache)
+                if (splineLoaded) {
+                    window.triggerLoadFinish();
+                }
             }
+
+            // Should skipping be allowed? Current requirement: strict wait.
+            // But we keep the loop logic for init.
+            startLoadingSequence();
 
             // 更新 UI 的輔助函數
             function updateLoaderUI() {
@@ -1807,13 +2259,46 @@
             // Defer Particle Initialization for TBT Optimization
             let particleBg;
             const initParticles = () => {
-                setTimeout(() => {
-                    // Lazy Load Spline Viewer
+                // Optimized Spline Viewer Loading
+                const loadSpline = () => {
                     const splineScript = document.createElement('script');
                     splineScript.type = 'module';
                     splineScript.src = 'https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js';
-                    document.body.appendChild(splineScript);
 
+                    // Listen for script load completion
+                    splineScript.onload = () => {
+                        // Wait for spline-viewer custom elements to be defined
+                        if (customElements.get('spline-viewer')) {
+                            attachSplineListeners();
+                        } else {
+                            customElements.whenDefined('spline-viewer').then(attachSplineListeners);
+                        }
+                    };
+
+                    document.head.appendChild(splineScript);
+                };
+
+                // Attach load event listeners to all spline-viewer elements
+                const attachSplineListeners = () => {
+                    document.querySelectorAll('spline-viewer').forEach(viewer => {
+                        viewer.addEventListener('load', () => {
+                            const wrapper = viewer.closest('.spline-wrapper');
+                            if (wrapper) {
+                                wrapper.classList.add('loaded');
+                            }
+                        });
+                    });
+                };
+
+                // Use requestIdleCallback for better performance
+                if ('requestIdleCallback' in window) {
+                    requestIdleCallback(loadSpline, { timeout: 800 });
+                } else {
+                    setTimeout(loadSpline, 500);
+                }
+
+                // Defer particle initialization
+                setTimeout(() => {
                     if (particleBg) return; // Prevent double init
                     particleBg = new ParticleBackground();
 
