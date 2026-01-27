@@ -3,7 +3,7 @@
 
 <head>
     <!-- ==========================================
-         NUCLEAR LABS - WORK LIST ARCHIVE (FASTER REVEAL)
+         NUCLEAR LABS - WORK LIST ARCHIVE (FIXED V5 - PROGRESS BAR)
          ========================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,7 +44,6 @@
             box-sizing: border-box;
         }
 
-        /* 修正滾動問題：移除 height: 100%，改用 min-height */
         html {
             overflow-x: hidden;
             height: auto;
@@ -59,21 +58,257 @@
             height: auto;
         }
 
+        /* =========================================
+           MENU OVERLAY STYLES
+           ========================================= */
+        .overlay-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--neon-color);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            padding: 60px 4vw;
+            box-sizing: border-box;
+            visibility: hidden;
+            clip-path: inset(0 0 100% 0);
+            overflow: hidden;
+        }
+
+        .overlay-header {
+            display: flex;
+            justify-content: flex-end;
+            padding: 30px 40px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 20;
+        }
+
+        .close-btn {
+            width: 80px;
+            height: 44px;
+            background-color: #000;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .close-icon {
+            width: 20px;
+            height: 20px;
+            position: relative;
+        }
+
+        .close-icon::before,
+        .close-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--neon-color);
+            transform: rotate(45deg);
+        }
+
+        .close-icon::after {
+            transform: rotate(-45deg);
+        }
+
+        .menu-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding-top: 40px;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 0;
+        }
+
+        .nav-list:hover .nav-item {
+            opacity: 0.25;
+            filter: blur(1px);
+        }
+
+        .nav-item {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 2.5vh 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: opacity 0.4s ease, filter 0.4s ease, border-color 0.4s ease;
+            cursor: pointer;
+        }
+
+        .nav-item:first-child {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item:hover {
+            opacity: 1 !important;
+            filter: blur(0) !important;
+            border-color: #000;
+        }
+
+        .nav-item-wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav-link {
+            font-size: clamp(3rem, 6vw, 7rem);
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            color: #000;
+            text-decoration: none;
+            line-height: 0.95;
+            text-transform: uppercase;
+            display: block;
+            letter-spacing: -0.04em;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+        }
+
+        .nav-item:hover .nav-link {
+            transform: translateX(30px);
+        }
+
+        .nav-meta-tag {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-num {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.4);
+            margin-right: 30px;
+            font-family: 'Syncopate', sans-serif;
+        }
+
+        .menu-footer-info {
+            position: absolute;
+            bottom: 40px;
+            left: 4vw;
+            width: calc(100% - 8vw);
+            padding: 30px 0 0 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            align-items: flex-start;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #000;
+            text-transform: uppercase;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.02em;
+            opacity: 0;
+        }
+
+        .menu-social {
+            display: flex;
+            gap: 30px;
+        }
+
+        .menu-social a {
+            color: #000;
+            text-decoration: none;
+            position: relative;
+            display: inline-block;
+            width: fit-content;
+            transition: opacity 0.3s;
+        }
+
+        .menu-social a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: #000;
+            transition: width 0.3s;
+        }
+
+        .menu-social a:hover::after {
+            width: 100%;
+        }
+
+        .menu-email {
+            text-align: right;
+        }
+
+        @media (max-width: 768px) {
+            .nav-link {
+                font-size: 2rem;
+            }
+
+            .nav-meta-tag {
+                display: none;
+            }
+
+            .menu-footer-info {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .menu-email {
+                text-align: left;
+            }
+
+            .close-btn {
+                width: 60px;
+                height: 40px;
+            }
+
+            .overlay-header {
+                padding: 20px;
+            }
+
+            .overlay-menu {
+                padding: 60px 20px;
+            }
+        }
+
         /* TRANSITION CURTAIN */
-        .transition-curtain {
+        .page-transition-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: #000;
-            z-index: 10000;
-            pointer-events: none;
-            /* Start state: Covering the screen */
-            clip-path: inset(0 0 0 0);
+            background: #000;
+            z-index: 99999;
             display: flex;
             justify-content: center;
             align-items: center;
+            pointer-events: none;
+            /* Default state */
+            clip-path: inset(0 0 0 0);
         }
 
         .transition-logo {
@@ -82,7 +317,8 @@
             color: var(--neon-color);
             font-size: 2rem;
             letter-spacing: 2px;
-            opacity: 0;
+            opacity: 1;
+            text-transform: uppercase;
         }
 
         /* Background Noise Canvas */
@@ -118,6 +354,8 @@
             pointer-events: none;
             z-index: 9999;
             mix-blend-mode: difference;
+            /* 關鍵修改：預設隱藏游標，等待 JS 偵測到滑鼠移動後開啟 */
+            opacity: 0;
         }
 
         .cursor-dot {
@@ -128,6 +366,7 @@
             position: absolute;
             top: 0;
             left: 0;
+            will-change: transform;
         }
 
         .cursor-follower {
@@ -141,7 +380,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.3s;
+            will-change: transform, width, height;
         }
 
         .cursor-text {
@@ -150,6 +392,7 @@
             opacity: 0;
             text-transform: uppercase;
             color: #000;
+            pointer-events: none;
         }
 
         body.hovered .cursor-follower {
@@ -200,21 +443,48 @@
             font-size: 1.2rem;
         }
 
-        .back-link {
-            font-family: var(--font-tech);
-            color: var(--neon-color);
-            text-decoration: none;
-            border: 1px solid var(--neon-color);
-            padding: 8px 20px;
-            border-radius: 20px;
-            transition: 0.3s;
-            text-transform: uppercase;
-            font-size: 0.8rem;
+        .header-actions {
+            display: flex;
+            gap: 12px;
         }
 
-        .back-link:hover {
-            background: var(--neon-color);
-            color: #000;
+        .btn {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 12px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s, color 0.3s;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-menu {
+            width: 60px;
+        }
+
+        .hamburger-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .hamburger-icon span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background-color: currentColor;
+        }
+
+        .btn-contact {
+            padding: 0 24px;
         }
 
         /* =========================================
@@ -282,7 +552,7 @@
         }
 
         /* =========================================
-           IRREGULAR LIST LAYOUT (FLEXBOX)
+           IRREGULAR LIST LAYOUT
            ========================================= */
         .work-list-container {
             position: relative;
@@ -290,12 +560,6 @@
             max-width: 1800px;
             margin: 0 auto;
             width: 100%;
-        }
-
-        /* Main Content Wrapper for Scale Effect */
-        #main-content {
-            transform-origin: center top;
-            will-change: transform;
         }
 
         .irregular-grid {
@@ -306,7 +570,6 @@
             position: relative;
         }
 
-        /* Base Work Item Style */
         .work-item {
             position: relative;
             display: flex;
@@ -318,7 +581,6 @@
             box-sizing: border-box;
         }
 
-        /* Image Container */
         .work-media {
             position: relative;
             width: 100%;
@@ -341,7 +603,6 @@
             filter: grayscale(0%) contrast(1);
         }
 
-        /* Tech Overlays */
         .tech-overlay {
             position: absolute;
             top: 0;
@@ -386,7 +647,6 @@
             border-right: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        /* Typography */
         .work-info {
             margin-top: 15px;
             position: relative;
@@ -436,7 +696,6 @@
                 margin-bottom: 0;
             }
 
-            /* Type A: Hero Left */
             .layout-type-a {
                 width: 58%;
                 margin-right: 42%;
@@ -446,7 +705,6 @@
                 aspect-ratio: 16/10;
             }
 
-            /* Type B: Vertical Right */
             .layout-type-b {
                 width: 33.33%;
                 margin-left: 66.66%;
@@ -458,7 +716,6 @@
                 aspect-ratio: 4/5;
             }
 
-            /* Type C: Wide Horizontal Offset */
             .layout-type-c {
                 width: 75%;
                 margin-left: 16.66%;
@@ -489,7 +746,6 @@
                 border-left-color: transparent;
             }
 
-            /* Type D: Small Insert */
             .layout-type-d {
                 width: 33.33%;
                 margin-left: 41.66%;
@@ -501,7 +757,6 @@
                 aspect-ratio: 1/1;
             }
 
-            /* Type E: Minimal/Typography */
             .layout-type-e {
                 width: 33.33%;
                 margin-left: 58.33%;
@@ -522,7 +777,6 @@
                 line-height: 0.9;
             }
 
-            /* Type F: Tall Left */
             .layout-type-f {
                 width: 41.66%;
                 margin-left: 8.33%;
@@ -533,7 +787,6 @@
                 aspect-ratio: 3/4;
             }
 
-            /* Type G: Full Width */
             .layout-type-g {
                 width: 100%;
                 margin-top: 50px;
@@ -633,9 +886,60 @@
         }
 
         @media (max-width: 1024px) {
+
+            .tech-sidebar,
+            .cursor-wrapper,
+            .global-grid-lines {
+                display: none !important;
+            }
+
+            .header-container {
+                top: 20px;
+            }
+
+            .pill-header {
+                width: 95%;
+                height: 60px;
+            }
+
+            .brand-logo {
+                font-size: 1rem;
+            }
+
+            .btn-contact span {
+                display: none;
+            }
+
+            .btn-contact::after {
+                content: '✉';
+                font-size: 1.2rem;
+            }
+
+            .work-header-section {
+                padding: 140px 5vw 60px 5vw;
+            }
+
+            .big-title {
+                font-size: clamp(2.5rem, 12vw, 4rem);
+            }
+
+            .filter-group {
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .filter-btn {
+                font-size: 0.85rem;
+            }
+
+            .work-list-container {
+                padding: 60px 5vw;
+            }
+
             .irregular-grid {
                 flex-direction: column;
-                gap: 80px;
+                gap: 0;
+                row-gap: 0;
             }
 
             .work-item {
@@ -644,11 +948,35 @@
                 margin-right: 0 !important;
                 margin-top: 0 !important;
                 transform: none !important;
+                margin-bottom: 24px !important;
+                position: relative;
+                border-radius: 12px;
+                overflow: visible;
+            }
+
+            .work-item::before {
+                content: '';
+                position: absolute;
+                top: 8px;
+                left: 8px;
+                right: -8px;
+                bottom: -8px;
+                background: linear-gradient(135deg, rgba(204, 255, 0, 0.1), rgba(204, 255, 0, 0.05));
+                border-radius: 12px;
+                z-index: -1;
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+
+            .work-item:hover::before {
+                opacity: 1;
             }
 
             .work-media {
-                aspect-ratio: 16/10 !important;
+                aspect-ratio: 4/3 !important;
                 width: 100% !important;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             }
 
             .work-info {
@@ -656,21 +984,41 @@
                 text-align: left !important;
                 border-right: none !important;
                 border-left: 2px solid transparent !important;
-                padding: 10px 0 0 12px !important;
+                padding: 12px 0 0 12px !important;
                 position: relative !important;
                 top: auto !important;
                 left: auto !important;
                 bottom: auto !important;
                 mix-blend-mode: normal !important;
             }
+
+            .work-title {
+                font-size: clamp(1.5rem, 5vw, 2rem) !important;
+            }
+
+            .work-index {
+                font-size: 0.7rem;
+            }
+
+            .work-tags {
+                font-size: 0.7rem;
+            }
+
+            .list-footer {
+                padding: 80px 0;
+                margin-top: 60px;
+            }
+
+            .next-project-link {
+                font-size: 8vw;
+            }
         }
     </style>
 </head>
 
 <body>
-
-    <!-- TRANSITION CURTAIN -->
-    <div class="transition-curtain">
+    <!-- PAGE TRANSITION OVERLAY -->
+    <div class="page-transition-overlay" style="clip-path: inset(0 0 0 0);">
         <div class="transition-logo">NUCLEAR LABS</div>
     </div>
 
@@ -682,14 +1030,81 @@
         <div class="cursor-dot"></div>
     </div>
 
-    <div class="header-container">
+    <div class="header-container" data-transition-element>
         <header class="pill-header">
             <a href="index.html" class="brand-logo" data-cursor="hover">NUCLEAR LABS</a>
-            <a href="index.html" class="back-link" data-cursor="hover">/// BACK TO HOME</a>
+            <div class="header-actions">
+                <button class="btn btn-menu" id="openMenu" aria-label="Menu" data-cursor="hover">
+                    <div class="hamburger-icon"><span></span><span></span><span></span></div>
+                </button>
+                <a href="#contact" class="btn btn-contact" data-cursor="hover"><span>CONTACT</span></a>
+            </div>
         </header>
     </div>
 
-    <div class="tech-sidebar">
+    <!-- NEW MENU OVERLAY STRUCTURE -->
+    <div class="overlay-menu" id="menuOverlay">
+        <div class="overlay-header">
+            <div class="close-btn" id="closeMenu" data-cursor="hover">
+                <div class="close-icon"></div>
+            </div>
+        </div>
+
+        <div class="menu-content">
+            <ul class="nav-list" id="navList">
+                <li class="nav-item">
+                    <div class="nav-item-wrapper"><span class="nav-num">01</span><a href="index.html" class="nav-link"
+                            data-cursor="hover">HOME</a></div>
+                    <div class="nav-meta-tag">Back to Main</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-item-wrapper"><span class="nav-num">02</span><a href="work.html" class="nav-link"
+                            data-cursor="hover">WORK</a></div>
+                    <div class="nav-meta-tag">Case Studies</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-item-wrapper"><span class="nav-num">03</span><a href="#about" class="nav-link"
+                            data-cursor="hover">ABOUT</a></div>
+                    <div class="nav-meta-tag">Studio Profile</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-item-wrapper"><span class="nav-num">04</span><a href="#services" class="nav-link"
+                            data-cursor="hover">SERVICES</a></div>
+                    <div class="nav-meta-tag">Capabilities</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-item-wrapper"><span class="nav-num">05</span><a href="#contact" class="nav-link"
+                            data-cursor="hover">CONTACT</a></div>
+                    <div class="nav-meta-tag">Get in Touch</div>
+                </li>
+            </ul>
+
+            <div class="menu-footer-info">
+                <div class="footer-col">
+                    <div class="footer-label">SAY HELLO</div>
+                    <div>HELLO@NUCLEARLABS.COM</div>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-label">LOCATED</div>
+                    <div>TOKYO, JAPAN</div>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-label">SOCIALS</div>
+                    <div class="menu-social">
+                        <a href="#" data-cursor="hover">IG</a>
+                        <a href="#" data-cursor="hover">TW</a>
+                        <a href="#" data-cursor="hover">LN</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-label">COPYRIGHT</div>
+                    <div>©2025 NUCLEAR LABS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tech-sidebar" data-transition-element>
         <div class="tech-line">
             <div class="tech-progress" id="progressBar"></div>
         </div>
@@ -702,7 +1117,7 @@
     <main id="main-content">
 
         <section class="work-header-section">
-            <div class="page-title-row">
+            <div class="page-title-row" data-transition-element>
                 <h1 class="big-title" data-speed="0.5">SELECTED<br><span>WORKS</span></h1>
                 <div class="filter-group">
                     <button class="filter-btn active" data-cursor="hover">ALL</button>
@@ -714,7 +1129,7 @@
         </section>
 
         <!-- Circular Reveal Transition Section -->
-        <section class="circular-reveal-section">
+        <section class="circular-reveal-section" data-transition-element>
             <div class="circle-mask-wrapper">
                 <div class="circle-mask"></div>
             </div>
@@ -724,7 +1139,7 @@
         </section>
 
         <!-- 15 ITEMS IRREGULAR GRID (FLEX) -->
-        <section class="work-list-container">
+        <section class="work-list-container" data-transition-element>
             <div class="irregular-grid">
 
                 <!-- 01: Type A -->
@@ -990,8 +1405,9 @@
             </div>
         </section>
 
-        <footer class="list-footer">
-            <p style="font-family: var(--font-tech); color: var(--text-muted); margin-bottom: 20px;">READY TO START?</p>
+        <footer class="list-footer" data-transition-element>
+            <p style="font-family: var(--font-tech); color: var(--text-muted); margin-bottom: 20px;">READY TO
+                START?</p>
             <a href="#" class="next-project-link" data-cursor="hover">CONTACT US</a>
         </footer>
 
@@ -1006,6 +1422,7 @@
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             smooth: true
         });
+        window.lenis = lenis;
 
         function raf(time) {
             lenis.raf(time);
@@ -1015,70 +1432,83 @@
 
         gsap.registerPlugin(ScrollTrigger);
 
-        // --- PAGE TRANSITION LOGIC (ZOOM EFFECTS) ---
+        /* ========================================
+           PAGE TRANSITION MANAGER CLASS
+           ======================================== */
+        class PageTransitionManager {
+            constructor() {
+                this.overlay = document.querySelector('.page-transition-overlay');
+                this.logo = document.querySelector('.transition-logo');
+                this.isTransitioning = false;
+            }
 
-        // 1. Entrance Animation (Load)
-        window.addEventListener('load', () => {
-            const tl = gsap.timeline();
-
-            // Set Initial Scale for Entrance Zoom Out Effect
-            gsap.set('#main-content', { scale: 1.15 });
-
-            // Reveal logo
-            tl.to('.transition-logo', { opacity: 1, duration: 0.5, ease: "power2.out" })
-                // Curtain Up
-                .to('.transition-curtain', {
-                    clipPath: "inset(0 0 100% 0)",
-                    duration: 1.2,
-                    ease: "power4.inOut",
-                    delay: 0.2
-                })
-                // Scale Content Down (Zoom Out) SIMULTANEOUSLY with curtain
-                .to('#main-content', {
-                    scale: 1,
-                    duration: 1.5,
-                    ease: "power3.out"
-                }, "-=1.2") // Start overlap with curtain
-
-                .set('.transition-curtain', { display: 'none' });
-
-            gsap.from('.big-title', { y: 100, opacity: 0, duration: 1.2, delay: 0.8, ease: "power4.out" });
-        });
-
-        // 2. Exit Animation (Click)
-        const internalLinks = document.querySelectorAll('a:not([target="_blank"]):not([href^="#"])');
-
-        internalLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                const href = link.getAttribute('href');
-                if (!href || href === '#') return;
-
-                e.preventDefault();
-
-                gsap.set('.transition-curtain', { display: 'flex', clipPath: "inset(100% 0 0 0)" });
+            // 退場動畫
+            exitAnimation(callback) {
+                if (this.isTransitioning) return;
+                this.isTransitioning = true;
+                if (window.lenis) window.lenis.stop();
 
                 const tl = gsap.timeline({
+                    onComplete: () => { if (callback) callback(); }
+                });
+
+                tl.to('[data-transition-element]', { y: -50, opacity: 0, stagger: 0.03, duration: 0.5, ease: 'power2.in' });
+                tl.to(this.overlay, { clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: 'power4.inOut' }, '-=0.3');
+                tl.to(this.logo, { opacity: 1, duration: 0.3 }, '-=0.4');
+                return tl;
+            }
+
+            // 進場動畫
+            entryAnimation() {
+                const tl = gsap.timeline({
                     onComplete: () => {
-                        window.location.href = href;
+                        this.isTransitioning = false;
+                        if (window.lenis) window.lenis.start();
                     }
                 });
 
-                // Curtain Down
-                tl.to('.transition-curtain', {
-                    clipPath: "inset(0 0 0 0)",
-                    duration: 0.8,
-                    ease: "power4.inOut"
-                })
-                    .to('.transition-logo', { opacity: 1, duration: 0.3 }, "-=0.3")
-                    // Add Subtle Zoom In & Fade Out for Content leaving
-                    .to('#main-content', {
-                        scale: 0.95,
-                        opacity: 0.5,
-                        duration: 0.8,
-                        ease: "power2.inOut"
-                    }, "-=0.8");
-            });
-        });
+                tl.to(this.logo, { opacity: 0, duration: 0.3 });
+                tl.to(this.overlay, { clipPath: 'inset(0 0 100% 0)', duration: 0.8, ease: 'power4.inOut' }, '-=0.1');
+                tl.from('[data-transition-element]', { y: 50, opacity: 0, stagger: 0.03, duration: 0.6, ease: 'power2.out' }, '-=0.5');
+                return tl;
+            }
+
+            interceptLinks() {
+                const links = document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"])');
+                links.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        const href = link.getAttribute('href');
+                        if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+                        e.preventDefault();
+                        this.exitAnimation(() => { window.location.href = href; });
+                    });
+                });
+            }
+        }
+
+        // --- SAFE INITIALIZATION LOGIC ---
+        function initApp() {
+            const transitionManager = new PageTransitionManager();
+            // 立即執行進場動畫
+            transitionManager.entryAnimation();
+            transitionManager.interceptLinks();
+
+            // 安全機制：3秒後如果遮罩還在，強制移除
+            setTimeout(() => {
+                const overlay = document.querySelector('.page-transition-overlay');
+                if (overlay && getComputedStyle(overlay).clipPath !== 'inset(0px 0px 100% 0px)') {
+                    gsap.to(overlay, { clipPath: 'inset(0 0 100% 0)', duration: 0.5, ease: 'power2.out' });
+                    if (window.lenis) window.lenis.start();
+                }
+            }, 3000);
+        }
+
+        // 檢查文件載入狀態，如果已經載入完成則立即執行，否則監聽 load 事件
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            initApp();
+        } else {
+            window.addEventListener('load', initApp);
+        }
 
 
         // --- PARALLAX & SCROLL REVEAL ---
@@ -1105,14 +1535,10 @@
                         clipPath: "inset(0% 0 0 0)", scale: 1,
                         duration: 1,
                         ease: "power4.inOut",
-                        scrollTrigger: {
-                            trigger: item,
-                            start: "top 100%"
-                        }
+                        scrollTrigger: { trigger: item, start: "top 100%" }
                     }
                 );
             }
-
             const info = item.querySelector('.work-info');
             if (info) {
                 gsap.fromTo(info,
@@ -1125,56 +1551,67 @@
         // Sidebar Progress
         const progressBar = document.getElementById('progressBar');
         const scrollVal = document.getElementById('scrollVal');
+        let lastProgress = 0;
 
         lenis.on('scroll', (e) => {
-            const progress = e.progress * 100;
-            progressBar.style.height = `${progress}%`;
-            scrollVal.innerText = Math.floor(e.scroll).toString().padStart(4, '0');
+            const currentProgress = e.progress * 100;
+            if (progressBar) progressBar.style.height = `${currentProgress}%`;
+            if (scrollVal) scrollVal.innerText = Math.floor(e.scroll).toString().padStart(4, '0');
         });
 
-        // Cursor
+        /* =========================================
+           FIXED CURSOR LOGIC (Prevent Jump)
+           ========================================= */
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorFollower = document.querySelector('.cursor-follower');
         const cursorText = document.querySelector('.cursor-text');
+        const cursorWrapper = document.querySelector('.cursor-wrapper');
 
-        const xTo = gsap.quickSetter(cursorDot, "x", "px");
-        const yTo = gsap.quickSetter(cursorDot, "y", "px");
-        const xToFollower = gsap.quickSetter(cursorFollower, "x", "px");
-        const yToFollower = gsap.quickSetter(cursorFollower, "y", "px");
+        const xTo = gsap.quickSetter(cursorDot, "x", "px"), yTo = gsap.quickSetter(cursorDot, "y", "px");
+        const xToFollower = gsap.quickSetter(cursorFollower, "x", "px"), yToFollower = gsap.quickSetter(cursorFollower, "y", "px");
 
-        let mouseX = 0, mouseY = 0;
-        let followerPos = { x: 0, y: 0 };
+        let mouseX = 0, mouseY = 0, followerPos = { x: 0, y: 0 };
+        let isCursorVisible = false; // 用來追蹤游標是否已顯示
 
         gsap.set(cursorDot, { xPercent: -50, yPercent: -50 });
         gsap.set(cursorFollower, { xPercent: -50, yPercent: -50 });
 
-        window.addEventListener('mousemove', (e) => {
+        document.addEventListener('mousemove', e => {
             mouseX = e.clientX;
             mouseY = e.clientY;
             xTo(mouseX);
             yTo(mouseY);
+
+            // 當滑鼠第一次移動時，淡入顯示游標
+            if (!isCursorVisible) {
+                isCursorVisible = true;
+                gsap.to(cursorWrapper, { opacity: 1, duration: 0.5 });
+            }
         });
 
+        const lerp = (start, end, factor) => start + (end - start) * factor;
+
         gsap.ticker.add(() => {
-            const dt = 1.0 - Math.pow(1.0 - 0.1, gsap.ticker.deltaRatio());
-            followerPos.x += (mouseX - followerPos.x) * dt;
-            followerPos.y += (mouseY - followerPos.y) * dt;
-            xToFollower(followerPos.x);
-            yToFollower(followerPos.y);
+            // 只有當游標可見時，Follower 才需要追蹤，避免在後台浪費計算資源
+            if (isCursorVisible) {
+                followerPos.x = lerp(followerPos.x, mouseX, 0.12);
+                followerPos.y = lerp(followerPos.y, mouseY, 0.12);
+                xToFollower(followerPos.x);
+                yToFollower(followerPos.y);
+            } else {
+                // 初始化狀態，確保它跟隨 (0,0) 或初始位置，雖然不可見但避免突然閃現
+                followerPos.x = mouseX;
+                followerPos.y = mouseY;
+            }
         });
 
         document.querySelectorAll('[data-cursor]').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 document.body.classList.add('hovered');
-                cursorText.innerText = el.dataset.cursor === 'view' ? "VIEW CASE" : "";
-                if (el.dataset.cursor === 'view') {
-                    gsap.to(cursorFollower, { width: 100, height: 100, duration: 0.3 });
-                }
+                if (el.dataset.cursor === 'view') cursorText.innerText = "VIEW"; else cursorText.innerText = "";
             });
             el.addEventListener('mouseleave', () => {
-                document.body.classList.remove('hovered');
-                cursorText.innerText = "";
-                gsap.to(cursorFollower, { width: 50, height: 50, duration: 0.3 });
+                document.body.classList.remove('hovered'); cursorText.innerText = "";
             });
         });
 
@@ -1205,15 +1642,44 @@
         }
         animateBg();
 
+        // --- MENU LOGIC ---
+        const menuOverlay = document.getElementById('menuOverlay');
+        const openMenuBtn = document.getElementById('openMenu');
+        const closeMenuBtn = document.getElementById('closeMenu');
+
+        const menuTl = gsap.timeline({ paused: true });
+        gsap.set(".nav-link", { y: "110%", skewY: 10 });
+        gsap.set(".nav-item", { borderBottomColor: "rgba(0,0,0,0)" });
+        gsap.set(".menu-footer-info", { opacity: 0, y: 20 });
+        gsap.set("#menuOverlay", { autoAlpha: 0, clipPath: 'inset(0 0 100% 0)' });
+
+        menuTl.to("#menuOverlay", { autoAlpha: 1, clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: "power4.inOut" })
+            .to(".nav-link", { y: "0%", skewY: 0, duration: 0.8, stagger: 0.05, ease: "power4.out" }, "-=0.6")
+            .to(".menu-footer-info", { opacity: 1, y: 0, duration: 0.5 }, "-=0.4");
+
+        if (openMenuBtn) openMenuBtn.addEventListener('click', () => {
+            if (window.lenis) window.lenis.stop();
+            menuTl.restart();
+        });
+
+        if (closeMenuBtn) closeMenuBtn.addEventListener('click', () => {
+            menuTl.reverse();
+            setTimeout(() => { if (window.lenis) window.lenis.start(); }, 1000);
+        });
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                menuTl.reverse();
+                setTimeout(() => { if (window.lenis) window.lenis.start(); }, 1000);
+            });
+        });
+
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-
     </script>
-    <!-- Page Transition System -->
-    <script src=" page-transitions.js\></script>
 </body>
 
 </html>

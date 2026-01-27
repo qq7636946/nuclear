@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手機版卡片堆疊測試</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .grid-card {
+            position: relative;
+            width: 100%;
+            margin-bottom: 24px;
+            border-radius: 12px;
+            overflow: visible;
+            background: #111;
+        }
+
+        /* Card stacking shadow layers */
+        .grid-card::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: -6px;
+            bottom: -6px;
+            background: linear-gradient(135deg, rgba(204, 255, 0, 0.08), rgba(204, 255, 0, 0.03));
+            border-radius: 12px;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        .grid-card::after {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: -12px;
+            bottom: -12px;
+            background: linear-gradient(135deg, rgba(204, 255, 0, 0.05), rgba(204, 255, 0, 0.01));
+            border-radius: 12px;
+            z-index: -2;
+            opacity: 0.5;
+        }
+
+        .media {
+            aspect-ratio: 4 / 3;
+            border-radius: 8px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .info {
+            padding: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .meta {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #ccff00;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📱 卡片堆疊效果測試</h1>
+
+        <div class="grid-card">
+            <div class="media">
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800" alt="Card 1">
+            </div>
+            <div class="info">
+                <div class="title">PROJECT 01</div>
+                <div class="meta">WEB DESIGN / UI/UX</div>
+            </div>
+        </div>
+
+        <div class="grid-card">
+            <div class="media">
+                <img src="https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=800" alt="Card 2">
+            </div>
+            <div class="info">
+                <div class="title">PROJECT 02</div>
+                <div class="meta">BRANDING / IDENTITY</div>
+            </div>
+        </div>
+
+        <div class="grid-card">
+            <div class="media">
+                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800" alt="Card 3">
+            </div>
+            <div class="info">
+                <div class="title">PROJECT 03</div>
+                <div class="meta">DEVELOPMENT / WEBGL</div>
+            </div>
+        </div>
+
+        <div class="grid-card">
+            <div class="media">
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800" alt="Card 4">
+            </div>
+            <div class="info">
+                <div class="title">PROJECT 04</div>
+                <div class="meta">CAMPAIGN / STRATEGY</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('✅ 卡片堆疊效果測試頁面已載入');
+        console.log('📱 請在手機或開發者工具的手機模式下查看');
+        console.log('🎨 應該可以看到每張卡片後方有霓虹綠色的雙層陰影');
+    </script>
+</body>
+
+</html>
