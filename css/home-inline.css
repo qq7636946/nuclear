@@ -3331,10 +3331,17 @@
                 display: none;
             }
 
+            .mobile_wrapper {
+                display: block;
+                width: 100%;
+                height: 900px;
+            }
+
             .spline_mobile {
                 display: block;
                 width: 100%;
-                height: 500px;
+                height: 100%;
+                margin: 0 auto;
             }
 
             #nu-wrapper .pinned-content {
@@ -3525,8 +3532,21 @@
             border-radius: 12px;
         }
 
+
+        @media (max-width: 998px) {
+            .mobile_wrapper {
+                height: 800px;
+            }
+        }
+
         /* Mobile responsive adjustments for Explosive Zoom */
         @media (max-width: 768px) {
+
+            .mobile_wrapper {
+                height: 700px;
+            }
+
+
             #nu-wrapper .section-crossed-marquee {
                 display: none;
             }
@@ -3624,4 +3644,41 @@
                 border-radius: 20px;
                 z-index: -2;
             }
+        }
+
+
+
+
+        @media (max-width: 576px) {
+
+
+
+            .mobile_wrapper {
+                height: 580px;
+            }
+
+            #nu-wrapper .section-stack-wrapper {
+                height: auto !important;
+                padding: 20px 0 !important;
+                overflow: visible !important;
+            }
+
+        }
+
+
+
+        @media (max-width: 425px) {
+
+
+
+            .mobile_wrapper {
+                height: 500px;
+            }
+
+            #nu-wrapper .section-stack-wrapper {
+                height: auto !important;
+                padding: 0px 0 !important;
+                overflow: visible !important;
+            }
+
         }
