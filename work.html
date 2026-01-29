@@ -1440,6 +1440,21 @@
                 this.overlay = document.querySelector('.page-transition-overlay');
                 this.logo = document.querySelector('.transition-logo');
                 this.isTransitioning = false;
+                this.handleBFCache();
+            }
+
+            // Handle BFCache
+            handleBFCache() {
+                window.addEventListener('pageshow', (event) => {
+                    if (event.persisted) {
+                        const overlay = this.overlay;
+                        gsap.set(overlay, { clipPath: 'inset(0 0 100% 0)' });
+                        gsap.set(this.logo, { opacity: 0 });
+                        gsap.set('[data-transition-element]', { y: 0, opacity: 1 });
+                        if (window.lenis) window.lenis.start();
+                        this.isTransitioning = false;
+                    }
+                });
             }
 
             // 退場動畫
@@ -1529,15 +1544,34 @@
         workItems.forEach(item => {
             const media = item.querySelector('.work-media');
             if (media) {
+                // 1. Reveal (ClipPath Only)
                 gsap.fromTo(media,
-                    { clipPath: "inset(100% 0 0 0)", scale: 1.1 },
+                    { clipPath: "inset(100% 0 0 0)" },
                     {
-                        clipPath: "inset(0% 0 0 0)", scale: 1,
+                        clipPath: "inset(0% 0 0 0)",
                         duration: 1,
                         ease: "power4.inOut",
                         scrollTrigger: { trigger: item, start: "top 100%" }
                     }
                 );
+
+                // 2. Zoom Out Scrub (Parallax Effect)
+                const img = media.querySelector('.work-img');
+                if (img) {
+                    gsap.fromTo(img,
+                        { scale: 1.2 },
+                        {
+                            scale: 1.0,
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: item,
+                                start: "top bottom",
+                                end: "bottom top",
+                                scrub: 1
+                            }
+                        }
+                    );
+                }
             }
             const info = item.querySelector('.work-info');
             if (info) {
