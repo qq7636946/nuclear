@@ -23,10 +23,26 @@ class PageTransitionManager {
         const tl = gsap.timeline({
             onComplete: () => {
                 this.isTransitioning = false;
-                if (window.lenis) window.lenis.start();
+                // 確保 LOADING 屏幕被隱藏（返回頁面時也需要隱藏）
+                const loaderScreen = document.querySelector('.loader-screen');
+                if (loaderScreen) {
+                    loaderScreen.style.display = 'none';
+                }
+                // 強制刷新 ScrollTrigger 和 Lenis 狀態
+                if (window.ScrollTrigger) {
+                    ScrollTrigger.refresh();
+                }
+                // 延遲啟動 Lenis 以確保動畫完全完成
+                setTimeout(() => {
+                    if (window.lenis) {
+                        window.lenis.start();
+                        // 強制刷新滾動位置
+                        window.lenis.scrollTo(window.scrollY);
+                    }
+                }, 150);
                 // 進場動畫完成後更新錨點位置
                 if (typeof updateAnchorPositions === 'function') {
-                    setTimeout(() => updateAnchorPositions(), 100);
+                    setTimeout(() => updateAnchorPositions(), 200);
                 }
             }
         });
@@ -862,4 +878,3 @@ window.addEventListener('load', function () {
     /* --- MediaPipe Removed --- */
 
 });
-
