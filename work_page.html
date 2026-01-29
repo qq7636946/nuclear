@@ -516,6 +516,17 @@
             /* Transition handled by GSAP now */
         }
 
+        .Hero__gradientOverlay {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70vh;
+            background: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.6) 30%, transparent 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
         /* --- HERO BANNER (Fixed Text Layer) --- */
         .Hero {
             position: fixed;
@@ -1454,6 +1465,7 @@
     <!-- BACKGROUND IMAGE -->
     <img src="https://clone.victorydesign.tw/wp-content/uploads/2026/01/002.jpg" class="Hero__background"
         alt="Hero Background">
+    <div class="Hero__gradientOverlay"></div>
 
     <!-- Main Layout -->
     <main class="Layout__inner">
