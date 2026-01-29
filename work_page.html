@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJECT KAZE | Alche Studio</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@400;700&family=Noto+Sans+JP:wght@100;400;700&family=Syncopate:wght@400;700&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Lenis Smooth Scroll (The 2025 Standard) -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+
+    <style>
+        /* --- RESET & BASE --- */
+        :root {
+            --bg-color: #050505;
+            --text-color: #ffffff;
+            --accent-color: #a29bfe;
+            /* Soft purple */
+            --accent-secondary: #74b9ff;
+            /* Soft blue */
+            --neon-color: #ccff00;
+            --font-main: 'Inter', sans-serif;
+            --font-jp: "Noto Sans JP", sans-serif;
+            --font-display: 'Syncopate', sans-serif;
+            --font-tech: 'Share Tech Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html.lenis {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto;
+        }
+
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            /* Hide horizontal scroll */
+            width: 100vw;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- PAGE TRANSITION OVERLAY (Consistent) --- */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            clip-path: inset(0 0 0 0);
+        }
+
+        .transition-logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            color: var(--neon-color);
+            font-size: 2rem;
+            letter-spacing: 2px;
+            opacity: 1;
+            text-transform: uppercase;
+        }
+
+        /* --- GLOBAL GRID LINES (Consistent) --- */
+        .global-grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: calc(100% / 6) 100%;
+        }
+
+        /* --- CURSOR (Consistent) --- */
+        .cursor-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            opacity: 0;
+        }
+
+        .cursor-dot {
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            will-change: transform;
+        }
+
+        .cursor-follower {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.3s;
+            will-change: transform, width, height;
+        }
+
+        .cursor-text {
+            font-size: 10px;
+            font-weight: 800;
+            opacity: 0;
+            text-transform: uppercase;
+            color: #000;
+            pointer-events: none;
+        }
+
+        body.hovered .cursor-follower {
+            width: 90px;
+            height: 90px;
+            background: #fff;
+            border-color: #fff;
+        }
+
+        body.hovered .cursor-text {
+            opacity: 1;
+        }
+
+        body.hovered .cursor-dot {
+            opacity: 0;
+        }
+
+        /* --- HEADER / NAVBAR (Consistent) --- */
+        .header-container {
+            position: fixed;
+            top: 40px;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            pointer-events: none;
+            mix-blend-mode: exclusion;
+        }
+
+        .pill-header {
+            width: 90%;
+            max-width: 1400px;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: auto;
+        }
+
+        .brand-logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 12px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s, color 0.3s;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-menu {
+            width: 60px;
+        }
+
+        .hamburger-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .hamburger-icon span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background-color: currentColor;
+        }
+
+        .btn-contact {
+            padding: 0 24px;
+        }
+
+        /* --- MENU OVERLAY (Consistent) --- */
+        .overlay-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--neon-color);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            padding: 60px 4vw;
+            box-sizing: border-box;
+            visibility: hidden;
+            clip-path: inset(0 0 100% 0);
+            overflow: hidden;
+        }
+
+        .overlay-header {
+            display: flex;
+            justify-content: flex-end;
+            padding: 30px 40px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 20;
+        }
+
+        .close-btn {
+            width: 80px;
+            height: 44px;
+            background-color: #000;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .close-icon {
+            width: 20px;
+            height: 20px;
+            position: relative;
+        }
+
+        .close-icon::before,
+        .close-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--neon-color);
+            transform: rotate(45deg);
+        }
+
+        .close-icon::after {
+            transform: rotate(-45deg);
+        }
+
+        .menu-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding-top: 40px;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 0;
+        }
+
+        .nav-list:hover .nav-item {
+            opacity: 0.25;
+            filter: blur(1px);
+        }
+
+        .nav-item {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 2.5vh 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: opacity 0.4s ease, filter 0.4s ease, border-color 0.4s ease;
+            cursor: pointer;
+        }
+
+        .nav-item:first-child {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item:hover {
+            opacity: 1 !important;
+            filter: blur(0) !important;
+            border-color: #000;
+        }
+
+        .nav-item-wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav-link {
+            font-size: clamp(3rem, 6vw, 7rem);
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            color: #000;
+            text-decoration: none;
+            line-height: 0.95;
+            text-transform: uppercase;
+            display: block;
+            letter-spacing: -0.04em;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+        }
+
+        .nav-item:hover .nav-link {
+            transform: translateX(30px);
+        }
+
+        .nav-meta-tag {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-num {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.4);
+            margin-right: 30px;
+            font-family: 'Syncopate', sans-serif;
+        }
+
+        .menu-footer-info {
+            position: absolute;
+            bottom: 40px;
+            left: 4vw;
+            width: calc(100% - 8vw);
+            padding: 30px 0 0 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            align-items: flex-start;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #000;
+            text-transform: uppercase;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.02em;
+            opacity: 0;
+        }
+
+        .footer-label {
+            opacity: 0.5;
+            margin-bottom: 8px;
+        }
+
+        .menu-social {
+            display: flex;
+            gap: 30px;
+        }
+
+        .menu-social a {
+            color: #000;
+            text-decoration: none;
+            position: relative;
+            display: inline-block;
+            width: fit-content;
+            transition: opacity 0.3s;
+        }
+
+        .menu-social a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: #000;
+            transition: width 0.3s;
+        }
+
+        .menu-social a:hover::after {
+            width: 100%;
+        }
+
+        /* --- LOADING OVERLAY --- */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .loading-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- LAYOUT STRUCTURE --- */
+        .Layout__inner {
+            position: relative;
+            z-index: 50;
+            width: 100%;
+        }
+
+        /* --- BACKGROUND IMAGE (Global Fixed) --- */
+        .Hero__background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            /* Lowest level */
+            opacity: 1;
+            filter: brightness(0.8);
+            /* Transition handled by GSAP now */
+        }
+
+        /* --- HERO BANNER (Fixed Text Layer) --- */
+        .Hero {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            pointer-events: none;
+            z-index: 50;
+            /* On top of Gallery (10) and BG (0) */
+        }
+
+        .Hero__content {
+            pointer-events: auto;
+        }
+
+        /* Grid Areas */
+        .Hero__topLeft {
+            grid-column: 1;
+            grid-row: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .Hero__brand {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 0.9;
+            letter-spacing: -1px;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .Hero__brand span {
+            display: block;
+            font-weight: 400;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .Hero__meta {
+            font-family: var(--font-jp);
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 10px;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .Hero__meta strong {
+            display: block;
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 5px;
+            font-family: var(--font-main);
+        }
+
+        .Hero__dots {
+            color: var(--accent-secondary);
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+        }
+
+        /* Updated Center: Centering text */
+        .Hero__center {
+            /* display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative; */
+            z-index: 1;
+        }
+
+        /* NEW: Centered Main Text */
+        .Hero__mainText {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 4rem);
+            letter-spacing: 0.5rem;
+            font-weight: 700;
+            color: #fff;
+            z-index: 20;
+            text-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            white-space: nowrap;
+            pointer-events: none;
+            text-transform: uppercase;
+        }
+
+        /* Enhanced Kanji for "押字" overlay effect */
+        .Hero__kanji {
+            font-family: var(--font-jp);
+            font-size: 25vw;
+            line-height: 1;
+            font-weight: 100;
+            color: rgba(255, 255, 255, 0.02);
+            /* Slight fill */
+            -webkit-text-stroke: 2px rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 10;
+            filter: drop-shadow(0 0 15px rgba(116, 185, 255, 0.5));
+            animation: glitch-skew 3s infinite linear alternate-reverse;
+            margin-top: 0;
+        }
+
+        /* Kanji Glitch Effects */
+        /* .Hero__kanji::before,
+        .Hero__kanji::after {
+            content: '風';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        } */
+
+        .Hero__kanji::before {
+            color: var(--accent-color);
+            z-index: -1;
+            transform: translate(-5px, 0);
+            mix-blend-mode: screen;
+            animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
+        }
+
+        .Hero__kanji::after {
+            color: var(--accent-secondary);
+            z-index: -2;
+            transform: translate(5px, 0);
+            mix-blend-mode: screen;
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        .Hero__topRight {
+            grid-column: 3;
+            grid-row: 1;
+            text-align: right;
+        }
+
+        .Hero__distance {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .Hero__distance strong {
+            display: block;
+            font-size: 2.5rem;
+            color: #fff;
+            margin-top: 5px;
+        }
+
+        .Hero__bottomLeft {
+            grid-column: 1;
+            grid-row: 2;
+            align-self: center;
+            font-family: var(--font-jp);
+            font-size: 0.75rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 250px;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .Hero__bottomLeft hr {
+            border: 0;
+            border-top: 1px dashed rgba(255, 255, 255, 0.5);
+            margin: 15px 0;
+            width: 50px;
+        }
+
+        .Hero__quote {
+            grid-column: 1 / span 3;
+            grid-row: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-top: auto;
+            margin-bottom: 20px;
+            z-index: 20;
+        }
+
+        .Hero__quoteText {
+            font-family: var(--font-jp);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #fff, var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .Hero__quoteSub {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 1);
+        }
+
+        /* --- SCROLL SPACER (CONTROLS BANNER HEIGHT) --- */
+        /* Reduced from 500vh to 200vh as requested */
+        .ScrollSpacer {
+            height: 200vh;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* --- MERCH SECTION --- */
+        .Merch {
+            position: relative;
+            z-index: 100;
+            /* Covers the fixed hero */
+            background-color: #000;
+            width: 100%;
+            min-height: 100vh;
+            padding: 100px 40px;
+            color: #fff;
+            box-shadow: 0 -50px 100px rgba(0, 0, 0, 1);
+            /* Soft blend */
+        }
+
+        .Merch__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 80px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .Merch__title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .Merch__icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-secondary);
+        }
+
+        .Merch__desc {
+            max-width: 500px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: right;
+            text-transform: uppercase;
+        }
+
+        .Merch__grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 100px;
+        }
+
+        .Merch__card {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 1;
+            min-width: 300px;
+            max-width: calc(50% - 20px);
+        }
+
+        .Merch__imgBox {
+            width: 100%;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .Merch__imgBox img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .Merch__card:hover .Merch__imgBox img {
+            transform: scale(1.05);
+        }
+
+        .Merch__overlayIcon {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 3rem;
+            font-family: 'Noto Sans JP', sans-serif;
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        .Merch__info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .Merch__row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 5px;
+        }
+
+        .Merch__rowSub {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+
+        .Merch__actions {
+            display: flex;
+            gap: 30px;
+            margin-top: 10px;
+        }
+
+        .Merch__actionBtn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            cursor: pointer;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0;
+            transition: color 0.3s;
+        }
+
+        .Merch__actionBtn:hover {
+            color: var(--accent-color);
+        }
+
+        .Merch__footer {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: var(--font-jp);
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .Merch__footerCol {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .Merch__footerCol h4 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        /* --- VIDEO SHOWCASE SECTION --- */
+        .VideoShowcase {
+            position: relative;
+            z-index: 100;
+            background-color: #000;
+            width: 100%;
+            box-shadow: 0 -50px 100px rgba(0, 0, 0, 1);
+        }
+
+        .VideoShowcase__container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .VideoShowcase__video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            border: 0;
+        }
+
+        .VideoShowcase__overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 60px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            z-index: 20;
+        }
+
+        .VideoShowcase__title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .VideoShowcase__tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--neon-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* --- GRADIENT OVERLAY BETWEEN SECTIONS --- */
+        .section-gradient-overlay {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            pointer-events: none;
+            z-index: 99;
+        }
+
+        .section-gradient-overlay.gradient-bottom-to-top {
+            background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 40%, transparent 100%);
+        }
+
+        .section-gradient-overlay.gradient-top-to-bottom {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 40%, transparent 100%);
+        }
+
+        /* --- PROJECT INFO SECTION --- */
+        .ProjectInfo {
+            position: relative;
+            z-index: 100;
+            background-color: #000;
+            width: 100%;
+            padding: 100px 40px;
+            color: #fff;
+        }
+
+        .ProjectInfo__grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .ProjectInfo__left {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .ProjectInfo__label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--neon-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .ProjectInfo__title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .ProjectInfo__desc {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 500px;
+        }
+
+        .ProjectInfo__right {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .ProjectInfo__meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .ProjectInfo__metaItem {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .ProjectInfo__metaLabel {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .ProjectInfo__metaValue {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .ProjectInfo__tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .ProjectInfo__tagItem {
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .ProjectInfo__tagItem:hover {
+            border-color: var(--neon-color);
+            color: var(--neon-color);
+        }
+
+        .ProjectInfo__divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+            margin: 40px 0;
+        }
+
+        @media (max-width: 768px) {
+            .ProjectInfo__grid {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .ProjectInfo__left,
+            .ProjectInfo__right {
+                min-width: 100%;
+            }
+
+            .ProjectInfo__meta {
+                flex-direction: column;
+            }
+
+            .ProjectInfo__metaItem {
+                min-width: 100%;
+            }
+
+            .VideoShowcase__overlay {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 40px 20px;
+            }
+
+            .ProjectInfo {
+                padding: 60px 20px;
+            }
+
+            .Merch__card {
+                min-width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        /* --- CYLINDRICAL GALLERY --- */
+        .Gallery__wrapper {
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            top: 200px;
+            left: 0;
+            overflow: hidden;
+            background: transparent;
+            z-index: 10;
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+            pointer-events: none;
+        }
+
+        #gallery-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* UI overlay for gallery */
+        .Gallery__ui {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            pointer-events: none;
+            mix-blend-mode: difference;
+        }
+
+        .Gallery__ui span {
+            width: 1px;
+            height: 30px;
+            background: linear-gradient(to bottom, #fff, transparent);
+            margin-bottom: 5px;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1024px) {
+
+            .cursor-wrapper,
+            .global-grid-lines {
+                display: none !important;
+            }
+
+            .header-container {
+                top: 20px;
+            }
+
+            .pill-header {
+                width: 95%;
+                height: 60px;
+            }
+
+            .brand-logo {
+                font-size: 1rem;
+            }
+
+            .btn-contact span {
+                display: none;
+            }
+
+            .btn-contact::after {
+                content: '✉';
+                font-size: 1.2rem;
+            }
+
+            .nav-link {
+                font-size: 2rem;
+            }
+
+            .nav-meta-tag {
+                display: none;
+            }
+
+            .menu-footer-info {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .close-btn {
+                width: 60px;
+                height: 40px;
+            }
+
+            .overlay-header {
+                padding: 20px;
+            }
+
+            .overlay-menu {
+                padding: 60px 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .Hero {
+                grid-template-columns: 1fr;
+                padding: 20px;
+                gap: 20px;
+                overflow: hidden;
+            }
+
+            .Hero__topLeft,
+            .Hero__topRight,
+            .Hero__center,
+            .Hero__bottomLeft,
+            .Hero__quote {
+                grid-column: 1;
+                grid-row: auto;
+                text-align: center;
+                align-items: center;
+            }
+
+            .Hero__center {
+                grid-row: 1;
+                height: 50vh;
+                margin-top: 60px;
+            }
+
+            .Hero__kanji {
+                font-size: 40vw;
+                margin: 0;
+            }
+
+            .Hero__mainText {
+                font-size: 0.8rem;
+                letter-spacing: 0.2rem;
+            }
+
+            .Merch__grid {
+                grid-template-columns: 1fr;
+            }
+
+            .Merch__header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .Merch__desc {
+                text-align: left;
+            }
+
+            .Merch__footer {
+                flex-direction: column;
+                gap: 40px;
+            }
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes glitch-anim-1 {
+            0% {
+                clip-path: inset(20% 0 80% 0);
+                transform: translate(-2px, 1px);
+            }
+
+            20% {
+                clip-path: inset(60% 0 10% 0);
+                transform: translate(2px, -1px);
+            }
+
+            40% {
+                clip-path: inset(10% 0 50% 0);
+                transform: translate(-2px, 2px);
+            }
+
+            60% {
+                clip-path: inset(80% 0 5% 0);
+                transform: translate(2px, -2px);
+            }
+
+            80% {
+                clip-path: inset(30% 0 40% 0);
+                transform: translate(-1px, 1px);
+            }
+
+            100% {
+                clip-path: inset(50% 0 20% 0);
+                transform: translate(1px, -1px);
+            }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% {
+                clip-path: inset(10% 0 60% 0);
+                transform: translate(2px, -1px);
+            }
+
+            20% {
+                clip-path: inset(80% 0 5% 0);
+                transform: translate(-2px, 2px);
+            }
+
+            40% {
+                clip-path: inset(40% 0 20% 0);
+                transform: translate(2px, 1px);
+            }
+
+            60% {
+                clip-path: inset(10% 0 80% 0);
+                transform: translate(-2px, -2px);
+            }
+
+            80% {
+                clip-path: inset(50% 0 10% 0);
+                transform: translate(1px, 2px);
+            }
+
+            100% {
+                clip-path: inset(20% 0 50% 0);
+                transform: translate(-1px, -1px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- PAGE TRANSITION OVERLAY -->
+    <div class="page-transition-overlay" style="clip-path: inset(0 0 0 0);">
+        <div class="transition-logo">NUCLEAR LABS</div>
+    </div>
+
+    <!-- GLOBAL GRID LINES -->
+    <div class="global-grid-lines"></div>
+
+    <!-- CURSOR -->
+    <div class="cursor-wrapper">
+        <div class="cursor-follower"><span class="cursor-text">VIEW</span></div>
+        <div class="cursor-dot"></div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header-container" data-transition-element>
+        <header class="pill-header">
+            <a href="index.html" class="brand-logo" data-cursor="hover">NUCLEAR LABS</a>
+            <div class="header-actions">
+                <button class="btn btn-menu" id="openMenu" aria-label="Menu" data-cursor="hover">
+                    <div class="hamburger-icon"><span></span><span></span><span></span></div>
+                </button>
+                <a href="#contact" class="btn btn-contact" data-cursor="hover"><span>CONTACT</span></a>
+            </div>
+        </header>
+    </div>
+
+    <!-- MENU OVERLAY -->
+    <div class="overlay-menu" id="menuOverlay">
+        <div class="overlay-header">
+            <div class="close-btn" id="closeMenu" data-cursor="hover">
+                <div class="close-icon"></div>
+            </div>
+        </div>
+
+        <div class="menu-content">
+            <ul class="nav-list" id="navList">
+                <li class="nav-item">
+                    <div class="nav-item-wrapper"><span class="nav-num">01</span><a href="index.html" class="nav-link"
+                            data-cursor="hover">HOME</a></div>
+                    <div class="nav-meta-tag">Back to Main</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-item-wrapper"><span class="nav-num">02</span><a href="work.html" class="nav-link"
+                            data-cursor="hover">WORK</a></div>
+                    <div class="nav-meta-tag">Case Studies</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-item-wrapper"><span class="nav-num">03</span><a href="#about" class="nav-link"
+                            data-cursor="hover">ABOUT</a></div>
+                    <div class="nav-meta-tag">Studio Profile</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-item-wrapper"><span class="nav-num">04</span><a href="#services" class="nav-link"
+                            data-cursor="hover">SERVICES</a></div>
+                    <div class="nav-meta-tag">Capabilities</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-item-wrapper"><span class="nav-num">05</span><a href="#contact" class="nav-link"
+                            data-cursor="hover">CONTACT</a></div>
+                    <div class="nav-meta-tag">Get in Touch</div>
+                </li>
+            </ul>
+
+            <div class="menu-footer-info">
+                <div class="footer-col">
+                    <div class="footer-label">SAY HELLO</div>
+                    <div>HELLO@NUCLEARLABS.COM</div>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-label">LOCATED</div>
+                    <div>TOKYO, JAPAN</div>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-label">SOCIALS</div>
+                    <div class="menu-social">
+                        <a href="#" data-cursor="hover">IG</a>
+                        <a href="#" data-cursor="hover">TW</a>
+                        <a href="#" data-cursor="hover">LN</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-label">COPYRIGHT</div>
+                    <div>© 2025 NUCLEAR LABS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loading-overlay">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <!-- BACKGROUND IMAGE -->
+    <img src="https://clone.victorydesign.tw/wp-content/uploads/2026/01/002.jpg" class="Hero__background"
+        alt="Hero Background">
+
+    <!-- Main Layout -->
+    <main class="Layout__inner">
+
+        <!-- FIXED HERO (Text Layers) -->
+        <section class="Hero" data-transition-element>
+            <div class="Hero__topLeft Hero__content">
+            </div>
+
+            <div class="Hero__center Hero__content">
+                <div class="Hero__mainText">PROJECT KAZE</div>
+            </div>
+
+            <div class="Hero__topRight Hero__content">
+            </div>
+            <div class="Hero__bottomLeft Hero__content">
+                <p>BRAND IDENTITY / WEB DESIGN<br>MOTION GRAPHICS / FILM PRODUCTION<br>ART DIRECTION</p>
+                <hr>
+                <p>// KAZE ATHLETICS — FULL BRANDING<br>& DIGITAL EXPERIENCE PROJECT</p>
+            </div>
+            <div class="Hero__quote Hero__content">
+                <div class="Hero__quoteText">風のように走れ<br>Run Like The Wind</div>
+                <div class="Hero__quoteSub">為運動品牌 KAZE ATHLETICS 打造的完整品牌識別系統，結合日式美學與當代運動精神，從品牌策略、視覺設計到數位體驗的全方位創意執行。
+                </div>
+            </div>
+        </section>
+
+        <!-- SPACER -->
+        <div class="ScrollSpacer"></div>
+
+        <!-- VIDEO SHOWCASE SECTION -->
+        <section class="VideoShowcase" data-transition-element>
+            <div class="VideoShowcase__container">
+                <iframe class="VideoShowcase__video"
+                    src="https://www.youtube.com/embed/ra9A9v23Ggs?autoplay=1&mute=1&loop=1&playlist=ra9A9v23Ggs&controls=0"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                </iframe>
+                <div class="VideoShowcase__overlay">
+                    <h2 class="VideoShowcase__title">PROJECT KAZE<br>風を追いかけて</h2>
+                    <span class="VideoShowcase__tag">// BRAND FILM 2025</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECT INFO SECTION -->
+        <section class="ProjectInfo" data-transition-element>
+            <div class="ProjectInfo__grid">
+                <div class="ProjectInfo__left">
+                    <div>
+                        <div class="ProjectInfo__label">// Project Overview</div>
+                        <h3 class="ProjectInfo__title">Run Like<br>The Wind<br>風のように走れ</h3>
+                    </div>
+                    <p class="ProjectInfo__desc">
+                        為 KAZE Athletics 打造的全方位品牌識別系統。從概念發想到視覺執行，我們以「風」為核心意象，創造出融合東方美學與當代運動精神的品牌語言。
+                    </p>
+                    <p class="ProjectInfo__desc">
+                        專案涵蓋品牌策略、視覺識別設計、數位體驗、影像製作與商品開發，完整呈現品牌從無到有的創建過程。
+                    </p>
+                </div>
+                <div class="ProjectInfo__right">
+                    <div class="ProjectInfo__meta">
+                        <div class="ProjectInfo__metaItem">
+                            <span class="ProjectInfo__metaLabel">Client</span>
+                            <span class="ProjectInfo__metaValue">KAZE Athletics</span>
+                        </div>
+                        <div class="ProjectInfo__metaItem">
+                            <span class="ProjectInfo__metaLabel">Year</span>
+                            <span class="ProjectInfo__metaValue">2025</span>
+                        </div>
+                        <div class="ProjectInfo__metaItem">
+                            <span class="ProjectInfo__metaLabel">Category</span>
+                            <span class="ProjectInfo__metaValue">Branding / Digital</span>
+                        </div>
+                        <div class="ProjectInfo__metaItem">
+                            <span class="ProjectInfo__metaLabel">Location</span>
+                            <span class="ProjectInfo__metaValue">Taipei, Taiwan</span>
+                        </div>
+                    </div>
+                    <div class="ProjectInfo__divider"></div>
+                    <div>
+                        <div class="ProjectInfo__label">// Scope of Work</div>
+                        <div class="ProjectInfo__tags">
+                            <span class="ProjectInfo__tagItem">Brand Strategy</span>
+                            <span class="ProjectInfo__tagItem">Visual Identity</span>
+                            <span class="ProjectInfo__tagItem">Web Design</span>
+                            <span class="ProjectInfo__tagItem">Motion Design</span>
+                            <span class="ProjectInfo__tagItem">Art Direction</span>
+                            <span class="ProjectInfo__tagItem">Film Production</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MERCH SECTION -->
+        <section class="Merch" data-transition-element>
+            <div class="Merch__header">
+                <h2 class="Merch__title">MERCHANDISE <span class="Merch__icon">風</span> DESIGN</h2>
+                <p class="Merch__desc">
+                    品牌周邊商品設計，延續「風」的視覺語言。霓虹色調、機能布料、極簡線條——每件單品都是品牌精神的延伸，為跑者打造兼具美感與實用性的運動裝備。
+                </p>
+            </div>
+
+            <div class="Merch__grid">
+                <!-- Product 1 -->
+                <div class="Merch__card" data-cursor="view">
+                    <div class="Merch__imgBox">
+                        <img src="https://images.unsplash.com/photo-1512353087810-25dfcd100962?q=80&w=2670&auto=format&fit=crop"
+                            alt="Rain Jacket">
+                        <div class="Merch__overlayIcon">風</div>
+                    </div>
+                    <div class="Merch__info">
+                        <div class="Merch__row">
+                            <span>COLLECTION // WIND</span>
+                            <span>2025</span>
+                        </div>
+                        <div class="Merch__rowSub">RUN IN ANY WEATHER</div>
+                        <div class="Merch__actions">
+                            <button class="Merch__actionBtn">DETAILS</button>
+                            <button class="Merch__actionBtn">DESCRIPTION</button>
+                            <button class="Merch__actionBtn">MATERIALS</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="Merch__card" data-cursor="view">
+                    <div class="Merch__imgBox">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2000&auto=format&fit=crop"
+                            alt="Streetwear">
+                    </div>
+                    <div class="Merch__info">
+                        <div class="Merch__row">
+                            <span>COLLECTION // JINCHURIKI</span>
+                            <span>2025</span>
+                        </div>
+                        <div class="Merch__rowSub">BECOME THE NEW HOKAGE</div>
+                        <div class="Merch__actions">
+                            <button class="Merch__actionBtn">DETAILS</button>
+                            <button class="Merch__actionBtn">DESCRIPTION</button>
+                            <button class="Merch__actionBtn">MATERIALS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="Merch__footer">
+                <div class="Merch__footerCol">
+                    <h4>About</h4>
+                    <span>History</span>
+                    <span>Philosophy</span>
+                    <span>Team</span>
+                </div>
+                <div class="Merch__footerCol">
+                    <h4>Races</h4>
+                    <span>Trails</span>
+                    <span>Ultra Trails</span>
+                    <span>Marathons</span>
+                </div>
+                <div class="Merch__footerCol">
+                    <h4>Partners</h4>
+                    <span>Collaboration</span>
+                    <span>Contact</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Cylindrical Gallery -->
+    <div class="Gallery__wrapper">
+        <canvas id="gallery-canvas"></canvas>
+        <div class="Gallery__ui">
+            <span></span>
+            Scroll to Explore
+        </div>
+    </div>
+
+    <script>
+        // --- 1. SETUP LENIS SMOOTH SCROLL (2025 Standard) ---
+        const lenis = new Lenis({
+            duration: 1.5, // Increased for silky smooth feel
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+        });
+        window.lenis = lenis;
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // --- GSAP INTEGRATION ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- PAGE TRANSITION MANAGER ---
+        class PageTransitionManager {
+            constructor() {
+                this.overlay = document.querySelector('.page-transition-overlay');
+                this.logo = document.querySelector('.transition-logo');
+                this.isTransitioning = false;
+            }
+
+            exitAnimation(callback) {
+                if (this.isTransitioning) return;
+                this.isTransitioning = true;
+                if (window.lenis) window.lenis.stop();
+
+                const tl = gsap.timeline({
+                    onComplete: () => { if (callback) callback(); }
+                });
+
+                tl.to('[data-transition-element]', { y: -50, opacity: 0, stagger: 0.03, duration: 0.5, ease: 'power2.in' });
+                tl.to(this.overlay, { clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: 'power4.inOut' }, '-=0.3');
+                tl.to(this.logo, { opacity: 1, duration: 0.3 }, '-=0.4');
+                return tl;
+            }
+
+            entryAnimation() {
+                const tl = gsap.timeline({
+                    onComplete: () => {
+                        this.isTransitioning = false;
+                        if (window.lenis) window.lenis.start();
+                    }
+                });
+
+                tl.to(this.logo, { opacity: 0, duration: 0.3 });
+                tl.to(this.overlay, { clipPath: 'inset(0 0 100% 0)', duration: 0.8, ease: 'power4.inOut' }, '-=0.1');
+                tl.from('[data-transition-element]', { y: 50, opacity: 0, stagger: 0.03, duration: 0.6, ease: 'power2.out' }, '-=0.5');
+                return tl;
+            }
+
+            interceptLinks() {
+                const links = document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"])');
+                links.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        const href = link.getAttribute('href');
+                        if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+                        e.preventDefault();
+                        this.exitAnimation(() => { window.location.href = href; });
+                    });
+                });
+            }
+        }
+
+        // --- INITIALIZATION ---
+        function initApp() {
+            const transitionManager = new PageTransitionManager();
+            transitionManager.entryAnimation();
+            transitionManager.interceptLinks();
+
+            // Hide loading overlay
+            document.getElementById('loading-overlay').classList.add('loading-hidden');
+
+            // Safety fallback
+            setTimeout(() => {
+                const overlay = document.querySelector('.page-transition-overlay');
+                if (overlay && getComputedStyle(overlay).clipPath !== 'inset(0px 0px 100% 0px)') {
+                    gsap.to(overlay, { clipPath: 'inset(0 0 100% 0)', duration: 0.5, ease: 'power2.out' });
+                    if (window.lenis) window.lenis.start();
+                }
+            }, 3000);
+        }
+
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            initApp();
+        } else {
+            window.addEventListener('load', initApp);
+        }
+
+        // --- CURSOR LOGIC ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorFollower = document.querySelector('.cursor-follower');
+        const cursorText = document.querySelector('.cursor-text');
+        const cursorWrapper = document.querySelector('.cursor-wrapper');
+
+        if (cursorDot && cursorFollower) {
+            const xTo = gsap.quickSetter(cursorDot, "x", "px"), yTo = gsap.quickSetter(cursorDot, "y", "px");
+            const xToFollower = gsap.quickSetter(cursorFollower, "x", "px"), yToFollower = gsap.quickSetter(cursorFollower, "y", "px");
+
+            let mouseX = 0, mouseY = 0, followerPos = { x: 0, y: 0 };
+            let isCursorVisible = false;
+
+            gsap.set(cursorDot, { xPercent: -50, yPercent: -50 });
+            gsap.set(cursorFollower, { xPercent: -50, yPercent: -50 });
+
+            document.addEventListener('mousemove', e => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                xTo(mouseX);
+                yTo(mouseY);
+
+                if (!isCursorVisible) {
+                    isCursorVisible = true;
+                    gsap.to(cursorWrapper, { opacity: 1, duration: 0.5 });
+                }
+            });
+
+            const lerp = (start, end, factor) => start + (end - start) * factor;
+
+            gsap.ticker.add(() => {
+                if (isCursorVisible) {
+                    followerPos.x = lerp(followerPos.x, mouseX, 0.12);
+                    followerPos.y = lerp(followerPos.y, mouseY, 0.12);
+                    xToFollower(followerPos.x);
+                    yToFollower(followerPos.y);
+                } else {
+                    followerPos.x = mouseX;
+                    followerPos.y = mouseY;
+                }
+            });
+
+            document.querySelectorAll('[data-cursor]').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    document.body.classList.add('hovered');
+                    if (el.dataset.cursor === 'view') cursorText.innerText = "VIEW"; else cursorText.innerText = "";
+                });
+                el.addEventListener('mouseleave', () => {
+                    document.body.classList.remove('hovered'); cursorText.innerText = "";
+                });
+            });
+        }
+
+        // --- MENU LOGIC ---
+        const menuOverlay = document.getElementById('menuOverlay');
+        const openMenuBtn = document.getElementById('openMenu');
+        const closeMenuBtn = document.getElementById('closeMenu');
+
+        const menuTl = gsap.timeline({ paused: true });
+        gsap.set(".nav-link", { y: "110%", skewY: 10 });
+        gsap.set(".nav-item", { borderBottomColor: "rgba(0,0,0,0)" });
+        gsap.set(".menu-footer-info", { opacity: 0, y: 20 });
+        gsap.set("#menuOverlay", { autoAlpha: 0, clipPath: 'inset(0 0 100% 0)' });
+
+        menuTl.to("#menuOverlay", { autoAlpha: 1, clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: "power4.inOut" })
+            .to(".nav-link", { y: "0%", skewY: 0, duration: 0.8, stagger: 0.05, ease: "power4.out" }, "-=0.6")
+            .to(".menu-footer-info", { opacity: 1, y: 0, duration: 0.5 }, "-=0.4");
+
+        if (openMenuBtn) openMenuBtn.addEventListener('click', () => {
+            if (window.lenis) window.lenis.stop();
+            menuTl.restart();
+        });
+
+        if (closeMenuBtn) closeMenuBtn.addEventListener('click', () => {
+            menuTl.reverse();
+            setTimeout(() => { if (window.lenis) window.lenis.start(); }, 1000);
+        });
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                menuTl.reverse();
+                setTimeout(() => { if (window.lenis) window.lenis.start(); }, 1000);
+            });
+        });
+
+        // --- CONFIGURATION: GALLERY IMAGES ---
+        const GALLERY_IMAGES = [
+            "https://images.weserv.nl/?url=clone.victorydesign.tw/wp-content/uploads/2026/01/Frame-2-4.webp&output=webp",
+            "https://images.weserv.nl/?url=clone.victorydesign.tw/wp-content/uploads/2026/01/Frame-5-1.webp&output=webp",
+            "https://images.weserv.nl/?url=clone.victorydesign.tw/wp-content/uploads/2026/01/Frame-3-1.webp&output=webp"
+        ];
+
+        // 2. Main Gallery & Logic
+        function initGallery3D() {
+            const canvas = document.getElementById('gallery-canvas');
+            const wrapper = document.querySelector('.Gallery__wrapper');
+            const imageUrls = GALLERY_IMAGES;
+
+            // Texture Loader
+            const textureLoader = new THREE.TextureLoader();
+            textureLoader.crossOrigin = "anonymous";
+
+            let displayImages = [...imageUrls];
+            // UPDATE: Adjusted total items to 22 for better spacing with 6 visible
+            while (displayImages.length < 22) { displayImages = displayImages.concat(imageUrls); }
+            displayImages = displayImages.slice(0, 22);
+
+            const scene = new THREE.Scene();
+
+            const camera = new THREE.PerspectiveCamera(60, wrapper.clientWidth / wrapper.clientHeight, 0.1, 1000);
+            camera.position.set(0, 0, 0);
+
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(wrapper.clientWidth, wrapper.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const group = new THREE.Group();
+            scene.add(group);
+
+            // UPDATE: Radius 16 and Height 2.5 to correct "flattened" look (restore landscape aspect ratio)
+            const radius = 16;
+            const angleStep = (Math.PI * 2) / displayImages.length;
+            const imgHeight = 2.5; // Shortened height for correct aspect ratio
+
+            displayImages.forEach((url, i) => {
+                const thetaLength = angleStep * 0.85;
+
+                const geometry = new THREE.CylinderGeometry(
+                    radius, radius, imgHeight,
+                    40, 1,
+                    true,
+                    0, thetaLength
+                );
+                geometry.scale(-1, 1, 1);
+
+                const texture = textureLoader.load(url);
+                texture.center.set(0.5, 0.5);
+
+                const material = new THREE.MeshBasicMaterial({
+                    map: texture,
+                    side: THREE.DoubleSide,
+                    transparent: true,
+                    opacity: 1,
+                    color: 0xffffff
+                });
+                const mesh = new THREE.Mesh(geometry, material);
+
+                const angle = i * angleStep;
+                mesh.rotation.y = angle;
+
+                group.add(mesh);
+            });
+
+            // --- ANIMATION LOGIC ---
+            let rotationState = { current: 0, target: 0 };
+
+            // 1. Background Image Dimming (Scrubbed)
+            // Use numeric scrub for lag smoothing
+            gsap.to(".Hero__background", {
+                opacity: 0.3,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: ".ScrollSpacer",
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 1.5 // Added lag smoothing
+                }
+            });
+
+            // 2. HERO TEXT SEQUENTIAL EXIT
+            const textExitTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: ".Merch",
+                    start: "top 85%",
+                    toggleActions: "play reverse play reverse",
+                }
+            });
+
+            // A. Kanji & Main Text - Silky smooth exit
+            textExitTl.to([".Hero__kanji", ".Hero__mainText"], {
+                opacity: 0,
+                filter: "blur(30px)",
+                scale: 1.15,
+                duration: 1.5,
+                ease: "expo.out"
+            }, 0);
+
+            // B. Meta Info - Staggered Slide Up
+            textExitTl.to([".Hero__topLeft", ".Hero__topRight", ".Hero__bottomLeft"], {
+                y: -80,
+                opacity: 0,
+                filter: "blur(10px)",
+                stagger: 0.08,
+                duration: 1.2,
+                ease: "power4.out"
+            }, 0.2);
+
+            // C. Quote - Cinematic Fade
+            textExitTl.to(".Hero__quote", {
+                y: 40,
+                opacity: 0,
+                scale: 0.95,
+                filter: "blur(15px)",
+                letterSpacing: "5px",
+                duration: 1.5,
+                ease: "power4.out"
+            }, 0.4);
+
+            textExitTl.set(".Hero", { pointerEvents: "none" }, 0.8);
+
+
+            // 3. Cylinder Rotation (Scrubbed)
+            ScrollTrigger.create({
+                trigger: ".ScrollSpacer",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 4, // Increased for slower, smoother rotation
+                onUpdate: (self) => {
+                    // UPDATE: Rotation amount reduced to 1 full rotation (2 * PI) for shorter 200vh scroll
+                    rotationState.target = self.progress * Math.PI * 2;
+                }
+            });
+
+            const clock = new THREE.Clock();
+            function animate() {
+                const time = clock.getElapsedTime();
+                // Even heavier inertia for ultra-silky feel
+                rotationState.current += (rotationState.target - rotationState.current) * 0.01;
+                group.rotation.y = rotationState.current;
+
+                renderer.render(scene, camera);
+                requestAnimationFrame(animate);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                const newW = wrapper.clientWidth; const newH = wrapper.clientHeight;
+                camera.aspect = newW / newH; camera.updateProjectionMatrix(); renderer.setSize(newW, newH);
+            });
+        }
+
+        setTimeout(initGallery3D, 100);
+    </script>
+</body>
+
+</html>
