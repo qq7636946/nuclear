@@ -511,6 +511,8 @@
             /* Lowest level */
             opacity: 1;
             filter: brightness(0.8);
+            transform: scale(1.2);
+            /* Initial Zoom */
             /* Transition handled by GSAP now */
         }
 
@@ -1662,6 +1664,7 @@
                 this.overlay = document.querySelector('.page-transition-overlay');
                 this.logo = document.querySelector('.transition-logo');
                 this.isTransitioning = false;
+                this.handleBFCache();
             }
 
             exitAnimation(callback) {
@@ -1679,11 +1682,35 @@
                 return tl;
             }
 
+            handleBFCache() {
+                window.addEventListener('pageshow', (event) => {
+                    if (event.persisted) {
+                        const overlay = this.overlay;
+                        gsap.set(overlay, { clipPath: 'inset(0 0 100% 0)' });
+                        gsap.set(this.logo, { opacity: 0 });
+                        gsap.set('[data-transition-element]', { y: 0, opacity: 1 });
+                        if (window.lenis) window.lenis.start();
+                        this.isTransitioning = false;
+                    }
+                });
+            }
+
             entryAnimation() {
                 const tl = gsap.timeline({
                     onComplete: () => {
                         this.isTransitioning = false;
-                        if (window.lenis) window.lenis.start();
+                        // 強制刷新 ScrollTrigger 狀態
+                        if (typeof ScrollTrigger !== 'undefined') {
+                            ScrollTrigger.refresh();
+                        }
+                        // 延遲啟動 Lenis 以確保動畫完全完成
+                        setTimeout(() => {
+                            if (window.lenis) {
+                                window.lenis.start();
+                                // 強制刷新滾動位置
+                                window.lenis.scrollTo(window.scrollY);
+                            }
+                        }, 150);
                     }
                 });
 
@@ -1891,6 +1918,7 @@
             // Use numeric scrub for lag smoothing
             gsap.to(".Hero__background", {
                 opacity: 0.3,
+                scale: 1.0,
                 ease: "none",
                 scrollTrigger: {
                     trigger: ".ScrollSpacer",
