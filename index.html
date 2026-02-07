@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 
 <head>
@@ -59,10 +59,11 @@
          Resource Hints (Performance)
          ========================================== -->
     <!-- Preconnect for critical CDNs (upgraded from dns-prefetch) -->
+    <!-- Preconnect for critical CDNs (upgraded from dns-prefetch) -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="https://unpkg.com">
-    <link rel="dns-prefetch" href="https://prod.spline.design">
+    <link rel="preconnect" href="https://unpkg.com"> <!-- Upgraded to preconnect -->
+    <link rel="preconnect" href="https://prod.spline.design"> <!-- Upgraded to preconnect -->
 
     <!-- Google Fonts (Optimized with display=swap) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -139,6 +140,55 @@
     <!-- ==========================================
          結構化資料 (JSON-LD)
          ========================================== -->
+    <style>
+        /* Critical Loader CSS to prevent FOUC */
+        .loader-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #000;
+            z-index: 100000;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px;
+            color: #fff;
+        }
+
+        .loader-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 150px;
+            width: 100%;
+        }
+
+        .loader-text {
+            font-family: 'inter', 'montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: right;
+            line-height: 1.5;
+            color: #fff;
+            position: absolute;
+            bottom: 100px;
+        }
+
+        .loader-progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 4px;
+            width: 0%;
+            background-color: #ccff00;
+            transition: width 0.1s linear;
+        }
+    </style>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -199,7 +249,8 @@
             style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; z-index: 10000; font-family: 'Inter', sans-serif;">
             <div style="text-align: center; padding: 40px; max-width: 600px;">
                 <h1 style="font-size: 2.5rem; margin-bottom: 20px; color: #ccff00;">NUCLEAR LABS SYSTEM V3</h1>
-                <p style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 15px;">此網站需要啟用 JavaScript 才能體驗完整的互動功能。</p>
+                <p style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 15px;">此網站需要啟用 JavaScript
+                    才能體驗完整的互動功能。</p>
                 <p style="font-size: 1rem; opacity: 0.8;">請在瀏覽器設定中啟用 JavaScript 以獲得最佳體驗。</p>
             </div>
         </div>
@@ -207,10 +258,14 @@
 
     <!-- 0. LOADING SCREEN -->
     <div class="loader-screen" id="nuLoader">
-        <div class="loader-progress-bar"></div>
+        <div class="loader-progress-bar" id="loaderBar"></div>
+        <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.11/dist/dotlottie-wc.js" type="module"></script>
+        <dotlottie-wc src="https://lottie.host/7740f83e-1557-48fa-9abe-190874c001e5/sWehGXjzAg.lottie"
+            style="width: 120px;height: 120px ; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"
+            autoplay></dotlottie-wc>
 
         <div class="loader-content">
-            <div class="loader-counter">000</div>
+            <!-- Counter Removed -->
             <div class="loader-text">
                 NUCLEAR LABS SYSTEM V3<br>
                 INITIALIZING ASSETS<br>
@@ -351,20 +406,17 @@
                     <!-- Spline Viewer (Single responsive instance) -->
                     <div class="spline-container spline_pc">
                         <div class="spline-wrapper">
-                            <div class="spline-loading">
-                                <div class="spinner"></div>
-                            </div>
+
+
                             <spline-viewer loading="eager"
-                                url="https://prod.spline.design/P9GeC1WeLuHJmIu9/scene.splinecode"></spline-viewer>
+                                url="https://prod.spline.design/ug8EN2QQzeUpRBj8/scene.splinecode"></spline-viewer>
                         </div>
                     </div>
 
                     <div class="mobile_wrapper">
                         <div class="spline_mobile">
                             <div class="spline-wrapper">
-                                <div class="spline-loading">
-                                    <div class="spinner"></div>
-                                </div>
+
                                 <video class="mobile-banner-video" autoplay muted loop playsinline preload="auto"
                                     style="width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease;">
                                     <source src="n-rwd4.mp4" type="video/mp4">
@@ -390,7 +442,7 @@
                             </defs>
                             <text class="circle-text-path">
                                 <textPath xlink:href="#circle">
-                                    SCROLL DOWN • DISCOVER MORE •
+                                    SCROLL DOWN 鈥?DISCOVER MORE 鈥?
                                 </textPath>
                             </text>
                         </svg>
@@ -401,6 +453,13 @@
 
                 </div>
             </div>
+
+
+
+
+
+
+
 
             <!-- CROSSED MARQUEE SECTION (UPDATED) -->
             <section class="section-crossed-marquee" data-transition-element>
@@ -530,7 +589,7 @@
             <div class="section-stack-wrapper" id="work" data-transition-element>
                 <div class="card-stack-container">
                     <div class="project-card" data-cursor="view">
-                        <video class="card-bg-video" autoplay muted loop playsinline>
+                        <video class="card-bg-video" autoplay muted loop playsinline width="960" height="540">
                             <source src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/logo.mp4"
                                 type="video/mp4">
                         </video>
@@ -556,7 +615,7 @@
                     </div>
 
                     <div class="project-card" data-cursor="view">
-                        <video class="card-bg-video" autoplay muted loop playsinline>
+                        <video class="card-bg-video" autoplay muted loop playsinline width="960" height="540">
                             <source src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/N.webm"
                                 type="video/webm">
                         </video>
@@ -582,7 +641,7 @@
                         </div>
                     </div>
                     <div class="project-card" data-cursor="view">
-                        <video class="card-bg-video" autoplay muted loop playsinline>
+                        <video class="card-bg-video" autoplay muted loop playsinline width="960" height="540">
                             <source src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/n33iw-gkqw3.webm"
                                 type="video/webm">
                         </video>
@@ -615,7 +674,7 @@
             <section class="section-explosive-zoom" id="lab">
                 <div class="explosive-wrapper">
                     <div class="center-stage">
-                        <video autoplay muted loop playsinline>
+                        <video autoplay muted loop playsinline width="1920" height="1080">
                             <source src="https://clone.victorydesign.tw/wp-content/uploads/2025/11/nn.webm"
                                 type="video/webm">
                         </video>
@@ -660,19 +719,19 @@
                         <!-- NEW WIREFRAME ICON WRAPPER -->
                         <div class="wireframe-icon-wrapper">
                             <svg viewBox="0 0 400 400">
-                                <!-- 1. 外圈大虛線圓 -->
+                                <!-- 1. 澶栧湀澶ц櫅绶氬湏 -->
                                 <circle cx="200" cy="200" r="190" class="wf-wireframe wf-outer-dashed" />
 
-                                <!-- 2. 垂直貫穿軸線 -->
+                                <!-- 2. 鍨傜洿璨┛杌哥窔 -->
                                 <line x1="200" y1="10" x2="200" y2="390" class="wf-wireframe wf-axis-line" />
 
-                                <!-- 3. 上方透視環 (橢圓) -->
+                                <!-- 3. 涓婃柟閫忚鐠?(姗㈠湏) -->
                                 <ellipse cx="200" cy="100" rx="140" ry="35" class="wf-wireframe wf-latitude-ring" />
 
-                                <!-- 4. 下方透視環 -->
+                                <!-- 4. 涓嬫柟閫忚鐠?-->
                                 <ellipse cx="200" cy="300" rx="140" ry="35" class="wf-wireframe wf-latitude-ring" />
 
-                                <!-- 5. 中間赤道環群 (密集區) -->
+                                <!-- 5. 涓枔璧ら亾鐠扮兢 (瀵嗛泦鍗€) -->
                                 <ellipse cx="200" cy="200" rx="170" ry="50" class="wf-wireframe wf-equator-ring"
                                     style="animation-delay: 0s" />
                                 <ellipse cx="200" cy="200" rx="120" ry="35" class="wf-wireframe wf-equator-ring"
@@ -680,7 +739,7 @@
                                 <ellipse cx="200" cy="200" rx="70" ry="20" class="wf-wireframe wf-equator-ring"
                                     style="animation-delay: 1s" />
 
-                                <!-- 6. 關鍵節點 (白點) -->
+                                <!-- 6. 闂滈嵉绡€榛?(鐧介粸) -->
                                 <circle cx="200" cy="100" r="3" class="wf-node-dot" />
                                 <circle cx="200" cy="200" r="4" class="wf-node-dot" style="animation-delay: 0.5s" />
                                 <circle cx="200" cy="300" r="3" class="wf-node-dot" />
@@ -866,438 +925,9 @@
             </section>
 
             <!-- COMPONENT CREATOR UI SECTION -->
-            <style>
-                .section-component-creator {
-                    background-color: #111;
-                    padding: 4rem 1rem;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    min-height: 100vh;
-                    font-family: 'Inter', sans-serif;
-                }
+            <link rel="stylesheet" href="css/components.css">
 
-                .cc-card {
-                    width: 100%;
-                    max-width: 64rem;
-                    /* max-w-5xl */
-                    background-color: #1c1c1e;
-                    border-radius: 1.5rem;
-                    /* rounded-3xl */
-                    overflow: hidden;
-                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-                    /* shadow-2xl */
-                    border: 1px solid rgba(255, 255, 255, 0.05);
-                    position: relative;
-                    display: flex;
-                    flex-direction: column;
-                    min-height: 500px;
-                }
 
-                @media (min-width: 768px) {
-                    .cc-card {
-                        flex-direction: row;
-                    }
-                }
-
-                .bg-grid-dashed {
-                    background-image:
-                        linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-                    background-size: 40px 40px;
-                    pointer-events: none;
-                    opacity: 0.5;
-                    position: absolute;
-                    inset: 0;
-                }
-
-                .cc-left-col {
-                    position: relative;
-                    z-index: 10;
-                    width: 100%;
-                    padding: 2.5rem;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                }
-
-                @media (min-width: 768px) {
-                    .cc-left-col {
-                        width: 50%;
-                        padding: 4rem;
-                        /* p-16 */
-                    }
-                }
-
-                .glow-icon {
-                    background: linear-gradient(135deg, #fca5a5 0%, #ef4444 50%, #a855f7 100%);
-                    box-shadow: 0 0 20px rgba(239, 68, 68, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2);
-                    width: 4rem;
-                    height: 4rem;
-                    border-radius: 1rem;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    position: relative;
-                    z-index: 10;
-                }
-
-                .cc-title {
-                    font-size: 2.25rem;
-                    line-height: 1.1;
-                    font-weight: 900;
-                    letter-spacing: -0.025em;
-                    margin-bottom: 1.5rem;
-                    color: white;
-                }
-
-                @media (min-width: 768px) {
-                    .cc-title {
-                        font-size: 3rem;
-                        /* text-5xl */
-                    }
-                }
-
-                .cc-desc {
-                    color: #6b7280;
-                    /* text-gray-500 */
-                    font-size: 0.875rem;
-                    line-height: 1.625;
-                    max-width: 24rem;
-                }
-
-                @media (min-width: 768px) {
-                    .cc-desc {
-                        font-size: 1rem;
-                    }
-                }
-
-                .cc-right-col {
-                    position: relative;
-                    z-index: 10;
-                    width: 100%;
-                    background-color: rgba(28, 28, 30, 0.5);
-                    backdrop-filter: blur(4px);
-                    border-top: 1px solid rgba(255, 255, 255, 0.05);
-                    padding: 2rem;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                }
-
-                @media (min-width: 768px) {
-                    .cc-right-col {
-                        width: 50%;
-                        border-top: 0;
-                        border-left: 1px solid rgba(255, 255, 255, 0.05);
-                        padding: 3rem;
-                        /* p-12 */
-                    }
-                }
-
-                .custom-checkbox {
-                    appearance: none;
-                    background-color: white;
-                    border-radius: 4px;
-                    display: grid;
-                    place-content: center;
-                    transition: all 0.2s;
-                    width: 1.5rem;
-                    height: 1.5rem;
-                    cursor: pointer;
-                    border: none;
-                }
-
-                .custom-checkbox::before {
-                    content: "";
-                    width: 10px;
-                    height: 10px;
-                    transform: scale(0);
-                    transition: 0.1s transform ease-in-out;
-                    box-shadow: inset 1em 1em white;
-                    transform-origin: center;
-                    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-                }
-
-                .custom-checkbox:checked {
-                    background-color: #3b82f6;
-                    border-color: #3b82f6;
-                }
-
-                .custom-checkbox:checked::before {
-                    transform: scale(1);
-                }
-
-                .toggle-switch {
-                    position: relative;
-                    display: inline-flex;
-                    align-items: center;
-                    cursor: pointer;
-                }
-
-                .toggle-switch input {
-                    appearance: none;
-                    position: absolute;
-                    width: 1px;
-                    height: 1px;
-                    padding: 0;
-                    margin: -1px;
-                    overflow: hidden;
-                    clip: rect(0, 0, 0, 0);
-                    white-space: nowrap;
-                    border-width: 0;
-                }
-
-                .toggle-track {
-                    width: 2.75rem;
-                    height: 1.5rem;
-                    background-color: #4b5563;
-                    border-radius: 9999px;
-                    transition: all 0.2s;
-                    position: relative;
-                }
-
-                .toggle-switch input:checked+.toggle-track {
-                    background-color: rgba(20, 184, 166, 0.8);
-                    /* teal-500/80 */
-                }
-
-                .toggle-thumb {
-                    position: absolute;
-                    top: 2px;
-                    left: 2px;
-                    background-color: white;
-                    border: 1px solid #d1d5db;
-                    border-radius: 9999px;
-                    height: 1.25rem;
-                    width: 1.25rem;
-                    transition: all 0.2s;
-                }
-
-                .toggle-switch input:checked+.toggle-track .toggle-thumb {
-                    transform: translateX(100%);
-                    border-color: white;
-                }
-
-                .list-item-selected {
-                    border: 1px solid #3b82f6;
-                    background-color: rgba(59, 130, 246, 0.1);
-                }
-
-                .cc-item-row {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.75rem;
-                    padding: 0.5rem;
-                    border-radius: 0.25rem;
-                    border: 1px solid transparent;
-                    transition: border-color 0.2s;
-                    cursor: pointer;
-                    position: relative;
-                }
-
-                .cc-item-row:hover {
-                    border-color: #4b5563;
-                }
-
-                /* Utility helper for text colors in this block */
-                .text-gray-200 {
-                    color: #e5e7eb;
-                }
-
-                .text-gray-300 {
-                    color: #d1d5db;
-                }
-
-                .text-gray-400 {
-                    color: #9ca3af;
-                }
-
-                .text-gray-600 {
-                    color: #4b5563;
-                }
-
-                .text-white {
-                    color: white;
-                }
-
-                .text-blue-500 {
-                    color: #3b82f6;
-                }
-
-                /* Fallback */
-
-                /* Icon detail (diamonds) */
-                .icon-grid {
-                    display: grid;
-                    grid-template-columns: repeat(2, 1fr);
-                    gap: 0.25rem;
-                    opacity: 0.8;
-                }
-
-                .icon-dot {
-                    width: 0.75rem;
-                    height: 0.75rem;
-                    background-color: rgba(255, 255, 255, 0.8);
-                    transform: rotate(45deg);
-                }
-
-                .glow-blur {
-                    position: absolute;
-                    inset: 0;
-                    background-color: #ef4444;
-                    filter: blur(40px);
-                    opacity: 0.4;
-                    transition: opacity 0.5s;
-                }
-
-                .glow-icon-container:hover .glow-blur {
-                    opacity: 0.6;
-                }
-            </style>
-
-            <section class="section-component-creator">
-                <!-- Main Container Card -->
-                <div class="cc-card">
-
-                    <!-- Background Grid Lines Overlay -->
-                    <div class="bg-grid-dashed"></div>
-
-                    <!-- Left Column: Branding & Info -->
-                    <div class="cc-left-col">
-
-                        <!-- Glowing Icon -->
-                        <div class="glow-icon-container" style="margin-bottom: 2rem; position: relative;">
-                            <div class="glow-icon">
-                                <div class="icon-grid">
-                                    <div class="icon-dot"></div>
-                                    <div class="icon-dot"></div>
-                                    <div class="icon-dot"></div>
-                                    <div class="icon-dot"></div>
-                                </div>
-                            </div>
-                            <!-- Back glow blur -->
-                            <div class="glow-blur"></div>
-                        </div>
-
-                        <!-- Title -->
-                        <h1 class="cc-title">
-                            CONTROL TO CREATE <br>
-                            AS <span class="text-white">COMPONENT</span> <span class="text-gray-600">OR</span> <br>
-                            PLAIN LAYERS
-                        </h1>
-
-                        <!-- Description -->
-                        <p class="cc-desc">
-                            Each UI element can be pasted as plain layers if you're just experimenting or as component
-                            if you're ready to commit
-                        </p>
-                    </div>
-
-                    <!-- Right Column: Interactive UI -->
-                    <div class="cc-right-col">
-
-                        <!-- Toggle Switch Header -->
-                        <div
-                            style="display: flex; align-items: center; justify-content: flex-end; margin-bottom: 2rem; gap: 0.75rem;">
-                            <!-- Toggle -->
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <div class="toggle-track">
-                                    <div class="toggle-thumb"></div>
-                                </div>
-                            </label>
-                            <span
-                                style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; color: #d1d5db; text-transform: uppercase;">Create
-                                as component</span>
-                        </div>
-
-                        <!-- Selection List Box -->
-                        <div
-                            style="border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 0.5rem; padding: 0.25rem; position: relative;">
-                            <!-- Decorative corner markers -->
-                            <div
-                                style="position: absolute; top: -4px; left: -4px; width: 8px; height: 8px; border-top: 1px solid #3b82f6; border-left: 1px solid #3b82f6;">
-                            </div>
-                            <div
-                                style="position: absolute; top: -4px; right: -4px; width: 8px; height: 8px; border-top: 1px solid #3b82f6; border-right: 1px solid #3b82f6;">
-                            </div>
-                            <div
-                                style="position: absolute; bottom: -4px; left: -4px; width: 8px; height: 8px; border-bottom: 1px solid #3b82f6; border-left: 1px solid #3b82f6;">
-                            </div>
-                            <div
-                                style="position: absolute; bottom: -4px; right: -4px; width: 8px; height: 8px; border-bottom: 1px solid #3b82f6; border-right: 1px solid #3b82f6;">
-                            </div>
-
-                            <!-- List Items -->
-                            <div style="display: flex; flex-direction: column; gap: 0.75rem; padding: 0.5rem;">
-
-                                <!-- Item 1 -->
-                                <div class="group" style="position: relative;">
-                                    <div
-                                        style="font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 0.25rem; letter-spacing: 0.05em; margin-left: 0.25rem;">
-                                        Frame</div>
-                                    <div class="cc-item-row">
-                                        <input type="checkbox" class="custom-checkbox">
-                                        <span class="text-gray-200" style="font-size: 1.125rem;">Oranges</span>
-                                    </div>
-                                </div>
-
-                                <!-- Item 2 (Active/Selected) -->
-                                <div class="group" style="position: relative;">
-                                    <div
-                                        style="font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 0.25rem; letter-spacing: 0.05em; margin-left: 0.25rem;">
-                                        Frame</div>
-                                    <div class="cc-item-row list-item-selected"
-                                        style="position: relative; z-index: 10;">
-                                        <input type="checkbox" class="custom-checkbox" checked>
-                                        <span class="text-white" style="font-size: 1.125rem;">Mangos</span>
-                                    </div>
-                                    <!-- Blue outline simulation & handles -->
-                                    <div
-                                        style="position: absolute; inset: 0; border: 1px solid #3b82f6; pointer-events: none; border-radius: 0.25rem; transform: translateY(1rem); display: none;">
-                                    </div>
-                                </div>
-
-                                <!-- Item 3 -->
-                                <div class="group" style="position: relative; margin-top: 0.5rem;">
-                                    <div
-                                        style="font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 0.25rem; letter-spacing: 0.05em; margin-left: 0.25rem;">
-                                        Frame</div>
-                                    <div class="cc-item-row">
-                                        <input type="checkbox" class="custom-checkbox">
-                                        <span class="text-gray-200" style="font-size: 1.125rem;">Apples</span>
-                                    </div>
-                                </div>
-
-                                <!-- Item 4 -->
-                                <div class="group" style="position: relative;">
-                                    <div
-                                        style="font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 0.25rem; letter-spacing: 0.05em; margin-left: 0.25rem;">
-                                        Frame</div>
-                                    <div class="cc-item-row">
-                                        <input type="checkbox" class="custom-checkbox">
-                                        <span class="text-gray-200" style="font-size: 1.125rem;">Bananas</span>
-                                    </div>
-                                </div>
-
-                                <!-- Item 5 -->
-                                <div class="group" style="position: relative;">
-                                    <div
-                                        style="font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 0.25rem; letter-spacing: 0.05em; margin-left: 0.25rem;">
-                                        Frame</div>
-                                    <div class="cc-item-row">
-                                        <input type="checkbox" class="custom-checkbox">
-                                        <span class="text-gray-200" style="font-size: 1.125rem;">Kiwis</span>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
 
             <!-- PINNED TEXT REVEAL -->
             <section class="section-pinned-text">
@@ -1319,115 +949,115 @@
                     <article class="grid-card">
                         <div class="media ratio-1" data-cursor="view">
                             <video src="recruit/assets/images/video1.mp4" autoplay muted loop playsinline loading="lazy"
-                                preload="none" class="photo-webgl-source webgl-target"
+                                preload="none" class="photo-webgl-source webgl-target" width="600" height="600"
                                 style="object-fit: cover; width: 100%; height: 100%;"></video>
                             <div class="noise-overlay"></div>
                         </div>
                         <div class="info">
                             <h2 class="title" data-effect="text-reveal">Kinetic Sandscapes</h2>
-                            <p class="meta">2025 – Branding</p>
+                            <p class="meta">2025 — Branding</p>
                         </div>
                     </article>
                     <article class="grid-card">
                         <div class="media ratio-3" data-cursor="view">
                             <video src="recruit/assets/images/video5.mp4" autoplay muted loop playsinline loading="lazy"
-                                preload="none" class="photo-webgl-source webgl-target"
+                                preload="none" class="photo-webgl-source webgl-target" width="1920" height="1080"
                                 style="object-fit: cover; width: 100%; height: 100%;"></video>
                         </div>
                         <div class="info">
                             <h2 class="title" data-effect="text-reveal">Neon Structure</h2>
-                            <p class="meta">2024 – Architecture</p>
+                            <p class="meta">2024 — Architecture</p>
                         </div>
                     </article>
                     <article class="grid-card">
                         <div class="media ratio-3" data-cursor="view">
                             <img src="https://images.unsplash.com/photo-1571212515416-f223d633f06c?q=80&w=2574&auto=format&fit=crop"
-                                loading="lazy" decoding="async" class="photo-webgl-source webgl-target"
-                                alt="Brooklyn Brewery">
+                                loading="lazy" decoding="async" class="photo-webgl-source webgl-target" width="1920"
+                                height="1080" alt="Brooklyn Brewery">
                         </div>
                         <div class="info">
                             <h2 class="title" data-effect="text-reveal">Brooklyn Brewery</h2>
-                            <p class="meta">2025 – Photography</p>
+                            <p class="meta">2025 — Photography</p>
                         </div>
                     </article>
                     <article class="grid-card">
                         <div class="media ratio-2" data-cursor="view">
                             <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=2676&auto=format&fit=crop"
-                                loading="lazy" decoding="async" class="photo-webgl-source webgl-target"
-                                alt="Regenerative">
+                                loading="lazy" decoding="async" class="photo-webgl-source webgl-target" width="800"
+                                height="600" alt="Regenerative">
                         </div>
                         <div class="info">
                             <h2 class="title" data-effect="text-reveal">Regenerative</h2>
-                            <p class="meta">2025 – Photography</p>
+                            <p class="meta">2025 — Photography</p>
                         </div>
                     </article>
                     <article class="grid-card">
                         <div class="media ratio-2" data-cursor="view">
                             <video src="recruit/assets/images/video3.mp4" autoplay muted loop playsinline loading="lazy"
-                                preload="none" class="photo-webgl-source webgl-target"
+                                preload="none" class="photo-webgl-source webgl-target" width="800" height="600"
                                 style="object-fit: cover; width: 100%; height: 100%;"></video>
                             <div class="noise-overlay"></div>
                         </div>
                         <div class="info">
                             <h2 class="title" data-effect="text-reveal">Hopscotch Payments</h2>
-                            <p class="meta">2025 – Development</p>
+                            <p class="meta">2025 — Development</p>
                         </div>
                     </article>
                     <article class="grid-card">
                         <div class="media ratio-4" data-cursor="view">
                             <video src="recruit/assets/images/video2.mp4" autoplay muted loop playsinline loading="lazy"
-                                preload="none" class="photo-webgl-source webgl-target"
+                                preload="none" class="photo-webgl-source webgl-target" width="1080" height="1920"
                                 style="object-fit: cover; width: 100%; height: 100%;"></video>
                             <div class="noise-overlay"></div>
                         </div>
                         <div class="info">
                             <h2 class="title" data-effect="text-reveal">Stories Worthwhile</h2>
-                            <p class="meta">2025 – UI/UX Design</p>
+                            <p class="meta">2025 — UI/UX Design</p>
                         </div>
                     </article>
                     <article class="grid-card">
                         <div class="media ratio-1" data-cursor="view">
                             <img src="https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?q=80&w=2670&auto=format&fit=crop"
-                                loading="lazy" decoding="async" class="photo-webgl-source webgl-target"
-                                alt="Urban Exploration">
+                                loading="lazy" decoding="async" class="photo-webgl-source webgl-target" width="600"
+                                height="600" alt="Urban Exploration">
                         </div>
                         <div class="info">
                             <h2 class="title" data-effect="text-reveal">Urban Exploration</h2>
-                            <p class="meta">2024 – Strategy</p>
+                            <p class="meta">2024 — Strategy</p>
                         </div>
                     </article>
                     <article class="grid-card">
                         <div class="media ratio-2" data-cursor="view">
                             <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=2574&auto=format&fit=crop"
-                                loading="lazy" decoding="async" class="photo-webgl-source webgl-target"
-                                alt="Digital Horizons">
+                                loading="lazy" decoding="async" class="photo-webgl-source webgl-target" width="800"
+                                height="600" alt="Digital Horizons">
                         </div>
                         <div class="info">
                             <h2 class="title" data-effect="text-reveal">Digital Horizons</h2>
-                            <p class="meta">2025 – Web Design</p>
+                            <p class="meta">2025 — Web Design</p>
                         </div>
                     </article>
                     <article class="grid-card">
                         <div class="media ratio-3" data-cursor="view">
                             <video src="recruit/assets/images/video4.mp4" autoplay muted loop playsinline loading="lazy"
-                                preload="none" class="photo-webgl-source webgl-target"
+                                preload="none" class="photo-webgl-source webgl-target" width="1920" height="1080"
                                 style="object-fit: cover; width: 100%; height: 100%;"></video>
                             <div class="noise-overlay"></div>
                         </div>
                         <div class="info">
                             <h2 class="title" data-effect="text-reveal">Motion Graphics</h2>
-                            <p class="meta">2025 – Animation</p>
+                            <p class="meta">2025 — Animation</p>
                         </div>
                     </article>
                     <article class="grid-card">
                         <div class="media ratio-1" data-cursor="view">
                             <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2670&auto=format&fit=crop"
-                                loading="lazy" decoding="async" class="photo-webgl-source webgl-target"
-                                alt="Cosmic Journey">
+                                loading="lazy" decoding="async" class="photo-webgl-source webgl-target" width="600"
+                                height="600" alt="Cosmic Journey">
                         </div>
                         <div class="info">
                             <h2 class="title" data-effect="text-reveal">Cosmic Journey</h2>
-                            <p class="meta">2025 – Creative Direction</p>
+                            <p class="meta">2025 — Creative Direction</p>
                         </div>
                     </article>
                 </div>
@@ -1438,12 +1068,12 @@
                 <!-- Top Marquee -->
                 <div class="footer-marquee">
                     <div class="footer-track">
-                        <span class="footer-marquee-item">LET'S WORK TOGETHER •</span>
-                        <span class="footer-marquee-item">START A PROJECT •</span>
-                        <span class="footer-marquee-item">SAY HELLO •</span>
-                        <span class="footer-marquee-item">LET'S WORK TOGETHER •</span>
-                        <span class="footer-marquee-item">START A PROJECT •</span>
-                        <span class="footer-marquee-item">SAY HELLO •</span>
+                        <span class="footer-marquee-item">LET'S WORK TOGETHER ↗</span>
+                        <span class="footer-marquee-item">START A PROJECT ↗</span>
+                        <span class="footer-marquee-item">SAY HELLO ↗</span>
+                        <span class="footer-marquee-item">LET'S WORK TOGETHER ↗</span>
+                        <span class="footer-marquee-item">START A PROJECT ↗</span>
+                        <span class="footer-marquee-item">SAY HELLO ↗</span>
                     </div>
                 </div>
                 <div>
@@ -1541,7 +1171,7 @@
                     </div>
                     <div class="footer-col">
                         <div class="footer-label">COPYRIGHT</div>
-                        <div>©2025 NUCLEAR LABS</div>
+                        <div>© 2025 NUCLEAR LABS</div>
                     </div>
                 </div>
             </div>
@@ -1549,873 +1179,9 @@
 
     </div>
 
-    <script>
-        /* ========================================
-           PAGE TRANSITION MANAGER CLASS
-           ======================================== */
-        class PageTransitionManager {
-            constructor() {
-                this.overlay = document.querySelector('.page-transition-overlay');
-                this.logo = document.querySelector('.transition-logo');
-                this.isTransitioning = false;
-            }
-            // 退場動畫 (點擊連結時)
-            exitAnimation(callback) {
-                if (this.isTransitioning) return;
-                this.isTransitioning = true;
-                if (window.lenis) window.lenis.stop();
-                const tl = gsap.timeline({ onComplete: () => { if (callback) callback(); } });
-                tl.to('[data-transition-element]', { y: -50, opacity: 0, stagger: 0.03, duration: 0.5, ease: 'power2.in' });
-                tl.to(this.overlay, { clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: 'power4.inOut' }, '-=0.3');
-                tl.to(this.logo, { opacity: 1, duration: 0.3 }, '-=0.4');
-                return tl;
-            }
-            // 進場動畫 (頁面載入時)
-            entryAnimation() {
-                const tl = gsap.timeline({
-                    onComplete: () => {
-                        this.isTransitioning = false;
-                        if (window.lenis) window.lenis.start();
-                        // 進場動畫完成後更新錨點位置
-                        if (typeof updateAnchorPositions === 'function') {
-                            setTimeout(() => updateAnchorPositions(), 100);
-                        }
-                    }
-                });
-                tl.to(this.logo, { opacity: 0, duration: 0.3 });
-                tl.to(this.overlay, { clipPath: 'inset(0 0 100% 0)', duration: 0.8, ease: 'power4.inOut' }, '-=0.1');
-                tl.from('[data-transition-element]', { y: 50, opacity: 0, stagger: 0.03, duration: 0.6, ease: 'power2.out' }, '-=0.5');
-                return tl;
-            }
-            // 連結攔截器
-            interceptLinks() {
-                const links = document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"])');
-                links.forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        const href = link.getAttribute('href');
-                        if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
-                        e.preventDefault();
-
-                        // 如果選單是開著的，先執行關閉動畫
-                        if (typeof menuTl !== 'undefined' && document.getElementById('menuOverlay').style.visibility !== 'hidden') {
-                            menuTl.reverse();
-                        }
-
-                        this.exitAnimation(() => { window.location.href = href; });
-                    });
-                });
-            }
-        }
-        /* ========================================
-           MAIN INITIALIZATION
-           ======================================== */
-        window.addEventListener('load', function () {
-
-            if (typeof gsap === 'undefined' || typeof Lenis === 'undefined') return;
-
-            if (window.ScrollTrigger) {
-                gsap.registerPlugin(ScrollTrigger);
-            }
-
-            // 1. Lenis Smooth Scroll (CRITICAL: 使用 window.lenis 使其全局可訪問)
-            window.lenis = new Lenis({
-                duration: 1.2,
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                direction: 'vertical',
-                gestureDirection: 'vertical',
-                smooth: true,
-                mouseMultiplier: 1,
-                smoothTouch: false,
-                touchMultiplier: 2
-            });
-
-            // Tech Dashboard & Header Logic
-            const techIndicator = document.getElementById('techIndicator');
-            const hudScrollVal = document.getElementById('hudScrollVal');
-            const glassNav = document.querySelector('.glass-nav');
-            const pillHeader = document.querySelector('.header-container');
-            const scrollThreshold = 300;
-
-            // 動態計算並更新錨點位置
-            function updateAnchorPositions() {
-                const anchors = document.querySelectorAll('.tech-anchor-item');
-                const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-
-                anchors.forEach(anchor => {
-                    const targetId = anchor.getAttribute('data-target');
-                    const targetEl = document.querySelector(targetId);
-
-                    if (targetEl && scrollHeight > 0) {
-                        // 計算目標元素在頁面中的實際位置百分比
-                        const elementTop = targetEl.offsetTop;
-                        const percent = (elementTop / scrollHeight) * 100;
-                        anchor.style.top = `${Math.min(Math.max(percent, 0), 100)}%`;
-                    }
-                });
-            }
-
-            if (window.ScrollTrigger) {
-                window.lenis.on('scroll', (e) => {
-                    ScrollTrigger.update();
-                    // Pill Header Visibility (Always Visible - Auto-hide disabled)
-                });
-
-                gsap.ticker.add((time) => {
-                    window.lenis.raf(time * 1000);
-
-                    // Update Dashboard Indicator based on scroll progress
-                    const scrollProgress = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-                    const percent = Math.min(Math.max(scrollProgress * 100, 0), 100);
-
-                    if (techIndicator) {
-                        techIndicator.style.top = `${percent}%`;
-                    }
-
-                    // Update HUD
-                    if (hudScrollVal) {
-                        hudScrollVal.innerText = Math.floor(window.scrollY).toString().padStart(4, '0');
-                    }
-                });
-                gsap.ticker.lagSmoothing(0);
-            }
-
-            // 初始化錨點位置
-            updateAnchorPositions();
-
-            // 當窗口大小改變時重新計算
-            window.addEventListener('resize', () => {
-                setTimeout(updateAnchorPositions, 100);
-            });
-
-            // Tech Anchors Click Event
-            document.querySelectorAll('.tech-anchor-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    const targetId = item.getAttribute('data-target');
-                    const targetEl = document.querySelector(targetId);
-                    if (targetEl) {
-                        window.lenis.scrollTo(targetEl);
-                    }
-                });
-            });
-
-            // 2. Loading Animation (Wait for ALL Spline instances)
-            const loaderCounter = document.querySelector(".loader-counter");
-            const loaderBar = document.querySelector(".loader-progress-bar");
-            const loaderScreen = document.querySelector(".loader-screen");
-
-            let progressObj = { val: 0 };
-            let splineLoaded = false;
-            let breatheAnimation = null;
-
-            // 監聽所有 spline-viewer 的 load 事件
-            const allSplineViewers = document.querySelectorAll('spline-viewer');
-            const mobileVideo = document.querySelector('.mobile-banner-video');
-
-            // Determine if we are waiting for Spline (Desktop) or Video (Mobile)
-            // Using offsetParent check is a reliable way to detect if an element or its ancestor is display: none
-            const visibleSplineViewers = Array.from(allSplineViewers).filter(el => el.offsetParent !== null);
-            const isMobileVideoVisible = mobileVideo && mobileVideo.offsetParent !== null;
-
-            let loadedCount = 0;
-            // Calculate total items to wait for
-            let totalItemsToWait = visibleSplineViewers.length + (isMobileVideoVisible ? 1 : 0);
-
-            console.log(`Items to wait for: ${totalItemsToWait} (Spline: ${visibleSplineViewers.length}, Video: ${isMobileVideoVisible ? 1 : 0})`);
-
-            function checkAllLoaded() {
-                loadedCount++;
-                console.log(`Asset loaded: ${loadedCount}/${totalItemsToWait}`);
-
-                if (!splineLoaded && (totalItemsToWait === 0 || loadedCount >= totalItemsToWait)) {
-                    splineLoaded = true;
-                    // Trigger finish
-                    if (typeof window.triggerLoadFinish === 'function') {
-                        window.triggerLoadFinish();
-                    }
-                }
-            }
-
-            // A. Handle Spline Viewers
-            visibleSplineViewers.forEach((viewer) => {
-                viewer.addEventListener('load', () => {
-                    checkAllLoaded();
-                });
-                // 有時候 load 不觸發，用 web components 屬性檢查
-                if (viewer.shadowRoot) {
-                    // If already loaded, manually trigger? 
-                    // Better to rely on the event or check if we missed it. 
-                    // For now, let's assume the event triggers or the timeout handles it.
-                    // Actually, if shadowRoot exists, it might be effectively 'loaded' enough for us
-                    // But 'load' event is safer for content. 
-                }
-            });
-
-            // B. Handle Mobile Video
-            if (isMobileVideoVisible) {
-                // If video is already ready (cached)
-                if (mobileVideo.readyState >= 3) { // HAVE_FUTURE_DATA or higher
-                    checkAllLoaded();
-                    mobileVideo.style.opacity = 1;
-                    const wrapper = mobileVideo.closest('.spline-wrapper');
-                    if (wrapper) wrapper.classList.add('loaded'); // Hide spinner
-                } else {
-                    mobileVideo.addEventListener('loadeddata', () => {
-                        checkAllLoaded();
-                        mobileVideo.style.opacity = 1;
-                        const wrapper = mobileVideo.closest('.spline-wrapper');
-                        if (wrapper) wrapper.classList.add('loaded'); // Hide spinner
-                    });
-                    mobileVideo.addEventListener('error', () => {
-                        console.warn("Video load error");
-                        checkAllLoaded(); // Count it anyway to avoid blocking
-                    });
-                }
-            }
-
-            // If nothing to wait for (e.g. strict text mode or error), treat as loaded
-            if (totalItemsToWait === 0) {
-                console.log("No visible assets to wait for. Skipping wait.");
-                setTimeout(() => {
-                    splineLoaded = true;
-                    if (typeof window.triggerLoadFinish === 'function') {
-                        window.triggerLoadFinish();
-                    }
-                }, 100);
-            }
-
-            // Fallback Timeout (4s max wait)
-            setTimeout(() => {
-                if (!splineLoaded) {
-                    console.warn('Asset load timeout (4s) - forcing entry.');
-                    splineLoaded = true;
-                    if (typeof window.triggerLoadFinish === 'function') {
-                        window.triggerLoadFinish();
-                    }
-                }
-            }, 6000); // Increased to 6s for video buffer potentially
-
-            // 完成載入並進場
-            function enterSite() {
-                // 停止呼吸動畫
-                if (breatheAnimation) {
-                    breatheAnimation.kill();
-                }
-
-                // Initialize Transition Manager
-                const transitionManager = new PageTransitionManager();
-                const overlay = document.querySelector('.page-transition-overlay');
-
-                // Finish Progress Bar
-                gsap.to(progressObj, {
-                    val: 100,
-                    duration: 0.5,
-                    ease: "power2.out",
-                    onUpdate: updateLoaderUI,
-                    onComplete: () => {
-                        sessionStorage.setItem('visited', 'true');
-
-                        gsap.set(overlay, { clipPath: 'inset(0 0 0 0)' });
-                        gsap.set('.transition-logo', { opacity: 1 });
-
-                        loaderScreen.style.display = 'none';
-
-                        transitionManager.entryAnimation();
-                        transitionManager.interceptLinks();
-                    }
-                });
-            }
-
-            // Start Loading Sequence
-            function startLoadingSequence() {
-                // Animate to 90% then WAIT
-                const tl = gsap.timeline();
-
-                tl.to(progressObj, {
-                    val: 40,
-                    duration: 1,
-                    ease: "power2.out",
-                    onUpdate: updateLoaderUI
-                })
-                    .to(progressObj, {
-                        val: 90,
-                        duration: 2, // Slow down as we approach the "wait" zone
-                        ease: "power1.inOut",
-                        onUpdate: updateLoaderUI
-                    });
-
-                // Define the trigger function exposed to global scope
-                window.triggerLoadFinish = function () {
-                    console.log("Assets loaded. Finishing sequence.");
-                    // Kill the fake progress timeline
-                    tl.kill();
-                    // Execute entry
-                    enterSite();
-                };
-
-                // If already loaded by the time we invoke this (rare but possible with cache)
-                if (splineLoaded) {
-                    window.triggerLoadFinish();
-                }
-            }
-
-            // Should skipping be allowed? Current requirement: strict wait.
-            // But we keep the loop logic for init.
-            startLoadingSequence();
-
-            // 更新 UI 的輔助函數
-            function updateLoaderUI() {
-                if (loaderCounter) loaderCounter.innerText = Math.floor(progressObj.val).toString().padStart(3, '0');
-                if (loaderBar) loaderBar.style.width = `${progressObj.val}%`;
-            }
-
-
-
-
-            // --- Cursor Logic ---
-            const cursorDot = document.querySelector('#nu-wrapper .cursor-dot');
-            const cursorFollower = document.querySelector('#nu-wrapper .cursor-follower');
-            const cursorText = document.querySelector('#nu-wrapper .cursor-text');
-            const xTo = gsap.quickSetter(cursorDot, "x", "px"), yTo = gsap.quickSetter(cursorDot, "y", "px");
-            const xToFollower = gsap.quickSetter(cursorFollower, "x", "px"), yToFollower = gsap.quickSetter(cursorFollower, "y", "px");
-            let mouseX = 0, mouseY = 0, followerPos = { x: 0, y: 0 };
-
-            gsap.set(cursorDot, { xPercent: -50, yPercent: -50 });
-            gsap.set(cursorFollower, { xPercent: -50, yPercent: -50 });
-
-            document.getElementById('nu-wrapper').addEventListener('mousemove', e => {
-                mouseX = e.clientX; mouseY = e.clientY; xTo(mouseX); yTo(mouseY);
-            });
-
-            gsap.ticker.add(() => {
-                const dt = 1.0 - Math.pow(1.0 - 0.1, gsap.ticker.deltaRatio());
-                followerPos.x += (mouseX - followerPos.x) * dt; followerPos.y += (mouseY - followerPos.y) * dt;
-                xToFollower(followerPos.x); yToFollower(followerPos.y);
-            });
-            document.querySelectorAll('[data-cursor]').forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    document.body.classList.add('hovered');
-                    if (el.dataset.cursor === 'view') cursorText.innerText = "VIEW"; else cursorText.innerText = "";
-                });
-                el.addEventListener('mouseleave', () => {
-                    document.body.classList.remove('hovered'); cursorText.innerText = "";
-                });
-            });
-
-            // --- Text Reveal Logic ---
-            const splitText = (element) => {
-                const text = element.innerText;
-                element.innerHTML = text.split("").map(char => `<span class="char">${char === ' ' ? '&nbsp;' : char}</span>`).join("");
-            };
-            document.querySelectorAll('[data-effect="text-reveal"]').forEach(el => {
-                splitText(el);
-                const chars = el.querySelectorAll('.char');
-                if (window.ScrollTrigger) {
-                    gsap.fromTo(chars,
-                        { opacity: 0, y: 50, filter: "blur(10px)", fontWeight: 100 },
-                        {
-                            opacity: 1, y: 0, filter: "blur(0px)", fontWeight: 800,
-                            duration: 1, stagger: 0.05, ease: "power4.out",
-                            scrollTrigger: { trigger: el, start: "top 80%" }
-                        }
-                    );
-                }
-            });
-
-            // --- Horizontal Staggered Scroll Animation ---
-            if (window.ScrollTrigger) {
-                const hSectionStaggered = document.querySelector('.section-horizontal-staggered');
-                const isMobile = window.innerWidth <= 768;
-
-                if (hSectionStaggered && !isMobile) {
-                    const wrapper = document.querySelector('.horizontal-staggered-wrapper');
-                    const getScrollAmount = () => -(wrapper.scrollWidth - window.innerWidth);
-
-                    gsap.to(wrapper, {
-                        x: getScrollAmount,
-                        ease: "none",
-                        scrollTrigger: {
-                            trigger: hSectionStaggered,
-                            pin: true,
-                            scrub: 1,
-                            invalidateOnRefresh: true,
-                            end: () => "+=" + wrapper.scrollWidth
-                        }
-                    });
-                }
-            }
-
-            // --- Explosive Zoom Section ---
-            if (window.ScrollTrigger) {
-                const exploSection = document.querySelector(".section-explosive-zoom");
-                const isMobile = window.innerWidth <= 768;
-
-                if (exploSection && !isMobile) {
-                    const exploTl = gsap.timeline({
-                        scrollTrigger: {
-                            trigger: ".section-explosive-zoom",
-                            start: "top top",
-                            end: "bottom bottom",
-                            scrub: 1,
-                            pin: ".explosive-wrapper"
-                        }
-                    });
-                    exploTl.fromTo(".center-stage", { scale: 0.8, borderRadius: "20px" }, { scale: 2.5, borderRadius: "0px", duration: 1, ease: "power2.inOut" }, 0);
-                    exploTl.to(".pos-1", { x: -300, y: -300, opacity: 0, scale: 1.5, duration: 0.8 }, 0);
-                    exploTl.to(".pos-2", { x: -400, y: 200, opacity: 0, scale: 1.2, duration: 0.9 }, 0);
-                    exploTl.to(".pos-3", { x: 400, y: -100, opacity: 0, scale: 1.5, duration: 0.7 }, 0);
-                    exploTl.to(".pos-4", { x: 300, y: 300, opacity: 0, scale: 1.2, duration: 0.8 }, 0);
-                    exploTl.to(".pos-5", { y: 200, opacity: 0, scale: 2, duration: 0.5 }, 0);
-                }
-            }
-
-            // --- Card Stack Pinning with Shrinking Effect ---
-            if (window.ScrollTrigger) {
-                const cards = gsap.utils.toArray(".project-card");
-                const isMobile = window.innerWidth <= 768;
-
-                cards.forEach((card, i) => {
-                    if (!isMobile) {
-                        // Desktop: Pinning stack effect
-                        const shouldPin = i < cards.length - 1;
-                        if (shouldPin) {
-                            ScrollTrigger.create({
-                                trigger: card,
-                                start: "top top",
-                                pin: true,
-                                pinSpacing: false,
-                                endTrigger: cards[i + 1],
-                                end: "top top",
-                                onUpdate: (self) => {
-                                    const progress = self.progress;
-                                    const scale = 1 - (progress * 0.15);
-                                    const yOffset = progress * 40;
-                                    gsap.to(card, {
-                                        scale: scale,
-                                        y: -yOffset,
-                                        duration: 0.3,
-                                        ease: "power2.out"
-                                    });
-                                }
-                            });
-                        }
-                        // Mobile: Scroll-based scale effect (Compliments Sticky)
-                        gsap.set(card, { transformOrigin: "top center" });
-                        gsap.fromTo(card,
-                            { scale: 1, filter: "brightness(1)" },
-                            {
-                                scale: 0.95,
-                                filter: "brightness(0.8)",
-                                ease: "none",
-                                scrollTrigger: {
-                                    trigger: card,
-                                    start: "top 5%",
-                                    end: "bottom 5%",
-                                    scrub: true
-                                }
-                            }
-                        );
-                    }
-                });
-            }
-
-
-            // --- Menu Logic ---
-            const menuTl = gsap.timeline({ paused: true });
-            gsap.set(".nav-link", { y: "110%", skewY: 10 });
-            gsap.set(".nav-item", { borderBottomColor: "rgba(0,0,0,0)" });
-            gsap.set(".menu-footer-info", { opacity: 0, y: 20 });
-
-            menuTl.to("#menuOverlay", { autoAlpha: 1, clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: "power4.inOut" })
-                .to(".nav-link", { y: "0%", skewY: 0, duration: 0.8, stagger: 0.05, ease: "power4.out" }, "-=0.6")
-                .to(".menu-footer-info", { opacity: 1, y: 0, duration: 0.5 }, "-=0.4");
-
-            const openBtn = document.getElementById('openMenu');
-            if (openBtn) openBtn.addEventListener('click', () => { window.lenis.stop(); menuTl.restart(); });
-
-            const closeBtn = document.getElementById('closeMenu');
-            if (closeBtn) closeBtn.addEventListener('click', () => { menuTl.reverse(); setTimeout(() => window.lenis.start(), 1000); });
-
-            // Scroll Top Button
-            const scrollTopBtn = document.getElementById('scrollTopBtn');
-            if (scrollTopBtn) {
-                scrollTopBtn.addEventListener('click', () => {
-                    window.lenis.scrollTo(0);
-                });
-            }
-
-
-            /* --- Grid Effects --- */
-            const gridCards = document.querySelectorAll('.legacy-grid-wrapper .grid-card');
-            const cardsData = [];
-
-            gridCards.forEach((card, index) => {
-                const media = card.querySelector('.media');
-                const img = card.querySelector('img, video');
-                const uniqueId = `distortion-filter-${index}`;
-
-                const svgFilter = `
-          <svg style="position: absolute; width: 0; height: 0; pointer-events: none;">
-              <defs>
-                  <filter id="${uniqueId}">
-                      <feTurbulence type="fractalNoise" baseFrequency="0.01 0.003" numOctaves="5" seed="${index}" result="noise"/>
-                      <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="B" class="displacement-map" />
-                  </filter>
-              </defs>
-          </svg>
-      `;
-                document.body.insertAdjacentHTML('beforeend', svgFilter);
-                img.style.filter = `url(#${uniqueId})`;
-                const displacementMap = document.querySelector(`#${uniqueId} .displacement-map`);
-
-                const cardObj = { media: media, img: img, map: displacementMap, isHovered: false };
-                cardsData.push(cardObj);
-
-                media.addEventListener('mouseenter', () => {
-                    cardObj.isHovered = true;
-                    gsap.to(displacementMap, { attr: { scale: 50 }, duration: 0.4, ease: "power2.out", overwrite: true });
-                    gsap.to(img, { scale: 1.15, duration: 0.5, ease: "power2.out", overwrite: true });
-                });
-
-                media.addEventListener('mouseleave', () => {
-                    cardObj.isHovered = false;
-                });
-
-                gsap.set(img, { height: "140%", top: "-20%", scale: 1.1 });
-                gsap.set(media, { clipPath: "inset(0 0 100% 0)" });
-
-                if (window.ScrollTrigger) {
-                    gsap.to(img, {
-                        yPercent: 20, ease: "none",
-                        scrollTrigger: { trigger: media, start: "top bottom", end: "bottom top", scrub: true }
-                    });
-                    const revealTl = gsap.timeline({ scrollTrigger: { trigger: card, start: "top 85%", duration: 1.5, ease: "power4.inOut" } });
-                    revealTl.to(media, { clipPath: "inset(0 0 0% 0)", duration: 1.5, ease: "power4.inOut" });
-                }
-            });
-
-            gsap.ticker.add(() => {
-                const velocity = window.lenis.velocity || 0;
-                const distortionAmount = Math.min(Math.abs(velocity) * 8.0, 150);
-
-                cardsData.forEach(card => {
-                    gsap.set(card.media, {
-                        scaleY: 1 + Math.min(Math.abs(velocity) * 0.005, 0.25),
-                        scaleX: 1 - Math.min(Math.abs(velocity) * 0.002, 0.1)
-                    });
-
-                    if (!card.isHovered) {
-                        gsap.to(card.map, { attr: { scale: distortionAmount }, duration: 0.15, ease: "power1.out", overwrite: "auto" });
-                        const velocityScale = 1.1 + Math.min(Math.abs(velocity) * 0.005, 0.15);
-                        gsap.to(card.img, { scale: velocityScale, duration: 0.15, overwrite: "auto" });
-                    }
-                });
-            });
-
-
-            /* --- Particle Background --- */
-            class ParticleBackground {
-                constructor() {
-                    this.container = document.getElementById('bg-canvas');
-                    // Mobile Optimization: Disable particles on mobile
-                    if (window.innerWidth <= 1120) return;
-
-                    if (!this.container || typeof THREE === 'undefined') return;
-
-                    this.scene = new THREE.Scene();
-                    this.scene.fog = new THREE.FogExp2(0x050505, 0.05);
-                    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-                    this.camera.position.z = 2.8;
-
-                    this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-                    this.renderer.setSize(window.innerWidth, window.innerHeight);
-                    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-                    this.container.appendChild(this.renderer.domElement);
-
-                    this.particlesMesh = null;
-                    this.coreParticlesMesh = null;
-                    this.clock = new THREE.Clock();
-                    this.mouseX = 0; this.mouseY = 0;
-                    this.params = { scatter: 0 };
-                    this.handFactor = 0; this.handScatterTarget = 0;
-                    this.handFactor = 0; this.handScatterTarget = 0;
-                    this.particlesCount = 3500; // Performance Opt: Adjusted to 3000 (Outer Sphere)
-                    this.initialPosArray = new Float32Array(this.particlesCount * 3);
-                    this.randomSpreadArray = new Float32Array(this.particlesCount * 3);
-
-                    this.initParticles();
-                    this.initEvents();
-                }
-
-                createCircleTexture() {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = 64; canvas.height = 64;
-                    const ctx = canvas.getContext('2d');
-                    const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-                    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-                    gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.8)');
-                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                    ctx.fillStyle = gradient;
-                    ctx.fillRect(0, 0, 64, 64);
-                    return new THREE.CanvasTexture(canvas);
-                }
-
-                initParticles() {
-                    // Outer sphere
-                    const particlesGeometry = new THREE.BufferGeometry();
-                    const posArray = new Float32Array(this.particlesCount * 3);
-                    const colorArray = new Float32Array(this.particlesCount * 3);
-                    const colorBottom = new THREE.Color(0x515151);
-                    const colorMiddle = new THREE.Color(0x1d1d1d);
-                    const colorTop = new THREE.Color(0xb3b3b3);
-
-                    for (let i = 0; i < this.particlesCount; i++) {
-                        const radius = 1.3 + (Math.random() - 0.5) * 0.5;
-                        const theta = Math.acos(THREE.MathUtils.randFloatSpread(2));
-                        const phi = THREE.MathUtils.randFloatSpread(360);
-                        const x = radius * Math.sin(theta) * Math.cos(phi);
-                        const y = radius * Math.sin(theta) * Math.sin(phi);
-                        const z = radius * Math.cos(theta);
-                        posArray[i * 3] = x; posArray[i * 3 + 1] = y; posArray[i * 3 + 2] = z;
-                        this.initialPosArray[i * 3] = x; this.initialPosArray[i * 3 + 1] = y; this.initialPosArray[i * 3 + 2] = z;
-                        this.randomSpreadArray[i * 3] = (Math.random() - 0.5) * 2.0;
-                        this.randomSpreadArray[i * 3 + 1] = (Math.random() - 0.5) * 2.0;
-                        this.randomSpreadArray[i * 3 + 2] = (Math.random() - 0.5) * 2.0;
-
-                        let normalizedY = (y + 1.5) / 3;
-                        normalizedY = Math.max(0, Math.min(1, normalizedY));
-                        let mixedColor;
-                        if (normalizedY < 0.45) {
-                            const t = normalizedY / 0.45;
-                            mixedColor = colorBottom.clone().lerp(colorMiddle, t * t);
-                        } else {
-                            const t = (normalizedY - 0.45) / 0.55;
-                            mixedColor = colorMiddle.clone().lerp(colorTop, t);
-                        }
-                        colorArray[i * 3] = mixedColor.r; colorArray[i * 3 + 1] = mixedColor.g; colorArray[i * 3 + 2] = mixedColor.b;
-                    }
-                    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-                    particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
-                    const material = new THREE.PointsMaterial({ size: 0.02, map: this.createCircleTexture(), vertexColors: true, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false });
-                    this.particlesMesh = new THREE.Points(particlesGeometry, material);
-                    this.scene.add(this.particlesMesh);
-
-                    // Core
-                    this.coreCount = 2750; // Performance Opt: Adjusted to 2750
-                    const coreGeometry = new THREE.BufferGeometry();
-                    const corePosArray = new Float32Array(this.coreCount * 3);
-                    const coreColorArray = new Float32Array(this.coreCount * 3);
-                    this.coreInitialPosArray = new Float32Array(this.coreCount * 3);
-                    this.coreRandomSpreadArray = new Float32Array(this.coreCount * 3);
-                    const coreColor = new THREE.Color(0xffffff);
-                    for (let i = 0; i < this.coreCount; i++) {
-                        const radius = 0.78 * Math.cbrt(Math.random());
-                        const theta = Math.acos(THREE.MathUtils.randFloatSpread(2));
-                        const phi = THREE.MathUtils.randFloatSpread(360);
-                        const x = radius * Math.sin(theta) * Math.cos(phi);
-                        const y = radius * Math.sin(theta) * Math.sin(phi);
-                        const z = radius * Math.cos(theta);
-                        corePosArray[i * 3] = x; corePosArray[i * 3 + 1] = y; corePosArray[i * 3 + 2] = z;
-                        this.coreInitialPosArray[i * 3] = x; this.coreInitialPosArray[i * 3 + 1] = y; this.coreInitialPosArray[i * 3 + 2] = z;
-                        this.coreRandomSpreadArray[i * 3] = (Math.random() - 0.5) * 1.5;
-                        this.coreRandomSpreadArray[i * 3 + 1] = (Math.random() - 0.5) * 1.5;
-                        this.coreRandomSpreadArray[i * 3 + 2] = (Math.random() - 0.5) * 1.5;
-                        coreColorArray[i * 3] = coreColor.r; coreColorArray[i * 3 + 1] = coreColor.g; coreColorArray[i * 3 + 2] = coreColor.b;
-                    }
-                    coreGeometry.setAttribute('position', new THREE.BufferAttribute(corePosArray, 3));
-                    coreGeometry.setAttribute('color', new THREE.BufferAttribute(coreColorArray, 3));
-                    const coreMaterial = new THREE.PointsMaterial({ size: 0.012, map: this.createCircleTexture(), vertexColors: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false });
-                    this.coreParticlesMesh = new THREE.Points(coreGeometry, coreMaterial);
-                    this.scene.add(this.coreParticlesMesh);
-                }
-
-                initEvents() {
-                    window.addEventListener('mousemove', (event) => {
-                        this.mouseX = event.clientX / window.innerWidth - 0.5;
-                        this.mouseY = event.clientY / window.innerHeight - 0.5;
-                    });
-                    window.addEventListener('resize', () => {
-                        if (window.innerWidth === 0 || window.innerHeight === 0) return;
-                        this.camera.aspect = window.innerWidth / window.innerHeight;
-                        this.camera.updateProjectionMatrix();
-                        this.renderer.setSize(window.innerWidth, window.innerHeight);
-                    });
-                }
-
-                updateHandState(isHandDetected, isOpenHand) {
-                    const targetFactor = isHandDetected ? 1.0 : 0.0;
-                    this.handFactor = THREE.MathUtils.lerp(this.handFactor, targetFactor, 0.1);
-                    const targetScatter = isOpenHand ? 1.0 : 0.0;
-                    this.handScatterTarget = THREE.MathUtils.lerp(this.handScatterTarget, targetScatter, 0.1);
-                }
-
-                render() {
-                    if (!this.renderer) return;
-                    const elapsedTime = this.clock.getElapsedTime();
-                    const scrollScatter = this.params.scatter;
-                    // Simplify: Remove Hand Factor logic
-                    const scatterVal = scrollScatter;
-                    const breatheStrength = 0.02 * (1 - scatterVal * 0.5);
-                    const breathe = 0.8 + Math.sin(elapsedTime * 0.5) * breatheStrength;
-                    const easeProgress = Math.pow(scatterVal, 2.5);
-
-                    if (this.particlesMesh) {
-                        this.particlesMesh.rotation.y = elapsedTime * 0.08 + (scatterVal * 1.5);
-                        this.particlesMesh.rotation.y += this.mouseX * 0.05;
-                        this.particlesMesh.rotation.x = -elapsedTime * 0.02 + (this.mouseY * 0.05);
-                        const positions = this.particlesMesh.geometry.attributes.position.array;
-                        const initialPositions = this.initialPosArray;
-                        const randomSpreads = this.randomSpreadArray;
-                        const count = this.particlesCount;
-                        const scatterIntensity = 6.0;
-
-                        for (let i = 0; i < count; i++) {
-                            const i3 = i * 3;
-                            const ix = initialPositions[i3]; const iy = initialPositions[i3 + 1]; const iz = initialPositions[i3 + 2];
-                            const rx = randomSpreads[i3]; const ry = randomSpreads[i3 + 1]; const rz = randomSpreads[i3 + 2];
-                            const explosionFactor = easeProgress * scatterIntensity;
-                            const noiseFactor = easeProgress * 3.0;
-                            // const riseFactor = easeProgress * 2.0; 
-                            positions[i3] = (ix * breathe) + (ix * explosionFactor) + (rx * noiseFactor);
-                            positions[i3 + 1] = (iy * breathe) + (iy * explosionFactor) + (ry * noiseFactor) /* + (Math.abs(ry) * riseFactor) */;
-                            positions[i3 + 2] = (iz * breathe) + (iz * explosionFactor) + (rz * noiseFactor);
-                        }
-                        this.particlesMesh.geometry.attributes.position.needsUpdate = true;
-                    }
-
-                    if (this.coreParticlesMesh) {
-                        this.coreParticlesMesh.rotation.y = -elapsedTime * 0.1 + (scatterVal * 0.5);
-                        this.coreParticlesMesh.rotation.z = elapsedTime * 0.05;
-                        const corePositions = this.coreParticlesMesh.geometry.attributes.position.array;
-                        const coreInitial = this.coreInitialPosArray;
-                        const coreSpread = this.coreRandomSpreadArray;
-                        const coreCount = this.coreCount;
-                        const coreScatterIntensity = 8.0;
-
-                        for (let i = 0; i < coreCount; i++) {
-                            const i3 = i * 3;
-                            const ix = coreInitial[i3]; const iy = coreInitial[i3 + 1]; const iz = coreInitial[i3 + 2];
-                            const rx = coreSpread[i3]; const ry = coreSpread[i3 + 1]; const rz = coreSpread[i3 + 2];
-                            const explosionFactor = easeProgress * coreScatterIntensity;
-                            const noiseFactor = easeProgress * 2.0;
-                            // const riseFactor = easeProgress * 1.5;
-                            corePositions[i3] = (ix * breathe) + (ix * explosionFactor) + (rx * noiseFactor);
-                            corePositions[i3 + 1] = (iy * breathe) + (iy * explosionFactor) + (ry * noiseFactor) /* + (Math.abs(ry) * riseFactor) */;
-                            corePositions[i3 + 2] = (iz * breathe) + (iz * explosionFactor) + (rz * noiseFactor);
-                        }
-                        this.coreParticlesMesh.geometry.attributes.position.needsUpdate = true;
-                    }
-                    this.renderer.render(this.scene, this.camera);
-                }
-            }
-
-            // Defer Particle Initialization for TBT Optimization
-            let particleBg;
-            const initParticles = () => {
-                // Optimized Spline Viewer Loading
-                const loadSpline = () => {
-                    const splineScript = document.createElement('script');
-                    splineScript.type = 'module';
-                    splineScript.src = 'https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js';
-
-                    // Listen for script load completion
-                    splineScript.onload = () => {
-                        // Wait for spline-viewer custom elements to be defined
-                        if (customElements.get('spline-viewer')) {
-                            attachSplineListeners();
-                        } else {
-                            customElements.whenDefined('spline-viewer').then(attachSplineListeners);
-                        }
-                    };
-
-                    document.head.appendChild(splineScript);
-                };
-
-                // Attach load event listeners to all spline-viewer elements
-                const attachSplineListeners = () => {
-                    document.querySelectorAll('spline-viewer').forEach(viewer => {
-                        viewer.addEventListener('load', () => {
-                            const wrapper = viewer.closest('.spline-wrapper');
-                            if (wrapper) {
-                                wrapper.classList.add('loaded');
-                            }
-                        });
-                    });
-                };
-
-                // Use requestIdleCallback for better performance
-                if ('requestIdleCallback' in window) {
-                    requestIdleCallback(loadSpline, { timeout: 800 });
-                } else {
-                    setTimeout(loadSpline, 500);
-                }
-
-                // Defer particle initialization
-                setTimeout(() => {
-                    if (particleBg) return; // Prevent double init
-                    particleBg = new ParticleBackground();
-
-                    if (window.ScrollTrigger && particleBg && particleBg.params) {
-                        gsap.to(particleBg.params, {
-                            scatter: 1,
-                            ease: "power4.out",
-                            scrollTrigger: {
-                                trigger: ".particle-pin-spacer",
-                                start: "top top",
-                                end: "top+=30% top",
-                                scrub: true
-                            }
-                        });
-                        ScrollTrigger.create({
-                            trigger: ".particle-pin-spacer", start: "top top", end: "bottom top", scrub: true,
-                            onUpdate: (self) => {
-                                const text = document.querySelector('.intro-overlay-text');
-                                if (text) text.style.opacity = 1 - self.progress * 3;
-                            }
-                        });
-                    }
-
-                    const pinnedTextSection = document.querySelector('.section-pinned-text');
-                    const pinnedLines = gsap.utils.toArray('.pinned-line, .pinned-text-title');
-
-                    if (window.ScrollTrigger && pinnedTextSection && pinnedLines.length > 0 && particleBg && particleBg.params && window.innerWidth > 1120) {
-                        const pinTl = gsap.timeline({
-                            scrollTrigger: { trigger: ".section-pinned-text", start: "top top", end: "+=200%", pin: true, scrub: 0.5 }
-                        });
-                        pinTl.to(particleBg.params, { scatter: 0, duration: 2, ease: "power2.inOut" }, 0);
-                        pinnedLines.forEach((line, i) => {
-                            pinTl.to(line, { color: getComputedStyle(document.body).getPropertyValue('--text-main').trim(), opacity: 1, filter: "blur(0px)", duration: 1, ease: "power2.out" }, i === 0 ? 0.5 : "-=0.8");
-                            if (line.classList.contains('special') && line.style.color) {
-                                pinTl.to(line, { color: "#ccff00", opacity: 1, filter: "blur(0px)", duration: 1 }, "<");
-                            }
-                        });
-                        pinTl.to(particleBg.params, { scatter: 1, duration: 2, ease: "power2.inOut" }, ">+0.5");
-                    }
-
-                    // Start Loop
-                    function raf(time) {
-                        if (particleBg && typeof particleBg.render === 'function') {
-                            particleBg.render();
-                        }
-                        requestAnimationFrame(raf);
-                    }
-                    requestAnimationFrame(raf);
-
-                }, 2500); // 2500ms delay for TBT optimization
-            };
-
-            // Robust check: Run immediately if loaded, otherwise wait
-            if (document.readyState === 'complete') {
-                initParticles();
-            } else {
-                window.addEventListener('load', initParticles);
-            }
-
-            /* --- MediaPipe Removed --- */
-
-        });
-    </script>
     <!-- Page Transition System -->
-    <script src=" page-transitions.js\></script>
+    <script src="js/page-transitions.js"></script>
+    <script src="js/home.js"></script>
 </body>
 
 </html>

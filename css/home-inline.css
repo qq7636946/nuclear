@@ -197,6 +197,12 @@
             box-sizing: border-box;
         }
 
+        #nu-wrapper h1 {
+            font-size: 18px;
+            letter-spacing: 2px;
+            font-weight: 400;
+        }
+
         /* === WEBGL NOISE CANVAS === */
         #bg-canvas {
             position: fixed;
@@ -3317,6 +3323,8 @@
                 cursor: auto !important;
             }
         }
+
+        /* --- Glass Labels for 3D Logo (2025 Premium Style) --- */
 
         .spline_mobile {
             display: none

@@ -1415,6 +1415,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- Unified Page Transition System -->
+    <script src="js/page-transitions.js"></script>
 
     <script>
         const lenis = new Lenis({
@@ -1433,77 +1435,16 @@
         gsap.registerPlugin(ScrollTrigger);
 
         /* ========================================
-           PAGE TRANSITION MANAGER CLASS
+           PAGE TRANSITION - Uses unified system from page-transitions.js
            ======================================== */
-        class PageTransitionManager {
-            constructor() {
-                this.overlay = document.querySelector('.page-transition-overlay');
-                this.logo = document.querySelector('.transition-logo');
-                this.isTransitioning = false;
-            }
 
-            // 退場動畫
-            exitAnimation(callback) {
-                if (this.isTransitioning) return;
-                this.isTransitioning = true;
-                if (window.lenis) window.lenis.stop();
-
-                const tl = gsap.timeline({
-                    onComplete: () => { if (callback) callback(); }
-                });
-
-                tl.to('[data-transition-element]', { y: -50, opacity: 0, stagger: 0.03, duration: 0.5, ease: 'power2.in' });
-                tl.to(this.overlay, { clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: 'power4.inOut' }, '-=0.3');
-                tl.to(this.logo, { opacity: 1, duration: 0.3 }, '-=0.4');
-                return tl;
-            }
-
-            // 進場動畫
-            entryAnimation() {
-                const tl = gsap.timeline({
-                    onComplete: () => {
-                        this.isTransitioning = false;
-                        if (window.lenis) window.lenis.start();
-                    }
-                });
-
-                tl.to(this.logo, { opacity: 0, duration: 0.3 });
-                tl.to(this.overlay, { clipPath: 'inset(0 0 100% 0)', duration: 0.8, ease: 'power4.inOut' }, '-=0.1');
-                tl.from('[data-transition-element]', { y: 50, opacity: 0, stagger: 0.03, duration: 0.6, ease: 'power2.out' }, '-=0.5');
-                return tl;
-            }
-
-            interceptLinks() {
-                const links = document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"])');
-                links.forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        const href = link.getAttribute('href');
-                        if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
-                        e.preventDefault();
-                        this.exitAnimation(() => { window.location.href = href; });
-                    });
-                });
-            }
-        }
-
-        // --- SAFE INITIALIZATION LOGIC ---
+        // --- INITIALIZATION LOGIC ---
         function initApp() {
-            const transitionManager = new PageTransitionManager();
-            // 立即執行進場動畫
-            transitionManager.entryAnimation();
-            transitionManager.interceptLinks();
-
-            // 安全機制：3秒後如果遮罩還在，強制移除
-            setTimeout(() => {
-                const overlay = document.querySelector('.page-transition-overlay');
-                if (overlay && getComputedStyle(overlay).clipPath !== 'inset(0px 0px 100% 0px)') {
-                    gsap.to(overlay, { clipPath: 'inset(0 0 100% 0)', duration: 0.5, ease: 'power2.out' });
-                    if (window.lenis) window.lenis.start();
-                }
-            }, 3000);
+            // Use unified transition system
+            window.PageTransitions.initQuick();
         }
 
-        // 檢查文件載入狀態，如果已經載入完成則立即執行，否則監聽 load 事件
+        // 檢查文件載入狀態
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
             initApp();
         } else {
@@ -1529,15 +1470,34 @@
         workItems.forEach(item => {
             const media = item.querySelector('.work-media');
             if (media) {
+                // 1. Reveal (ClipPath Only)
                 gsap.fromTo(media,
-                    { clipPath: "inset(100% 0 0 0)", scale: 1.1 },
+                    { clipPath: "inset(100% 0 0 0)" },
                     {
-                        clipPath: "inset(0% 0 0 0)", scale: 1,
+                        clipPath: "inset(0% 0 0 0)",
                         duration: 1,
                         ease: "power4.inOut",
                         scrollTrigger: { trigger: item, start: "top 100%" }
                     }
                 );
+
+                // 2. Zoom Out Scrub (Parallax Effect)
+                const img = media.querySelector('.work-img');
+                if (img) {
+                    gsap.fromTo(img,
+                        { scale: 1.2 },
+                        {
+                            scale: 1.0,
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: item,
+                                start: "top bottom",
+                                end: "bottom top",
+                                scrub: 1
+                            }
+                        }
+                    );
+                }
             }
             const info = item.querySelector('.work-info');
             if (info) {
@@ -1647,7 +1607,7 @@
         const openMenuBtn = document.getElementById('openMenu');
         const closeMenuBtn = document.getElementById('closeMenu');
 
-        const menuTl = gsap.timeline({ paused: true });
+        window.menuTl = gsap.timeline({ paused: true });
         gsap.set(".nav-link", { y: "110%", skewY: 10 });
         gsap.set(".nav-item", { borderBottomColor: "rgba(0,0,0,0)" });
         gsap.set(".menu-footer-info", { opacity: 0, y: 20 });
