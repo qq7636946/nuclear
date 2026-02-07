@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUCLEAR - Earth 3D</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+
+            width: 100%;
+            background: #E8DED0;
+            font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .scroll-container {
+            height: 300vh;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #E8DED0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: opacity 1s ease;
+            gap: 20px;
+        }
+        #loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-top-color: #333;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .loading-text {
+            color: rgba(0,0,0,0.5);
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Hero Section */
+        .hero-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 80px;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .hero-title {
+            font-size: clamp(80px, 12vw, 160px);
+            font-weight: 600;
+            line-height: 0.9;
+            color: #1a1a1a;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0;
+        }
+
+        .hero-desc {
+            position: absolute;
+            bottom: 80px;
+            left: 80px;
+            max-width: 320px;
+        }
+
+        .hero-desc .arrow {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .hero-desc p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #1a1a1a;
+        }
+
+        /* Stats Section */
+        .stats-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 60%;
+            height: 100%;
+            padding: 60px 80px;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0;
+        }
+
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .country-title h1 {
+            font-size: 48px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .country-title .subtitle {
+            font-size: 20px;
+            color: #1a1a1a;
+        }
+
+        .flag {
+            width: 40px;
+            height: 28px;
+            background: #fff;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flag-circle {
+            width: 16px;
+            height: 16px;
+            background: #bc002d;
+            border-radius: 50%;
+        }
+
+        .stats-content {
+            max-width: 700px;
+        }
+
+        .stats-note {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .stats-table {
+            width: 100%;
+        }
+
+        .stat-row {
+            display: flex;
+            align-items: center;
+            padding: 14px 0;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .stat-label {
+            width: 60px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .stat-bar-container {
+            flex: 1;
+            margin: 0 16px;
+        }
+
+        .stat-value {
+            font-size: 13px;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .stat-value span {
+            color: #888;
+            font-size: 11px;
+            margin-left: 4px;
+        }
+
+        .stat-bar {
+            height: 6px;
+            background: #E8D800;
+            width: 0;
+        }
+
+        .stat-question {
+            font-size: 10px;
+            color: #666;
+            text-align: right;
+            width: 220px;
+        }
+
+        .stat-rank {
+            text-align: right;
+            min-width: 60px;
+        }
+
+        .stat-rank .rank-number {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .stat-rank .rank-total {
+            font-size: 11px;
+            color: #888;
+        }
+
+        .stat-row.info-row .stat-label {
+            width: 140px;
+            font-size: 12px;
+        }
+
+        .stat-row.info-row .stat-value-text {
+            flex: 1;
+            font-size: 12px;
+            color: #E8D800;
+            font-weight: 600;
+        }
+
+        .stat-row.info-row .stat-label-jp {
+            font-size: 10px;
+            color: #666;
+            text-align: right;
+            width: 100px;
+        }
+
+        .stats-footer {
+            margin-top: 20px;
+            font-size: 10px;
+            color: #888;
+        }
+
+        .rank-header {
+            text-align: right;
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <div class="loader"></div>
+        <div class="loading-text">Loading Earth...</div>
+    </div>
+
+    <div class="scroll-container">
+        <div id="canvas-container"></div>
+
+        <!-- Hero Section - Cut 1 -->
+        <section class="hero-section">
+            <div class="hero-left">
+                <div class="hero-title">GRID</div>
+                <div class="hero-title">&TYPE</div>
+            </div>
+            <div class="hero-right">
+                <div class="hero-title">ROCK</div>
+                <div class="hero-title">N'ROLL</div>
+            </div>
+            <div class="hero-desc">
+                <div class="arrow">→</div>
+                <p>We create digital products with advanced technologies to build memorable experiences and transform brands.</p>
+            </div>
+        </section>
+
+        <!-- Stats Section - Cut 2 -->
+        <div class="stats-overlay">
+            <div class="stats-header">
+                <div class="country-title">
+                    <h1>Japan</h1>
+                    <div class="subtitle">日本</div>
+                </div>
+                <div class="flag">
+                    <div class="flag-circle"></div>
+                </div>
+            </div>
+
+            <div class="stats-content">
+                <div class="stats-note">調査結果 *Q1～Q3はYES回答者割合、()内は前年の調査結果</div>
+                <div class="rank-header">順位</div>
+
+                <div class="stats-table">
+                    <div class="stat-row">
+                        <div class="stat-label">Q1</div>
+                        <div class="stat-bar-container">
+                            <div class="stat-value">77.5% <span>(73.9%)</span></div>
+                            <div class="stat-bar" data-width="77.5"></div>
+                        </div>
+                        <div class="stat-question">あなたは、日々の仕事に、喜びや楽しみを感じていますか?</div>
+                        <div class="stat-rank">
+                            <span class="rank-number">92</span><span class="rank-total">(104)</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-row">
+                        <div class="stat-label">Q2</div>
+                        <div class="stat-bar-container">
+                            <div class="stat-value">83.2% <span>(80.2%)</span></div>
+                            <div class="stat-bar" data-width="83.2"></div>
+                        </div>
+                        <div class="stat-question">自分の仕事は、人々の生活をより良くすることにつながっていると思いますか?</div>
+                        <div class="stat-rank">
+                            <span class="rank-number">21</span><span class="rank-total">(33)</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-row">
+                        <div class="stat-label">Q3</div>
+                        <div class="stat-bar-container">
+                            <div class="stat-value">76.8% <span>(71.2%)</span></div>
+                            <div class="stat-bar" data-width="76.8"></div>
+                        </div>
+                        <div class="stat-question">自分の仕事や働き方は、多くの選択肢の中から、あなたが選べる状態ですか?</div>
+                        <div class="stat-rank">
+                            <span class="rank-number">28</span><span class="rank-total">(44)</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-row info-row">
+                        <div class="stat-label">GDP Ranking</div>
+                        <div class="stat-bar-container">
+                            <div class="stat-value-text">4,026.21 Billion USD</div>
+                            <div class="stat-bar" data-width="85"></div>
+                        </div>
+                        <div class="stat-label-jp">国内総生産ランキング</div>
+                        <div class="stat-rank">
+                            <span class="rank-number">4</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-row info-row">
+                        <div class="stat-label">WHR Ranking</div>
+                        <div class="stat-bar-container">
+                            <div class="stat-value-text">6.147</div>
+                            <div class="stat-bar" data-width="60"></div>
+                        </div>
+                        <div class="stat-label-jp">幸福度ランキング</div>
+                        <div class="stat-rank">
+                            <span class="rank-number">55</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-row info-row">
+                        <div class="stat-label">Weekly working hours</div>
+                        <div class="stat-bar-container">
+                            <div class="stat-value-text">38.7 Hours</div>
+                            <div class="stat-bar" data-width="65"></div>
+                        </div>
+                        <div class="stat-label-jp">週間平均労働時間</div>
+                        <div class="stat-rank">
+                            <span class="rank-number">63</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-footer">GDP：全192カ国　WHR：全147カ国</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const container = document.getElementById('canvas-container');
+        const loadingEl = document.getElementById('loading');
+
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        container.appendChild(renderer.domElement);
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xE8DED0);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 5);
+
+        // Controls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.5;
+        controls.enablePan = false;
+        controls.enableZoom = false;
+
+        // Flat lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.3);
+        directionalLight.position.set(5, 5, 5);
+        scene.add(directionalLight);
+
+        let earthModel = null;
+        let earthTargetX = 0; // Target X position for scroll animation
+        let earthPivot = new THREE.Group(); // Pivot group to keep rotation centered
+        scene.add(earthPivot);
+
+        // Color definitions
+        const LAND_COLOR = 0xE8D800;
+        const OCEAN_COLOR = 0xF5EFE0;
+        const CLOUD_COLOR = 0xFFFFFF;
+        const WIREFRAME_COLOR = 0x222222;
+
+        // Load Earth model
+        const loader = new THREE.GLTFLoader();
+        loader.load(
+            'earth/source/earth-cartoon.glb',
+            (gltf) => {
+                earthModel = gltf.scene;
+
+                const meshList = [];
+                earthModel.traverse((node) => {
+                    if (node.isMesh) {
+                        meshList.push(node);
+                    }
+                });
+
+                meshList.forEach((node) => {
+                    const nameLower = node.name.toLowerCase();
+
+                    const isCloud = nameLower.includes('cloud') ||
+                                   nameLower.includes('nuage') ||
+                                   nameLower.includes('atmosphere');
+
+                    const isOcean = nameLower.includes('ocean') ||
+                                   nameLower.includes('water') ||
+                                   nameLower.includes('sea') ||
+                                   nameLower.includes('sphere') ||
+                                   nameLower.includes('globe');
+
+                    if (isCloud) {
+                        node.material = new THREE.MeshBasicMaterial({
+                            color: CLOUD_COLOR,
+                            transparent: true,
+                            opacity: 0.9
+                        });
+                    } else if (isOcean) {
+                        node.material = new THREE.MeshBasicMaterial({
+                            color: OCEAN_COLOR
+                        });
+                    } else {
+                        node.material = new THREE.MeshBasicMaterial({
+                            color: LAND_COLOR
+                        });
+
+                        const wireframeMat = new THREE.MeshBasicMaterial({
+                            color: WIREFRAME_COLOR,
+                            wireframe: true
+                        });
+                        const wireframeMesh = new THREE.Mesh(node.geometry.clone(), wireframeMat);
+                        node.add(wireframeMesh);
+                    }
+                });
+
+                // Center and scale
+                const box = new THREE.Box3().setFromObject(earthModel);
+                const center = box.getCenter(new THREE.Vector3());
+                const size = box.getSize(new THREE.Vector3());
+                earthModel.position.sub(center);
+
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const scale = 3.25 / maxDim;
+                earthModel.scale.setScalar(scale);
+
+                // Add earth to pivot group (pivot stays at center, we move the group)
+                earthPivot.add(earthModel);
+
+                setTimeout(() => {
+                    loadingEl.classList.add('hidden');
+                    initScrollAnimations();
+                }, 500);
+            },
+            (progress) => {
+                const percent = (progress.loaded / progress.total * 100).toFixed(0);
+                document.querySelector('.loading-text').textContent = `Loading... ${percent}%`;
+            },
+            (error) => {
+                console.error('Error loading Earth:', error);
+                document.querySelector('.loading-text').textContent = 'Error loading model. Please check the file path.';
+            }
+        );
+
+        // Scroll Animations
+        function initScrollAnimations() {
+            const finalEarthX = 2.2; // Final X position on the right
+
+            // Cut 1 -> Cut 2: Hero fades out, Earth moves right
+            ScrollTrigger.create({
+                trigger: '.scroll-container',
+                start: 'top top',
+                end: '50% top',
+                scrub: 1,
+                onUpdate: (self) => {
+                    // Move earth to right based on scroll progress
+                    earthTargetX = self.progress * finalEarthX;
+                }
+            });
+
+            // Hero fade out
+            gsap.to('.hero-section', {
+                opacity: 0,
+                scrollTrigger: {
+                    trigger: '.scroll-container',
+                    start: 'top top',
+                    end: '30% top',
+                    scrub: 1,
+                }
+            });
+
+            // Pin earth at final position after scroll
+            ScrollTrigger.create({
+                trigger: '.scroll-container',
+                start: '50% top',
+                end: 'bottom bottom',
+                onEnter: () => {
+                    earthTargetX = finalEarthX; // Lock at final position
+                },
+                onLeaveBack: () => {
+                    // Allow scroll animation to control again
+                }
+            });
+
+            // Cut 2: Stats fade in
+            gsap.to('.stats-overlay', {
+                opacity: 1,
+                scrollTrigger: {
+                    trigger: '.scroll-container',
+                    start: '35% top',
+                    end: '55% top',
+                    scrub: 1,
+                }
+            });
+
+            // Animate stat bars when stats are visible
+            ScrollTrigger.create({
+                trigger: '.scroll-container',
+                start: '45% top',
+                onEnter: () => {
+                    document.querySelectorAll('.stat-bar').forEach((bar, i) => {
+                        gsap.to(bar, {
+                            width: `${bar.dataset.width}%`,
+                            duration: 0.8,
+                            delay: i * 0.1,
+                            ease: 'power2.out'
+                        });
+                    });
+                },
+                once: true
+            });
+        }
+
+        // Mouse interaction
+        let mouseX = 0, mouseY = 0;
+        let targetX = 0, targetY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            targetX = (e.clientX / window.innerWidth - 0.5);
+            targetY = (e.clientY / window.innerHeight - 0.5);
+        });
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            mouseX += (targetX - mouseX) * 0.05;
+            mouseY += (targetY - mouseY) * 0.05;
+
+            if (earthModel) {
+                // Smooth pivot position for scroll (keeps rotation centered)
+                earthPivot.position.x += (earthTargetX - earthPivot.position.x) * 0.1;
+
+                // Mouse tilt on the model itself (rotation stays centered)
+                earthModel.rotation.x = mouseY * 0.3;
+                earthModel.rotation.z = -mouseX * 0.1;
+            }
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
